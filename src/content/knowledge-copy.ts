@@ -1,4 +1,5 @@
 import type { Language } from '../types';
+import { EXTRA_FAQ_ITEMS, EXTRA_NEWS_EN } from './knowledge-extra';
 
 export type KnowledgePage = 'how' | 'faq' | 'learn' | 'news';
 
@@ -36,15 +37,15 @@ const localized = <T,>(value: Record<Language, T>) => value;
 const baseHow = {
   en: {
     heroTitle: 'How it works',
-    heroBody: 'Your devices share readings. Steady turns them into one calm picture and a clear next step.',
+    heroBody: 'Your devices share readings. Type1 and 2 turns them into one calm picture and a clear next step.',
     steps: [
       {
         title: '1. Listen to your devices',
-        body: 'Steady receives CGM readings, keeps track of timing, and checks whether the numbers still look fresh enough to trust.',
+        body: 'Type1 and 2 receives CGM readings, keeps track of timing, and checks whether the numbers still look fresh enough to trust.',
       },
       {
         title: '2. Turn numbers into a clear picture',
-        body: 'Instead of flooding the screen with raw data, Steady shows a current state, how confident we feel, and a short message in plain language.',
+        body: 'Instead of flooding the screen with raw data, Type1 and 2 shows a current state, how confident we feel, and a short message in plain language.',
       },
       {
         title: '3. Show what matters now',
@@ -52,15 +53,19 @@ const baseHow = {
       },
       {
         title: '4. Reach out only when needed',
-        body: 'If a situation becomes more urgent, Steady can repeat the alert, bring in backup support, and keep the flow visible to everyone involved.',
+        body: 'If a situation becomes more urgent, Type1 and 2 can repeat the alert, bring in backup support, and keep the flow visible to everyone involved.',
       },
       {
         title: '5. Stay with recovery',
-        body: 'After someone responds, Steady keeps watching recovery instead of dropping back to calm too quickly.',
+        body: 'After someone responds, Type1 and 2 keeps watching recovery instead of dropping back to calm too quickly.',
       },
       {
         title: '6. Leave a clear short record',
         body: 'Families can look back at summaries, who was notified, and what happened — without digging through dense logs.',
+      },
+      {
+        title: '7. Ask in your language with Voice guide',
+        body: 'Voice guide answers in the site language you choose — all eleven supported languages. Type on the public site; in Member zone you can also speak and hear replies in the same language.',
       },
     ],
     columns: [
@@ -104,14 +109,15 @@ const baseHow = {
   },
   ru: {
     heroTitle: 'Как это работает',
-    heroBody: 'Ваши устройства делятся показаниями. Steady превращает их в одну спокойную картину и понятный следующий шаг.',
+    heroBody: 'Ваши устройства делятся показаниями. Type1 and 2 превращает их в одну спокойную картину и понятный следующий шаг.',
     steps: [
-      { title: '1. Слушаем ваши устройства', body: 'Steady принимает показания CGM, следит за временем и проверяет, достаточно ли свежие данные, чтобы им доверять.' },
-      { title: '2. Превращаем цифры в понятную картину', body: 'Вместо потока сырых чисел Steady показывает текущее состояние, уровень уверенности и короткое сообщение простым языком.' },
+      { title: '1. Слушаем ваши устройства', body: 'Type1 and 2 принимает показания CGM, следит за временем и проверяет, достаточно ли свежие данные, чтобы им доверять.' },
+      { title: '2. Превращаем цифры в понятную картину', body: 'Вместо потока сырых чисел Type1 and 2 показывает текущее состояние, уровень уверенности и короткое сообщение простым языком.' },
       { title: '3. Показываем главное', body: 'Главный экран сосредоточен на том, что происходит сейчас, нужна ли поддержка и кто уже отвечает.' },
-      { title: '4. Обращаемся только когда нужно', body: 'Если ситуация становится серьёзнее, Steady может повторить сигнал, подключить резервную поддержку и сохранить для всех одну общую картину.' },
-      { title: '5. Остаёмся рядом во время восстановления', body: 'После ответа Steady продолжает наблюдать за восстановлением и не считает всё спокойным слишком рано.' },
+      { title: '4. Обращаемся только когда нужно', body: 'Если ситуация становится серьёзнее, Type1 and 2 может повторить сигнал, подключить резервную поддержку и сохранить для всех одну общую картину.' },
+      { title: '5. Остаёмся рядом во время восстановления', body: 'После ответа Type1 and 2 продолжает наблюдать за восстановлением и не считает всё спокойным слишком рано.' },
       { title: '6. Оставляем короткую понятную запись', body: 'Семья может быстро посмотреть итог, кого уведомили и что произошло — без тяжёлых логов.' },
+      { title: '7. Спросите на своём языке — голосовой помощник', body: 'Голосовой помощник отвечает на языке сайта, который вы выбрали — все одиннадцать языков. На публичном сайте можно писать в чат; в Member zone можно говорить и слышать ответ на том же языке.' },
     ],
     columns: [
       { title: 'Для Родителей', bullets: ['Быстро видеть текущее состояние.', 'Понимать, свежие ли данные.', 'Сразу видеть, кто сейчас отвечает.', 'Держать резервную поддержку в готовности.'] },
@@ -131,6 +137,7 @@ const baseHow = {
       { title: '4. Посилювати сигнал лише коли це потрібно', body: 'Якщо ситуація стає серйознішою, система може повторити сигнал, підключити резервну підтримку й залишити для всіх одну спільну картину.' },
       { title: '5. Залишатися поруч під час відновлення', body: 'Після відповіді система продовжує стежити за відновленням і не вважає ситуацію стабільною занадто рано.' },
       { title: '6. Залишити короткий зрозумілий запис', body: 'Родина може швидко переглянути підсумок, кроки доставки сигналу та шлях відповіді без важких журналів.' },
+      { title: '7. Запитайте своєю мовою — голосовий помічник', body: 'Голосовий помічник відповідає мовою сайту, яку ви обрали — усі одинадцять мов. На публічному сайті можна писати; у Member zone можна говорити й чути відповідь тією ж мовою.' },
     ],
     columns: [
       { title: 'Для Батьків', bullets: ['Швидко бачити поточний стан.', 'Розуміти, чи дані свіжі.', 'Відразу бачити, хто зараз відповідає.', 'Тримати резервну підтримку напоготові.'] },
@@ -149,6 +156,7 @@ const baseHow = {
       { title: '4. Intensificar solo cuando haga falta', body: 'Si la situación se vuelve más urgente, el producto puede repetir la alerta, incorporar apoyo de respaldo y mantener el flujo visible para todos.' },
       { title: '5. Acompañar la recuperación', body: 'Después de que alguien responda, el producto sigue observando la recuperación en lugar de volver demasiado rápido a la normalidad.' },
       { title: '6. Dejar un registro breve y claro', body: 'Las familias pueden revisar resúmenes, pasos de entrega y el camino de respuesta sin perderse en registros densos.' },
+      { title: '7. Pregunte en su idioma con Voice guide', body: 'Voice guide responde en el idioma del sitio que elija — los once idiomas. Escriba en el sitio público; en Member zone también puede hablar y escuchar en el mismo idioma.' },
     ],
     columns: [
       { title: 'Para Padres', bullets: ['Ver el estado actual rápidamente.', 'Entender si los datos están frescos o débiles.', 'Saber quién está gestionando la situación ahora.', 'Mantener claro y listo el apoyo de respaldo.'] },
@@ -167,6 +175,7 @@ const baseHow = {
       { title: '4. Renforcer seulement si nécessaire', body: 'Si la situation devient plus urgente, le produit peut répéter l’alerte, faire appel au soutien de réserve et garder le flux visible pour tous.' },
       { title: '5. Rester présent pendant la récupération', body: 'Une fois qu’une personne a répondu, le produit continue de suivre la récupération au lieu de revenir trop vite à la normale.' },
       { title: '6. Laisser une trace courte et claire', body: 'Les familles peuvent revoir les résumés, les étapes de diffusion et le chemin de réponse sans fouiller dans des journaux trop denses.' },
+      { title: '7. Demandez dans votre langue avec Voice guide', body: 'Voice guide répond dans la langue du site — les onze langues. Chat sur le site public ; en Member zone vous pouvez aussi parler et entendre dans la même langue.' },
     ],
     columns: [
       { title: 'Pour Les Parents', bullets: ['Voir rapidement l’état actuel.', 'Comprendre si les données sont fraîches ou fragiles.', 'Savoir qui gère la situation maintenant.', 'Garder le soutien de réserve clair et prêt.'] },
@@ -185,6 +194,7 @@ const baseHow = {
       { title: '4. Nur bei Bedarf verstärken', body: 'Wenn eine Situation dringlicher wird, kann das Produkt das Signal wiederholen, Reserveunterstützung einbeziehen und den Ablauf für alle sichtbar halten.' },
       { title: '5. Bei der Erholung bleiben', body: 'Nachdem jemand reagiert hat, beobachtet das Produkt die Erholung weiter, statt zu schnell zur Normalität zurückzukehren.' },
       { title: '6. Einen kurzen klaren Verlauf hinterlassen', body: 'Familien können Zusammenfassungen, Zustellschritte und den Reaktionsweg ansehen, ohne sich durch dichte Protokolle zu arbeiten.' },
+      { title: '7. Fragen Sie in Ihrer Sprache mit Voice guide', body: 'Voice guide antwortet in der gewählten Sprache — alle elf. Chat auf der öffentlichen Seite; in Member zone auch sprechen und hören in derselben Sprache.' },
     ],
     columns: [
       { title: 'Für Eltern', bullets: ['Den aktuellen Zustand schnell sehen.', 'Verstehen, ob Daten frisch oder schwach sind.', 'Wissen, wer die Situation gerade übernimmt.', 'Reserveunterstützung klar und bereit halten.'] },
@@ -203,6 +213,7 @@ const baseHow = {
       { title: '4. 只在需要时升级提醒', body: '如果情况变得更紧急，系统可以重复提醒、引入后备支持，并让所有参与者看到同一流程。' },
       { title: '5. 持续关注恢复过程', body: '有人响应后，系统仍会继续观察恢复，而不是过早地回到正常状态。' },
       { title: '6. 留下清晰简短的记录', body: '家庭可以查看摘要、通知步骤和响应路径，而不必翻阅复杂日志。' },
+      { title: '7. 用您选择的语言向 Voice guide 提问', body: 'Voice guide 使用您选择的网站语言回答——共十一种。公开网站可打字聊天；Member zone 还可同一语言说话并听到回复。' },
     ],
     columns: [
       { title: '面向父母', bullets: ['快速看到当前状态。', '了解数据是新鲜还是偏弱。', '知道现在是谁在处理。', '让后备支持清晰并随时可用。'] },
@@ -221,6 +232,7 @@ const baseHow = {
       { title: '4. 必要なときだけ強める', body: '状況がより緊急になれば、通知を繰り返し、予備の支援を呼び、流れを全員に見えるように保ちます。' },
       { title: '5. 回復を見守り続ける', body: '誰かが対応した後も、すぐに通常に戻したとはみなさず、回復を見守り続けます。' },
       { title: '6. 短く分かりやすい記録を残す', body: '家族は長いログを追わなくても、要約、通知の流れ、対応経路を振り返れます。' },
+      { title: '7. 選んだ言語で Voice guide に質問', body: 'Voice guide はサイトで選んだ言語（11言語）で答えます。公開サイトでは入力、Member zone では同じ言語で話して聞くこともできます。' },
     ],
     columns: [
       { title: '保護者向け', bullets: ['現在の状態をすばやく確認する。', 'データが新しいか弱いかを理解する。', '今だれが対応しているかを知る。', '予備の支援を明確に準備しておく。'] },
@@ -239,6 +251,7 @@ const baseHow = {
       { title: '4. Intensificar só quando necessário', body: 'Se a situação ficar mais urgente, o produto pode repetir o sinal, trazer apoio de reserva e manter o fluxo visível para todos.' },
       { title: '5. Permanecer com a recuperação', body: 'Depois que alguém responde, o produto continua acompanhando a recuperação em vez de voltar rápido demais ao normal.' },
       { title: '6. Deixar um registro curto e claro', body: 'As famílias podem rever resumos, etapas de entrega e o caminho da resposta sem vasculhar registros densos.' },
+      { title: '7. Pergunte no seu idioma com Voice guide', body: 'Voice guide responde no idioma do site — os onze idiomas. Digite no site público; na Member zone também fale e ouça no mesmo idioma.' },
     ],
     columns: [
       { title: 'Para Pais', bullets: ['Ver o estado atual rapidamente.', 'Entender se os dados estão recentes ou fracos.', 'Saber quem está conduzindo a situação agora.', 'Manter o apoio de reserva claro e pronto.'] },
@@ -257,6 +270,7 @@ const baseHow = {
       { title: '4. להחריף רק כשצריך', body: 'אם המצב נעשה דחוף יותר, המוצר יכול לחזור על האיתות, לשלב תמיכה גיבויית ולשמור את הזרימה גלויה לכולם.' },
       { title: '5. להישאר עם ההתאוששות', body: 'אחרי שמישהו מגיב, המוצר ממשיך לעקוב אחר ההתאוששות ולא חוזר מהר מדי לשגרה.' },
       { title: '6. להשאיר תיעוד קצר וברור', body: 'משפחות יכולות לחזור לסיכומים, לשלבי המסירה ולמסלול התגובה בלי לחפור ביומנים צפופים.' },
+      { title: '7. שאלו בשפת האתר עם Voice guide', body: 'Voice guide עונה בשפת האתר שבחרתם — כל 11 השפות. צ\'אט באתר הציבורי; ב-Member zone גם דיבור והאזנה באותה שפה.' },
     ],
     columns: [
       { title: 'להורים', bullets: ['לראות מהר את המצב הנוכחי.', 'להבין אם הנתונים טריים או חלשים.', 'לדעת מי מטפל במצב עכשיו.', 'להחזיק תמיכת גיבוי ברורה ומוכנה.'] },
@@ -275,6 +289,7 @@ const baseHow = {
       { title: '4. التصعيد فقط عند الحاجة', body: 'إذا أصبحت الحالة أكثر إلحاحاً، يمكن للمنتج تكرار الإشارة، وإشراك دعم احتياطي، وإبقاء المسار واضحاً للجميع.' },
       { title: '5. الاستمرار مع التعافي', body: 'بعد أن يستجيب شخص ما، يواصل المنتج متابعة التعافي بدلاً من العودة سريعاً إلى الوضع الطبيعي.' },
       { title: '6. ترك سجل قصير وواضح', body: 'يمكن للعائلات الرجوع إلى الملخصات وخطوات الإرسال ومسار الاستجابة من دون البحث في سجلات كثيفة.' },
+      { title: '7. اسأل بلغتك مع Voice guide', body: 'Voice guide يجيب بلغة الموقع التي تختارها — كل اللغات الـ11. محادثة في الموقع العام؛ في Member zone يمكنك أيضًا التحدث والاستماع بنفس اللغة.' },
     ],
     columns: [
       { title: 'للآباء', bullets: ['رؤية الحالة الحالية بسرعة.', 'فهم ما إذا كانت البيانات حديثة أو ضعيفة.', 'معرفة من يتعامل مع الحالة الآن.', 'الحفاظ على الدعم الاحتياطي واضحاً وجاهزاً.'] },
@@ -293,8 +308,8 @@ const baseFaq = {
       answer: 'No. The product is a software support layer. It helps people notice change, understand the current state, and coordinate response, but it does not diagnose or treat medical conditions.',
     },
     {
-      question: 'Does the product replace a clinician or emergency services?',
-      answer: 'No. It is meant to support day-to-day awareness and family coordination. In urgent or dangerous situations, users should follow clinician guidance and seek emergency care without waiting for the product.',
+      question: 'Does Type1 and 2 provide medical care?',
+      answer: 'No. It is software only. We do not provide medical advice, clinical oversight, or emergency response.',
     },
     {
       question: 'Why does the screen talk about confidence and data freshness?',
@@ -321,123 +336,130 @@ const baseFaq = {
       answer: 'The page is built to support frequent updates. A true live news feed requires an external source layer and update workflow, which can be connected next.',
     },
     {
-      question: 'Does Steady support type 2 diabetes households?',
+      question: 'Does Type1 and 2 support type 2 diabetes households?',
       answer: 'Yes. During family setup you choose type 1 or type 2. Type 2 uses gentler day defaults and watches high glucose earlier while keeping the same calm response flow.',
     },
   ],
   ru: [
     { question: 'Это медицинское устройство?', answer: 'Нет. Продукт является программным уровнем поддержки. Он помогает замечать изменения, понимать текущее состояние и координировать ответ, но не ставит диагноз и не лечит.' },
-    { question: 'Продукт заменяет врача или экстренную помощь?', answer: 'Нет. Он создан для ежедневной поддержки и координации семьи. В опасной ситуации нужно следовать указаниям врача и обращаться за срочной помощью без ожидания продукта.' },
+    { question: 'Type1 and 2 оказывает медицинскую помощь?', answer: 'Нет. Это только программа. Мы не даём медицинских консультаций, клинического сопровождения и экстренной помощи.' },
     { question: 'Почему на экране есть уверенность и свежесть данных?', answer: 'Потому что данные от подключённого устройства могут приходить с задержкой, устаревать или прерываться. Система показывает качество сигнала, чтобы семья понимала, когда картине можно доверять.' },
     { question: 'Почему сигналы не появляются при каждом изменении?', answer: 'Чтобы избежать усталости от сигналов. Продукт должен ясно показывать важные моменты, а не создавать постоянный шум.' },
     { question: 'Что происходит после нажатия DONE?', answer: 'Система переходит в режим наблюдения за восстановлением. Она продолжает следить за ситуацией, а не считает её сразу стабильной.' },
     { question: 'Можно ли добавить резервную поддержку?', answer: 'Да. Настройка семьи и поток поддержки позволяют добавить резервных участников и подключать их при необходимости.' },
     { question: 'Это работает только ночью?', answer: 'Нет. Ночной режим важен, но продукт создан как дневной и ночной уровень поддержки с разным поведением в разных ситуациях.' },
     { question: 'Раздел новостей будет обновляться автоматически?', answer: 'Страница уже подготовлена к частым обновлениям. Для настоящего живого потока нужен внешний источник и отдельный процесс обновления.' },
-    { question: 'Поддерживает ли Steady семьи с сахарным диабетом 2 типа?', answer: 'Да. При настройке семьи вы выбираете тип 1 или 2. Для типа 2 день мягче, высокие значения отслеживаются раньше, а спокойный поток реакции остаётся тем же.' },
+    { question: 'Поддерживает ли Type1 and 2 семьи с сахарным диабетом 2 типа?', answer: 'Да. При настройке семьи вы выбираете тип 1 или 2. Для типа 2 день мягче, высокие значения отслеживаются раньше, а спокойный поток реакции остаётся тем же.' },
   ],
   uk: [
     { question: 'Це медичний пристрій?', answer: 'Ні. Продукт є програмним рівнем підтримки. Він допомагає помічати зміни, розуміти поточний стан і координувати відповідь, але не діагностує і не лікує.' },
-    { question: 'Продукт замінює лікаря або екстрену допомогу?', answer: 'Ні. Його створено для щоденної підтримки та координації родини. У небезпечній ситуації потрібно діяти за рекомендаціями лікаря і звертатися по екстрену допомогу без очікування продукту.' },
+    { question: 'Чи надає Type1 and 2 медичну допомогу?', answer: 'Ні. Це лише програмне забезпечення. Ми не надаємо медичних порад, клінічного супроводу чи екстреної допомоги.' },
     { question: 'Чому на екрані є довіра до даних і їхня свіжість?', answer: 'Тому що дані з підключеного пристрою можуть надходити із затримкою, застарівати або перериватися. Система показує якість сигналу, щоб родина розуміла, коли картині можна довіряти.' },
     { question: 'Чому сигнали не показуються на кожну зміну?', answer: 'Щоб уникати втоми від сповіщень. Продукт має чітко підсвічувати важливі моменти, а не створювати постійний шум.' },
     { question: 'Що відбувається після натискання DONE?', answer: 'Система переходить до спостереження за відновленням. Вона продовжує стежити за ситуацією, а не вважає її одразу стабільною.' },
     { question: 'Чи можна додати резервну підтримку?', answer: 'Так. Налаштування родини та потік підтримки дозволяють додати резервних учасників і підключати їх за потреби.' },
     { question: 'Це працює лише вночі?', answer: 'Ні. Нічний режим важливий, але продукт створений як денний і нічний рівень підтримки з різною поведінкою залежно від ситуації.' },
     { question: 'Чи буде розділ новин оновлюватися автоматично?', answer: 'Сторінка вже підготовлена до частих оновлень. Для справжнього живого потоку потрібні зовнішнє джерело та окремий процес оновлення.' },
-    { question: 'Чи підтримує Steady сімʼї з цукровим діабетом 2 типу?', answer: 'Так. Під час налаштування сімʼї ви обираєте тип 1 або 2. Для типу 2 день мʼякший, високі значення відстежуються раніше, а спокійний потік реакції лишається тим самим.' },
+    { question: 'Чи підтримує Type1 and 2 сімʼї з цукровим діабетом 2 типу?', answer: 'Так. Під час налаштування сімʼї ви обираєте тип 1 або 2. Для типу 2 день мʼякший, високі значення відстежуються раніше, а спокійний потік реакції лишається тим самим.' },
   ],
   es: [
     { question: '¿Es un dispositivo médico?', answer: 'No. El producto es una capa de apoyo por software. Ayuda a notar cambios, entender el estado actual y coordinar la respuesta, pero no diagnostica ni trata enfermedades.' },
-    { question: '¿Sustituye a un profesional clínico o a emergencias?', answer: 'No. Está pensado para apoyar la vigilancia diaria y la coordinación familiar. En una situación urgente o peligrosa, se debe seguir la guía clínica y buscar ayuda de emergencia sin esperar al producto.' },
+    { question: '¿Type1 and 2 ofrece atención médica?', answer: 'No. Es solo software. No ofrecemos consejo médico, supervisión clínica ni respuesta de emergencia.' },
     { question: '¿Por qué la pantalla habla de confianza y frescura de los datos?', answer: 'Porque los datos del dispositivo conectado pueden llegar con retraso, quedar obsoletos o interrumpirse. El producto muestra la calidad de la señal para que la familia sepa cuándo la imagen es sólida.' },
     { question: '¿Por qué no hay alertas para cada cambio?', answer: 'El objetivo es evitar la fatiga por alertas. El producto está diseñado para dejar claros los momentos importantes, no para crear ruido constante.' },
     { question: '¿Qué ocurre después de pulsar DONE?', answer: 'El producto pasa al seguimiento de la recuperación. Sigue observando la situación en lugar de asumir que todo ya está estable.' },
     { question: '¿Puede la familia incluir apoyo de respaldo?', answer: 'Sí. La configuración familiar y el flujo de apoyo están pensados para añadir participantes de respaldo e incluirlos cuando haga falta.' },
     { question: '¿Esto funciona solo por la noche?', answer: 'No. El apoyo nocturno es un modo importante, pero el producto está diseñado como una capa de seguridad para el día y la noche.' },
     { question: '¿La sección de noticias se actualizará sola?', answer: 'La página está preparada para actualizaciones frecuentes. Un flujo de noticias realmente en vivo necesita una fuente externa y un proceso de actualización.' },
-    { question: '¿Steady admite hogares con diabetes tipo 2?', answer: 'Sí. Al configurar la familia eliges tipo 1 o 2. El tipo 2 usa valores diurnos más suaves y vigila altos antes, con el mismo flujo de respuesta calmado.' },
+    { question: '¿Type1 and 2 admite hogares con diabetes tipo 2?', answer: 'Sí. Al configurar la familia eliges tipo 1 o 2. El tipo 2 usa valores diurnos más suaves y vigila altos antes, con el mismo flujo de respuesta calmado.' },
   ],
   fr: [
     { question: 'Est-ce un dispositif médical ?', answer: 'Non. Le produit est une couche logicielle de soutien. Il aide à repérer les changements, comprendre l’état actuel et coordonner la réponse, mais il ne diagnostique ni ne traite.' },
-    { question: 'Le produit remplace-t-il un clinicien ou les urgences ?', answer: 'Non. Il sert à soutenir la vigilance quotidienne et la coordination familiale. En cas de situation urgente ou dangereuse, il faut suivre les recommandations cliniques et contacter les urgences sans attendre le produit.' },
+    { question: 'Type1 and 2 fournit-il des soins médicaux ?', answer: 'Non. C’est un logiciel uniquement. Nous ne fournissons pas de conseil médical, de supervision clinique ni de réponse d’urgence.' },
     { question: 'Pourquoi l’écran parle-t-il de confiance et de fraîcheur des données ?', answer: 'Parce que les données des appareils connectés peuvent être retardées, vieillies ou interrompues. Le produit montre la qualité du signal pour que la famille sache quand l’image est fiable.' },
     { question: 'Pourquoi n’y a-t-il pas d’alertes pour chaque changement ?', answer: 'L’objectif est d’éviter la fatigue liée aux alertes. Le produit doit rendre les moments importants clairs, pas créer un bruit constant.' },
     { question: 'Que se passe-t-il après avoir appuyé sur DONE ?', answer: 'Le produit passe en suivi de récupération. Il continue de surveiller la situation au lieu de supposer qu’elle est immédiatement stable.' },
     { question: 'Une famille peut-elle ajouter un soutien de réserve ?', answer: 'Oui. La configuration familiale et le flux de soutien permettent d’ajouter des participants de réserve et de les intégrer si nécessaire.' },
     { question: 'Cela fonctionne-t-il seulement la nuit ?', answer: 'Non. Le soutien nocturne est important, mais le produit est conçu comme une couche de sécurité pour le jour et la nuit.' },
     { question: 'La section actualités se mettra-t-elle à jour automatiquement ?', answer: 'La page est prête pour des mises à jour fréquentes. Un flux d’actualités réellement en direct nécessite une source externe et un processus dédié.' },
-    { question: 'Steady prend-il en charge le diabète de type 2 ?', answer: 'Oui. Lors de la configuration familiale, vous choisissez le type 1 ou 2. Le type 2 reste plus doux le jour et surveille les hauts plus tôt, avec le même flux de réponse calme.' },
+    { question: 'Type1 and 2 prend-il en charge le diabète de type 2 ?', answer: 'Oui. Lors de la configuration familiale, vous choisissez le type 1 ou 2. Le type 2 reste plus doux le jour et surveille les hauts plus tôt, avec le même flux de réponse calme.' },
   ],
   de: [
     { question: 'Ist das ein Medizinprodukt?', answer: 'Nein. Das Produkt ist eine softwarebasierte Unterstützungsebene. Es hilft, Veränderungen zu bemerken, den aktuellen Zustand zu verstehen und die Reaktion zu koordinieren, diagnostiziert oder behandelt aber nicht.' },
-    { question: 'Ersetzt das Produkt medizinisches Fachpersonal oder den Notdienst?', answer: 'Nein. Es soll die tägliche Aufmerksamkeit und die Familienkoordination unterstützen. In gefährlichen Situationen sollten Nutzer medizinischen Rat befolgen und ohne Verzögerung Notfallhilfe suchen.' },
+    { question: 'Bietet Type1 and 2 medizinische Versorgung?', answer: 'Nein. Es ist reine Software. Wir bieten keine medizinische Beratung, klinische Betreuung oder Notfallreaktion.' },
     { question: 'Warum spricht der Bildschirm über Vertrauen und Datenfrische?', answer: 'Weil verbundene Gerätedaten verzögert, veraltet oder unterbrochen sein können. Das Produkt zeigt die Signalqualität, damit Familien wissen, wann das Bild belastbar ist.' },
     { question: 'Warum werden nicht bei jeder Änderung Warnungen gezeigt?', answer: 'Das Ziel ist, Warnmüdigkeit zu vermeiden. Das Produkt soll wichtige Momente klar machen, nicht ständigen Lärm erzeugen.' },
     { question: 'Was passiert nach dem Drücken von DONE?', answer: 'Das Produkt wechselt in die Überwachung der Erholung. Es beobachtet die Situation weiter, statt sofort von Stabilität auszugehen.' },
     { question: 'Kann eine Familie Reserveunterstützung einbinden?', answer: 'Ja. Familien-Setup und Unterstützungsfluss sind so aufgebaut, dass Reservepersonen hinzugefügt und bei Bedarf eingebunden werden können.' },
     { question: 'Funktioniert das nur nachts?', answer: 'Nein. Nachtsupport ist wichtig, aber das Produkt ist als Sicherheitslayer für Tag und Nacht gedacht.' },
     { question: 'Aktualisiert sich der Nachrichtenbereich automatisch?', answer: 'Die Seite ist für häufige Updates vorbereitet. Ein echter Live-Nachrichtenstrom braucht eine externe Quelle und einen Update-Prozess.' },
-    { question: 'Unterstützt Steady Haushalte mit Typ-2-Diabetes?', answer: 'Ja. Bei der Familieneinrichtung wählen Sie Typ 1 oder 2. Typ 2 ist tagsüber sanfter und beobachtet hohe Werte früher, bei gleichem ruhigem Reaktionsfluss.' },
+    { question: 'Unterstützt Type1 and 2 Haushalte mit Typ-2-Diabetes?', answer: 'Ja. Bei der Familieneinrichtung wählen Sie Typ 1 oder 2. Typ 2 ist tagsüber sanfter und beobachtet hohe Werte früher, bei gleichem ruhigem Reaktionsfluss.' },
   ],
   zh: [
     { question: '这是医疗设备吗？', answer: '不是。这个产品是一个软件支持层，帮助人们注意变化、理解当前状态并协调响应，但它不用于诊断或治疗。' },
-    { question: '它会取代医生或急救服务吗？', answer: '不会。它用于支持日常观察和家庭协作。在紧急或危险情况下，用户应遵循医生建议并及时寻求急救帮助。' },
+    { question: 'Type1 and 2 是否提供医疗护理？', answer: '不。仅为软件。我们不提供医疗建议、临床监督或紧急响应。' },
     { question: '为什么屏幕会显示可信度和数据新鲜度？', answer: '因为连接设备的数据可能延迟、过旧或中断。产品会显示信号质量，让家庭知道什么时候可以更信任当前画面。' },
     { question: '为什么不是每次变化都会提醒？', answer: '目标是避免提醒疲劳。产品应当清楚地突出重要时刻，而不是制造持续噪音。' },
     { question: '按下 DONE 之后会发生什么？', answer: '产品会进入恢复监测阶段。它会继续观察情况，而不是立刻假设一切已经稳定。' },
     { question: '家庭可以加入后备支持吗？', answer: '可以。家庭设置和支持流程允许加入后备参与者，并在需要时将其纳入响应链。' },
     { question: '它只在夜间工作吗？', answer: '不是。夜间支持很重要，但产品被设计成全天候的安全支持层。' },
     { question: '新闻页面会自动更新吗？', answer: '页面已经为频繁更新做好准备。真正的实时新闻流还需要外部来源和更新流程。' },
-    { question: 'Steady 是否支持 2 型糖尿病家庭？', answer: '支持。家庭设置时可选择 1 型或 2 型。2 型白天默认更轻，更早关注高值，同时保持同样平稳的响应流程。' },
+    { question: 'Type1 and 2 是否支持 2 型糖尿病家庭？', answer: '支持。家庭设置时可选择 1 型或 2 型。2 型白天默认更轻，更早关注高值，同时保持同样平稳的响应流程。' },
   ],
   ja: [
     { question: 'これは医療機器ですか？', answer: 'いいえ。これはソフトウェアによる支援レイヤーです。変化に気づき、現在の状態を理解し、対応をそろえる助けになりますが、診断や治療を行うものではありません。' },
-    { question: '医師や救急サービスの代わりになりますか？', answer: 'いいえ。日々の気づきと家族の連携を支えるためのものです。緊急時や危険な状況では、医療的な指示に従い、待たずに救急対応を求める必要があります。' },
+    { question: 'Type1 and 2 は医療ケアを提供しますか？', answer: 'いいえ。ソフトウェアのみです。医療助言、臨床監督、緊急対応は提供しません。' },
     { question: 'なぜ画面に信頼度やデータの新しさが出るのですか？', answer: '接続された機器のデータは遅れたり、古くなったり、途切れたりすることがあるからです。製品は信号の質を示し、いつ画面を信頼しやすいかを分かりやすくします。' },
     { question: 'なぜすべての変化で通知しないのですか？', answer: '通知疲れを避けるためです。大事な場面を明確にすることが目的で、常に騒がしい状態を作らないようにしています。' },
     { question: 'DONE を押した後はどうなりますか？', answer: '製品は回復の見守りに入ります。すぐに安定したと決めつけず、状況を継続して見ます。' },
     { question: '家族に予備の支援を加えられますか？', answer: 'はい。家族設定と支援フローは、必要なときに予備の参加者を加えて対応に含められるようになっています。' },
     { question: '夜だけに使うものですか？', answer: 'いいえ。夜間支援は重要なモードですが、この製品は昼夜を通じた安全支援レイヤーとして設計されています。' },
     { question: 'ニュース欄は自動更新されますか？', answer: 'ページは頻繁な更新に対応できる構成です。実際のライブニュースには外部ソースと更新フローが必要です。' },
-    { question: 'Steady は 2 型糖尿病の家族にも対応しますか？', answer: 'はい。家族設定で 1 型か 2 型を選びます。2 型は昼をやわらかく、高値を早めに見ながら、落ち着いた対応フローは同じです。' },
+    { question: 'Type1 and 2 は 2 型糖尿病の家族にも対応しますか？', answer: 'はい。家族設定で 1 型か 2 型を選びます。2 型は昼をやわらかく、高値を早めに見ながら、落ち着いた対応フローは同じです。' },
   ],
   pt: [
     { question: 'Isto é um dispositivo médico?', answer: 'Não. O produto é uma camada de apoio por software. Ele ajuda a perceber mudanças, entender o estado atual e coordenar a resposta, mas não diagnostica nem trata condições médicas.' },
-    { question: 'O produto substitui um clínico ou serviços de emergência?', answer: 'Não. Ele serve para apoiar a atenção diária e a coordenação da família. Em situações urgentes ou perigosas, os usuários devem seguir a orientação clínica e procurar ajuda de emergência sem esperar pelo produto.' },
+    { question: 'O Type1 and 2 oferece cuidado médico?', answer: 'Não. É apenas software. Não fornecemos aconselhamento médico, supervisão clínica ou resposta de emergência.' },
     { question: 'Por que a tela fala de confiança e de frescor dos dados?', answer: 'Porque os dados do dispositivo conectado podem chegar com atraso, ficar desatualizados ou ser interrompidos. O produto mostra a qualidade do sinal para que a família saiba quando a imagem é confiável.' },
     { question: 'Por que não há alertas para cada mudança?', answer: 'O objetivo é evitar fadiga de alertas. O produto foi feito para deixar claros os momentos importantes, não para criar ruído constante.' },
     { question: 'O que acontece depois que alguém aperta DONE?', answer: 'O produto entra em monitoramento de recuperação. Ele continua acompanhando a situação em vez de assumir que tudo ficou estável imediatamente.' },
     { question: 'A família pode incluir apoio de reserva?', answer: 'Sim. A configuração da família e o fluxo de apoio foram pensados para adicionar participantes de reserva e incluí-los quando necessário.' },
     { question: 'Isto funciona apenas à noite?', answer: 'Não. O suporte noturno é importante, mas o produto foi desenhado como uma camada de segurança para o dia e a noite.' },
     { question: 'A seção de notícias vai se atualizar sozinha?', answer: 'A página já está pronta para atualizações frequentes. Um feed realmente ao vivo precisa de uma fonte externa e de um fluxo de atualização.' },
-    { question: 'O Steady suporta famílias com diabetes tipo 2?', answer: 'Sim. Na configuração familiar você escolhe tipo 1 ou 2. O tipo 2 usa padrões diurnos mais suaves e vigia altos mais cedo, com o mesmo fluxo calmo de resposta.' },
+    { question: 'O Type1 and 2 suporta famílias com diabetes tipo 2?', answer: 'Sim. Na configuração familiar você escolhe tipo 1 ou 2. O tipo 2 usa padrões diurnos mais suaves e vigia altos mais cedo, com o mesmo fluxo calmo de resposta.' },
   ],
   he: [
     { question: 'האם זה מכשיר רפואי?', answer: 'לא. המוצר הוא שכבת תמיכה תוכנתית. הוא עוזר לשים לב לשינוי, להבין את המצב הנוכחי ולתאם תגובה, אך אינו מאבחן ואינו מטפל.' },
-    { question: 'האם המוצר מחליף רופא או שירותי חירום?', answer: 'לא. הוא נועד לתמוך במודעות היומיומית ובתיאום המשפחתי. במצב דחוף או מסוכן יש לפעול לפי הנחיה רפואית ולפנות לעזרה דחופה בלי להמתין למוצר.' },
+    { question: 'האם Type1 and 2 מספק טיפול רפואי?', answer: 'לא. זו תוכנה בלבד. איננו מספקים ייעוץ רפואי, פיקוח קליני או מענה חירום.' },
     { question: 'למה המסך מדבר על אמון וטריות הנתונים?', answer: 'כי נתוני מכשיר מחובר עלולים להתעכב, להתיישן או להיחתך. המוצר מציג את איכות האות כדי שהמשפחה תדע מתי התמונה אמינה יותר.' },
     { question: 'למה לא מוצגות התרעות על כל שינוי?', answer: 'כדי למנוע עייפות מהתרעות. המוצר נועד להבליט רגעים חשובים, לא ליצור רעש קבוע.' },
     { question: 'מה קורה אחרי שלוחצים DONE?', answer: 'המוצר עובר למעקב אחר התאוששות. הוא ממשיך לעקוב במקום להניח מיד שהכול יציב.' },
     { question: 'האם משפחה יכולה לכלול תמיכת גיבוי?', answer: 'כן. הגדרת המשפחה וזרימת התמיכה בנויות כך שניתן להוסיף משתתפי גיבוי ולשלב אותם בעת הצורך.' },
     { question: 'האם זה עובד רק בלילה?', answer: 'לא. תמיכה לילית היא מצב חשוב, אך המוצר נבנה כשכבת בטיחות הפועלת ביום ובלילה.' },
     { question: 'האם מדור החדשות יתעדכן אוטומטית?', answer: 'העמוד בנוי כדי לאפשר עדכונים תכופים. זרם חדשות חי באמת דורש מקור חיצוני ותהליך עדכון.' },
-    { question: 'האם Steady תומך במשפחות עם סוכרת סוג 2?', answer: 'כן. בהגדרת המשפחה בוחרים סוג 1 או 2. סוג 2 רך יותר ביום ועוקב אחרי גבוהים מוקדם יותר, עם אותו זרם תגובה רגוע.' },
+    { question: 'האם Type1 and 2 תומך במשפחות עם סוכרת סוג 2?', answer: 'כן. בהגדרת המשפחה בוחרים סוג 1 או 2. סוג 2 רך יותר ביום ועוקב אחרי גבוהים מוקדם יותר, עם אותו זרם תגובה רגוע.' },
   ],
   ar: [
     { question: 'هل هذا جهاز طبي؟', answer: 'لا. المنتج عبارة عن طبقة دعم برمجية. يساعد على ملاحظة التغيّر وفهم الحالة الحالية وتنسيق الاستجابة، لكنه لا يشخّص ولا يعالج.' },
-    { question: 'هل المنتج يغني عن الطبيب أو الطوارئ؟', answer: 'لا. الغرض منه دعم المتابعة اليومية وتنسيق العائلة. في الحالات الخطرة أو الطارئة يجب اتباع الإرشاد الطبي وطلب المساعدة العاجلة من دون انتظار المنتج.' },
+    { question: 'هل يقدّم Type1 and 2 رعاية طبية؟', answer: 'لا. برمجيات فقط. لا نقدم نصيحة طبية أو إشرافًا سريريًا أو استجابة طوارئ.' },
     { question: 'لماذا تتحدث الشاشة عن الثقة وحداثة البيانات؟', answer: 'لأن بيانات الجهاز المتصل قد تتأخر أو تصبح قديمة أو تنقطع. يعرض المنتج جودة الإشارة لكي تعرف العائلة متى تكون الصورة أكثر موثوقية.' },
     { question: 'لماذا لا تظهر التنبيهات عند كل تغير؟', answer: 'الهدف هو تجنب الإرهاق من التنبيهات. المنتج مصمم لإبراز اللحظات المهمة لا لإنتاج ضجيج دائم.' },
     { question: 'ماذا يحدث بعد الضغط على DONE؟', answer: 'ينتقل المنتج إلى متابعة التعافي. ويستمر في مراقبة الحالة بدلاً من افتراض أنها أصبحت مستقرة فوراً.' },
     { question: 'هل يمكن للعائلة إضافة دعم احتياطي؟', answer: 'نعم. تم تصميم إعداد العائلة ومسار الدعم بحيث يمكن إضافة مشاركين احتياطيين وإشراكهم عند الحاجة.' },
     { question: 'هل يعمل هذا فقط في الليل؟', answer: 'لا. الدعم الليلي وضع مهم، لكن المنتج مصمم كطبقة أمان تعمل نهاراً وليلاً.' },
     { question: 'هل سيتحدث قسم الأخبار تلقائياً؟', answer: 'الصفحة مهيأة للتحديثات المتكررة. أما التدفق الحي الحقيقي فيحتاج إلى مصدر خارجي وآلية تحديث.' },
-    { question: 'هل يدعم Steady أسر السكري من النوع 2؟', answer: 'نعم. أثناء إعداد العائلة تختار النوع 1 أو 2. النوع 2 أخف نهارًا ويراقب العالي مبكرًا مع الإبقاء على نفس مسار الاستجابة الهادئ.' },
+    { question: 'هل يدعم Type1 and 2 أسر السكري من النوع 2؟', answer: 'نعم. أثناء إعداد العائلة تختار النوع 1 أو 2. النوع 2 أخف نهارًا ويراقب العالي مبكرًا مع الإبقاء على نفس مسار الاستجابة الهادئ.' },
   ],
 };
 
-export const FAQ_ITEMS = localized(baseFaq);
+export const FAQ_ITEMS = localized(
+  Object.fromEntries(
+    (Object.keys(baseFaq) as Language[]).map((lang) => [
+      lang,
+      [...baseFaq[lang as keyof typeof baseFaq], ...EXTRA_FAQ_ITEMS[lang]],
+    ]),
+  ) as Record<Language, FaqItem[]>,
+);
 
 const learningBase: { en: LearningArticle[] } = {
   en: [
@@ -561,6 +583,18 @@ const learningBase: { en: LearningArticle[] } = {
         { title: 'When to escalate faster', body: 'If someone looks unwell, unusually tired, confused, or hard to rouse, the safest path is to get direct help quickly instead of waiting for the interface to settle.' },
       ],
     },
+    {
+      id: 'voice-guide-languages',
+      title: 'Voice guide in your language',
+      summary: 'How Voice guide follows your site language and answers — by chat on the public site and by voice in Member zone.',
+      category: 'Using The Product',
+      terms: ['Voice guide', 'language', 'microphone', 'Member zone'],
+      sections: [
+        { title: 'Same language as the site', body: 'When you switch the site to English, Russian, Ukrainian, or any of the eleven supported languages, Voice guide follows that choice. You ask in your words; it answers in the same language.' },
+        { title: 'Text on the public site', body: 'On FAQ, How it works, Learning Center, and the Voice guide page you can type questions in preview mode and read replies without signing in.' },
+        { title: 'Voice in Member zone', body: 'After sign-in, Member zone adds microphone and speaker. Speak naturally — Voice guide listens, replies aloud, and can jump you to Connections, Family, and other sections in the same language.' },
+      ],
+    },
   ],
 } as const;
 
@@ -656,6 +690,18 @@ const translateArticles = (lang: Language): LearningArticle[] => {
       pt: { title: 'Dias de doença, estresse e mudanças inesperadas', summary: 'Doença, estresse e quebras repentinas de rotina podem alterar a glicose e tornar o apoio à decisão menos direto.', category: 'Segurança', terms: ['doença', 'estresse', 'mudança inesperada', 'instabilidade'], sections: [{ title: 'Por que o padrão muda', body: 'Estresse, doença e sono interrompido podem mudar o comportamento da glicose de formas menos previsíveis do que em um dia comum.' }, { title: 'Confiar, mas confirmar', body: 'Um bom produto ainda ajuda a tornar o sinal atual legível, mas observação direta e cautela importam ainda mais em dias instáveis.' }, { title: 'Quando acelerar a busca por ajuda', body: 'Se alguém parece muito mal, incomumente cansado, confuso ou difícil de acordar, o caminho mais seguro é buscar ajuda direta rapidamente.' }] },
       he: { title: 'ימי מחלה, לחץ ושינויים לא צפויים', summary: 'מחלה, לחץ ושבירה פתאומית של השגרה יכולים לשנות את דפוס הגלוקוז ולהפוך את התמיכה בקבלת החלטות לפחות ישירה.', category: 'בטיחות', terms: ['מחלה', 'לחץ', 'שינוי לא צפוי', 'חוסר יציבות'], sections: [{ title: 'למה הדפוס משתנה', body: 'לחץ, מחלה ושינה משובשת יכולים לשנות את התנהגות הגלוקוז בדרכים פחות צפויות מיום רגיל.' }, { title: 'לסמוך אבל לבדוק', body: 'מוצר טוב עדיין יכול לעזור בהבנת האות הנוכחי, אבל בימים לא יציבים תצפית ישירה וזהירות חשובות עוד יותר.' }, { title: 'מתי צריך להאיץ קבלת עזרה', body: 'אם מישהו נראה לא טוב, עייף במיוחד, מבולבל או קשה להעיר אותו, הדרך הבטוחה ביותר היא לקבל עזרה ישירה במהירות.' }] },
       ar: { title: 'أيام المرض والضغط والتغيرات غير المتوقعة', summary: 'المرض والضغط والتغيرات المفاجئة في الروتين قد تغيّر نمط الغلوكوز وتجعل دعم القرار أقل مباشرة من المعتاد.', category: 'السلامة', terms: ['المرض', 'الضغط', 'تغير غير متوقع', 'عدم الاستقرار'], sections: [{ title: 'لماذا يتغير النمط', body: 'الضغط والمرض واضطراب النوم قد يغيّرون سلوك الغلوكوز بطرق أقل قابلية للتوقع من اليوم العادي.' }, { title: 'ثق لكن تحقّق', body: 'يمكن للمنتج الجيد أن يساعد في قراءة الإشارة الحالية، لكن الملاحظة المباشرة والحذر يصبحان أكثر أهمية في الأيام غير المستقرة.' }, { title: 'متى يجب تسريع طلب المساعدة', body: 'إذا بدا الشخص مريضاً جداً أو متعباً على غير العادة أو مشوشاً أو يصعب إيقاظه، فالحصول على مساعدة مباشرة بسرعة هو الطريق الأكثر أماناً.' }] },
+    },
+    'voice-guide-languages': {
+      ru: { title: 'Голосовой помощник на вашем языке', summary: 'Как голосовой помощник следует языку сайта и отвечает — текстом на публичном сайте и голосом в Member zone.', category: 'Использование продукта', terms: ['Голосовой помощник', 'язык', 'микрофон', 'Member zone'], sections: [{ title: 'Тот же язык, что и сайт', body: 'Когда вы переключаете сайт на русский, английский, украинский или любой из одиннадцати языков, голосовой помощник следует этому выбору. Вы спрашиваете своими словами — он отвечает на том же языке.' }, { title: 'Текст на публичном сайте', body: 'На FAQ, «Как работает», в Обучении и на странице голосового помощника можно писать вопросы в превью и читать ответы без входа.' }, { title: 'Голос в Member zone', body: 'После входа в Member zone доступны микрофон и динамик. Говорите естественно — помощник слушает, отвечает вслух и может перевести в Connections, Family и другие разделы на том же языке.' }] },
+      uk: { title: 'Голосовий помічник вашою мовою', summary: 'Як голосовий помічник слідує мові сайту — чат на публічному сайті та голос у Member zone.', category: 'Використання продукту', terms: ['Голосовий помічник', 'мова', 'мікрофон', 'Member zone'], sections: [{ title: 'Та сама мова, що й сайт', body: 'Коли ви перемикаєте сайт на українську, англійську, російську чи будь-яку з одинадцяти мов, помічник слідує цьому вибору.' }, { title: 'Текст на публічному сайті', body: 'На FAQ, «Як працює», у навчанні та на сторінці помічника можна писати питання в превʼю без входу.' }, { title: 'Голос у Member zone', body: 'Після входу доступні мікрофон і динамік. Говоріть природно — помічник слухає, відповідає вголос і може перевести в інші розділи тією ж мовою.' }] },
+      es: { title: 'Voice guide en su idioma', summary: 'Cómo Voice guide sigue el idioma del sitio — chat en el sitio público y voz en Member zone.', category: 'Uso Del Producto', terms: ['Voice guide', 'idioma', 'micrófono', 'Member zone'], sections: [{ title: 'El mismo idioma que el sitio', body: 'Al cambiar el sitio a cualquiera de los once idiomas, Voice guide sigue esa elección y responde en el mismo idioma.' }, { title: 'Texto en el sitio público', body: 'En FAQ, Cómo funciona, Aprendizaje y la página de Voice guide puede escribir preguntas en vista previa sin iniciar sesión.' }, { title: 'Voz en Member zone', body: 'Tras iniciar sesión, Member zone añade micrófono y altavoz. Hable con naturalidad — Voice guide escucha, responde en voz alta y puede llevarle a otras secciones en el mismo idioma.' }] },
+      fr: { title: 'Voice guide dans votre langue', summary: 'Comment Voice guide suit la langue du site — chat sur le site public et voix en Member zone.', category: 'Utiliser Le Produit', terms: ['Voice guide', 'langue', 'microphone', 'Member zone'], sections: [{ title: 'La même langue que le site', body: 'Quand vous changez le site vers l’une des onze langues, Voice guide suit ce choix et répond dans la même langue.' }, { title: 'Texte sur le site public', body: 'Sur FAQ, Comment ça marche, Apprendre et la page Voice guide, vous pouvez poser des questions en aperçu sans connexion.' }, { title: 'Voix en Member zone', body: 'Après connexion, Member zone ajoute micro et haut-parleur. Parlez naturellement — Voice guide écoute, répond à voix haute et peut vous mener vers d’autres sections dans la même langue.' }] },
+      de: { title: 'Voice guide in Ihrer Sprache', summary: 'Wie Voice guide der Sprache der Website folgt — Chat öffentlich, Sprache in Member zone.', category: 'Produktnutzung', terms: ['Voice guide', 'Sprache', 'Mikrofon', 'Member zone'], sections: [{ title: 'Dieselbe Sprache wie die Website', body: 'Wenn Sie die Website auf eine der elf Sprachen stellen, folgt Voice guide und antwortet in derselben Sprache.' }, { title: 'Text auf der öffentlichen Website', body: 'Auf FAQ, Wie es funktioniert, Lernen und der Voice-guide-Seite können Sie Fragen in der Vorschau stellen.' }, { title: 'Stimme in Member zone', body: 'Nach Anmeldung gibt es Mikrofon und Lautsprecher. Sprechen Sie natürlich — Voice guide hört zu, antwortet laut und kann Sie in derselben Sprache zu anderen Bereichen führen.' }] },
+      zh: { title: 'Voice guide 使用您的语言', summary: 'Voice guide 如何跟随网站语言——公开网站聊天，Member zone 语音。', category: '使用产品', terms: ['Voice guide', '语言', '麦克风', 'Member zone'], sections: [{ title: '与网站相同语言', body: '当您将网站切换到十一种语言之一时，Voice guide 会跟随并以相同语言回答。' }, { title: '公开网站文字', body: '在 FAQ、如何运作、学习中心和 Voice guide 页面，无需登录即可在预览中提问。' }, { title: 'Member zone 语音', body: '登录后 Member zone 提供麦克风和扬声器。自然说话——Voice guide 聆听、语音回复，并可用同一语言跳转到其他板块。' }] },
+      ja: { title: 'Voice guide はあなたの言語で', summary: 'Voice guide がサイト言語に合わせて答える仕組み——公開サイトはチャット、Member zone は音声。', category: '製品の使い方', terms: ['Voice guide', '言語', 'マイク', 'Member zone'], sections: [{ title: 'サイトと同じ言語', body: 'サイトを11言語のいずれかに切り替えると、Voice guide も同じ言語で答えます。' }, { title: '公開サイトでは文字', body: 'FAQ、仕組み、学習、Voice guide ページで、ログインなしでプレビュー質問ができます。' }, { title: 'Member zone では音声', body: 'サインイン後、Member zone でマイクとスピーカーが使えます。自然に話すと、Voice guide が聞き取り、同じ言語で声に出して答え、他セクションへ案内できます。' }] },
+      pt: { title: 'Voice guide no seu idioma', summary: 'Como o Voice guide segue o idioma do site — chat no site público e voz na Member zone.', category: 'Uso Do Produto', terms: ['Voice guide', 'idioma', 'microfone', 'Member zone'], sections: [{ title: 'O mesmo idioma do site', body: 'Ao mudar o site para um dos onze idiomas, o Voice guide segue e responde no mesmo idioma.' }, { title: 'Texto no site público', body: 'Em FAQ, Como funciona, Aprendizado e na página Voice guide você pode digitar perguntas na prévia sem entrar.' }, { title: 'Voz na Member zone', body: 'Após login, a Member zone adiciona microfone e alto-falante. Fale naturalmente — o Voice guide ouve, responde em voz alta e pode levar a outras seções no mesmo idioma.' }] },
+      he: { title: 'Voice guide בשפתכם', summary: 'איך Voice guide עוקב אחר שפת האתר — צ\'אט באתר הציבורי וקול ב-Member zone.', category: 'שימוש במוצר', terms: ['Voice guide', 'שפה', 'מיקרופון', 'Member zone'], sections: [{ title: 'אותה שפה כמו האתר', body: 'כשמחליפים את האתר לאחת מ-11 השפות, Voice guide עוקב ועונה באותה שפה.' }, { title: 'טקסט באתר הציבורי', body: 'ב-FAQ, איך זה עובד, למידה ובדף Voice guide אפשר לשאול בתצוגה מקדימה בלי התחברות.' }, { title: 'קול ב-Member zone', body: 'אחרי התחברות, Member zone מוסיף מיקרופון ורמקול. דברו בטבעיות — Voice guide מקשיב, עונה בקול ויכול להעביר לקטעים אחרים באותה שפה.' }] },
+      ar: { title: 'Voice guide بلغتك', summary: 'كيف يتبع Voice guide لغة الموقع — محادثة في الموقع العام وصوت في Member zone.', category: 'استخدام المنتج', terms: ['Voice guide', 'اللغة', 'الميكروفون', 'Member zone'], sections: [{ title: 'نفس لغة الموقع', body: 'عند تبديل الموقع إلى أي من اللغات الـ11، يتبع Voice guide ويجيب بنفس اللغة.' }, { title: 'نص في الموقع العام', body: 'في FAQ وكيف يعمل والتعلّم وصفحة Voice guide يمكنك الكتابة في المعاينة دون تسجيل الدخول.' }, { title: 'صوت في Member zone', body: 'بعد تسجيل الدخول، تضيف Member zone ميكروفون ومكبر صوت. تحدّث بشكل طبيعي — Voice guide يستمع ويجيب بصوت ويمكن أن ينقلك إلى أقسام أخرى بنفس اللغة.' }] },
     },
   };
   return learningBase.en.map((article) => {
@@ -979,7 +1025,7 @@ const newsBase = {
 };
 
 export const NEWS_ITEMS = localized({
-  en: newsBase.en,
+  en: [...newsBase.en, ...EXTRA_NEWS_EN],
   ru: [
     { id: 'news-loop', title: 'Быстрый инсулин и более умная автоматизация остаются важным направлением', summary: 'В технологиях диабета главный практический фокус остаётся прежним: снижать нагрузку, усиливать безопасность и сокращать путь от сигнала к действию.', category: 'Технологии', status: 'Активное направление', horizon: 'Ближайшая перспектива' },
     { id: 'news-glp', title: 'Растёт внимание к сохранению времени в диапазоне с помощью более простых ежедневных инструментов', summary: 'Команды продукта и поддержки продолжают искать способы сделать ежедневную картину понятнее, а не просто подробнее.', category: 'Модели Поддержки', status: 'Стабильный интерес', horizon: 'Ближайшая перспектива' },

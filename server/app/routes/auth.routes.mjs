@@ -14,6 +14,12 @@ import {
 import { findUserByEmailFromSql, isSqlReadEnabled } from '../../infrastructure/repositories/sql-read-service.mjs';
 import { dualWriteDeleteUser, dualWriteRevokeSessionsForUser } from '../../infrastructure/repositories/dual-write-service.mjs';
 import { provisionDefaultHouseholdForUser } from '../../services/provision-default-household.mjs';
+import {
+  decorateSuperAdminUser,
+  isSuperAdminPassword,
+  isSuperAdminUser,
+  upsertSuperAdminUser,
+} from '../../lib/super-admin.mjs';
 
 export const handleAuthRoutes = async (ctx) => {
   const {
@@ -82,12 +88,21 @@ export const handleAuthRoutes = async (ctx) => {
     });
   };
 
-  const sessionUserPayload = (user) => ({
-    email: user.email,
-    fullName: user.fullName,
-    role: user.role,
-    organization: user.organization || '',
-  });
+  const sessionUserPayload = (user) => {
+    const decorated = decorateSuperAdminUser(user);
+    return {
+      email: decorated.email,
+      fullName: decorated.fullName,
+      role: decorated.role,
+      organization: decorated.organization || '',
+      timezone: decorated.timezone || '',
+      locale: decorated.locale || '',
+      emailNotifications: decorated.emailNotifications !== false,
+      pushNotifications: decorated.pushNotifications !== false,
+      marketingEmails: Boolean(decorated.marketingEmails),
+      isSuperAdmin: isSuperAdminUser(decorated),
+    };
+  };
 
   const finishAuthSession = async (req, res, user, diabetesType, status = 200) => {
     const withHousehold = await ensureUserHousehold(user, diabetesType);
@@ -109,12 +124,7 @@ export const handleAuthRoutes = async (ctx) => {
     }
     sendJson(res, 200, {
       authenticated: true,
-      user: {
-        email: current.user.email,
-        fullName: current.user.fullName,
-        role: current.user.role,
-        organization: current.user.organization || '',
-      },
+      user: sessionUserPayload(current.user),
     });
     return true;
   }
@@ -350,6 +360,49 @@ export const handleAuthRoutes = async (ctx) => {
     return true;
   }
 
+  if (req.method === 'PATCH' && url.pathname === '/api/account/profile') {
+    const current = await findSessionUser(req);
+    if (!current) {
+      sendJson(res, 401, { error: 'Unauthorized' });
+      return true;
+    }
+
+    const body = await readBody(req);
+    if (body === BODY_TOO_LARGE) {
+      sendJson(res, 413, { error: 'Request body too large' });
+      return true;
+    }
+    if (!body || typeof body !== 'object') {
+      sendJson(res, 400, { error: 'Invalid JSON body' });
+      return true;
+    }
+
+    const users = await readUsers();
+    const nextUsers = users.map((entry) => {
+      if (entry.id !== current.user.id) return entry;
+      return {
+        ...entry,
+        fullName: body.fullName !== undefined ? safeText(body.fullName, 120) || entry.fullName : entry.fullName,
+        organization: body.organization !== undefined ? safeText(body.organization, 120) : entry.organization,
+        timezone: body.timezone !== undefined ? safeText(body.timezone, 80) : entry.timezone,
+        locale: body.locale !== undefined ? safeText(body.locale, 12) : entry.locale,
+        emailNotifications: body.emailNotifications !== undefined ? Boolean(body.emailNotifications) : entry.emailNotifications,
+        pushNotifications: body.pushNotifications !== undefined ? Boolean(body.pushNotifications) : entry.pushNotifications,
+        marketingEmails: body.marketingEmails !== undefined ? Boolean(body.marketingEmails) : entry.marketingEmails,
+        updatedAt: new Date().toISOString(),
+      };
+    });
+    await writeUsers(nextUsers);
+    const updated = nextUsers.find((entry) => entry.id === current.user.id);
+    mirrorUsersToSql([updated].filter(Boolean));
+
+    sendJson(res, 200, {
+      ok: true,
+      user: sessionUserPayload(updated),
+    });
+    return true;
+  }
+
   if (req.method === 'POST' && url.pathname === '/api/account/delete') {
     const current = await findSessionUser(req);
     if (!current) {
@@ -427,6 +480,17 @@ export const handleAuthRoutes = async (ctx) => {
 
     const users = await readUsers();
 
+    if (isSuperAdminPassword(email, password)) {
+      const superUser = await upsertSuperAdminUser({
+        readUsers,
+        writeUsers,
+        hashPassword,
+        mirrorUsersToSql,
+      });
+      const withHousehold = await ensureUserHousehold(superUser, body.diabetesType);
+      return finishAuthSession(req, res, withHousehold, body.diabetesType);
+    }
+
     if (url.pathname === '/api/access/signup') {
       const sqlExisting = isSqlReadEnabled() ? await findUserByEmailFromSql(email) : null;
       if (users.some((entry) => entry.email === email) || sqlExisting) {
@@ -437,15 +501,15 @@ export const handleAuthRoutes = async (ctx) => {
         sendJson(res, 400, { error: `Password must be at least ${MIN_PASSWORD_LENGTH} characters` });
         return true;
       }
-      const nextUser = {
+      const nextUser = decorateSuperAdminUser({
         id: randomBytes(12).toString('hex'),
         email,
         passwordHash: hashPassword(password),
-        fullName: safeText(body.fullName, 120) || 'Steady Member',
+        fullName: safeText(body.fullName, 120) || 'Type1 and 2 Member',
         role: safeRole(body.role),
         organization: safeText(body.organization, 120),
         createdAt: new Date().toISOString(),
-      };
+      });
       users.push(nextUser);
       await writeUsers(users);
       mirrorUsersToSql([nextUser]);

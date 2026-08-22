@@ -1,7 +1,9 @@
 import React from 'react';
 import { Activity, Download, Heart, HeartHandshake, Monitor, Smartphone, Sparkles, Waves } from 'lucide-react';
-import type { DiabetesType, Language } from '../../types';
-import { BRAND_TAGLINE } from '../../content/landing-copy';
+import type { Language } from '../../types';
+import type { SignupDiabetesChoice } from '../../lib/signup-diabetes-type';
+import { BrandLogo } from '../BrandLogo';
+import { SocialLinks } from '../SocialLinks';
 import LanguageSelector from '../LanguageSelector';
 import ThemeToggle from '../ThemeToggle';
 import type { T1DTheme } from '../../lib/t1d-ui';
@@ -31,6 +33,7 @@ interface T1DFooterProps {
   signInLabel: string;
   type1SignUpLabel: string;
   type2SignUpLabel: string;
+  bothSignUpLabel: string;
   activePageLabel: string;
   copyright: string;
   reserved: string;
@@ -48,14 +51,13 @@ interface T1DFooterProps {
   languageSectionLabel: string;
   changeLanguageLabel: string;
   legalNote: string;
-  trustLegalLabel: string;
   productLinks: FooterLink[];
   knowledgeLinks: FooterLink[];
   legalLinks: FooterLink[];
   downloadLinks: FooterLink[];
   onNavigate: (pageId: string) => void;
   onSignIn: () => void;
-  onSignUp: (type: DiabetesType) => void;
+  onSignUp: (choice: SignupDiabetesChoice) => void;
   onToggleTheme: () => void;
   setLang: (lang: Language) => void;
 }
@@ -97,6 +99,7 @@ export const T1DFooter: React.FC<T1DFooterProps> = ({
   signInLabel,
   type1SignUpLabel,
   type2SignUpLabel,
+  bothSignUpLabel,
   activePageLabel,
   copyright,
   reserved,
@@ -114,7 +117,6 @@ export const T1DFooter: React.FC<T1DFooterProps> = ({
   languageSectionLabel,
   changeLanguageLabel,
   legalNote,
-  trustLegalLabel,
   productLinks,
   knowledgeLinks,
   legalLinks,
@@ -164,6 +166,9 @@ export const T1DFooter: React.FC<T1DFooterProps> = ({
             <button type="button" onClick={() => onSignUp('type2')} className={t1dBtnPrimary(theme)}>
               {type2SignUpLabel}
             </button>
+            <button type="button" onClick={() => onSignUp('both')} className={t1dBtnSecondary(theme)}>
+              {bothSignUpLabel}
+            </button>
           </div>
         </div>
       </div>
@@ -183,17 +188,9 @@ export const T1DFooter: React.FC<T1DFooterProps> = ({
 
         <div className={`grid grid-cols-1 gap-10 border-b pb-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1.2fr_0.85fr_0.85fr_0.85fr_0.85fr_0.9fr] ${theme === 'dark' ? 'border-white/10' : 'border-slate-200/80'}`}>
           <div className={`space-y-4 ${isRTL ? 'text-right' : 'text-left'}`}>
-            <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <span className={`t1d-brand-mark ${theme === 'dark' ? 't1d-brand-mark--dark' : ''}`}>
-                <Heart size={20} />
-              </span>
-              <div>
-                <p className="t1d-eyebrow">{BRAND_TAGLINE[lang]}</p>
-                <p className="text-2xl font-extrabold tracking-tight t1d-display">{brand}</p>
-              </div>
-            </div>
+            <BrandLogo variant="full" density="footer" isRTL={isRTL} />
+            <SocialLinks isRTL={isRTL} />
             <p className={`text-base font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>{heroEyebrow}</p>
-            <p className={`max-w-md text-sm leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{disclaimer}</p>
           </div>
 
           <nav className="space-y-4">
@@ -284,9 +281,12 @@ export const T1DFooter: React.FC<T1DFooterProps> = ({
                   switchToDarkTitle={switchToDarkTitle}
                 />
               </div>
-              <p className={`text-[13px] leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{trustLegalLabel}</p>
             </div>
           </div>
+        </div>
+
+        <div className={`t1d-footer-legal-strip ${theme === 'dark' ? 't1d-footer-legal-strip--dark' : ''} ${isRTL ? 't1d-footer-legal-strip--rtl' : ''}`}>
+          <p className="t1d-footer-disclaimer">{disclaimer}</p>
         </div>
 
         <div className={`mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between ${isRTL ? 'md:flex-row-reverse' : ''}`}>

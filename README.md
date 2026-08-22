@@ -1,4 +1,4 @@
-# T1D / Steady
+# T1D / Type1 and 2
 
 Family response and coordination system around CGM events.
 

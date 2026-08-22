@@ -19,6 +19,8 @@ const {
   shouldRunBackgroundDexcomPoll,
   applyDexcomPollToHousehold,
   appendDexcomAudit,
+  shouldRunBackgroundHealthPortalSync,
+  applyHealthPortalSyncToHousehold,
   runEscalationPass,
 } = createApp({ serverDir: __dirname });
 
@@ -38,6 +40,8 @@ if (isDirectRun) {
     shouldRunBackgroundDexcomPoll,
     applyDexcomPollToHousehold,
     appendDexcomAudit,
+    shouldRunBackgroundHealthPortalSync,
+    applyHealthPortalSyncToHousehold,
     runEscalationPass,
     logger: console,
   });

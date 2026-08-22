@@ -119,7 +119,7 @@ const buildCombinedInsight = ({ meal, currentGlucose, trend, diabetesType }) => 
   if (carbs <= 20) {
     return `${glucoseText}${trendText}. Lower carb meal (${carbs}g) — good choice if you want a calmer post-meal curve.`;
   }
-  return `${glucoseText}${trendText}. Balanced meal logged — Steady will keep this alongside your safety timeline.`;
+  return `${glucoseText}${trendText}. Balanced meal logged — Type1 and 2 will keep this alongside your safety timeline.`;
 };
 
 export const ensureNutritionState = (household) => {

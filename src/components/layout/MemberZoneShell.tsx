@@ -1,11 +1,14 @@
 import React from 'react';
 import type { DiabetesType, Language } from '../../types';
+import type { SignupDiabetesChoice } from '../../lib/signup-diabetes-type';
+import { AUTH_TYPE_COPY } from '../../content/access-copy';
 import { buildPublicSiteChrome } from '../../lib/public-site-chrome';
 import { memberLayoutTypeClass, memberShellTypeClass, typeAccentBarClass } from '../../lib/diabetes-type-theme';
 import { T1DPageBackdrop } from './T1DPageBackdrop';
 import { T1DFooter } from './T1DFooter';
 import { T1DTopbar } from './T1DTopbar';
 import { DiabetesTypeRibbon } from './DiabetesTypeRibbon';
+import { MemberZoneStrip } from './MemberZoneStrip';
 import type { T1DTheme } from '../../lib/t1d-ui';
 
 interface MemberZoneShellProps {
@@ -19,7 +22,7 @@ interface MemberZoneShellProps {
   accountLabel: string;
   onAccountAction: () => void;
   onBackToPublic: () => void;
-  onSignUp: (type: DiabetesType) => void;
+  onSignUp: (choice: SignupDiabetesChoice) => void;
   children: React.ReactNode;
   hero?: React.ReactNode;
 }
@@ -51,7 +54,6 @@ export const MemberZoneShell: React.FC<MemberZoneShellProps> = ({
     <div dir={isRTL ? 'rtl' : 'ltr'} className={`min-h-screen w-full relative flex flex-col ${shellTone} ${memberShellTypeClass(diabetesType)} ${isRTL ? 'text-right' : 'text-left'}`}>
       <T1DPageBackdrop theme={theme} diabetesType={diabetesType} />
       <div className={typeAccentBarClass(diabetesType, theme)} />
-      {diabetesType ? <DiabetesTypeRibbon lang={lang} theme={theme} diabetesType={diabetesType} isRTL={isRTL} /> : null}
       <T1DTopbar
         lang={lang}
         theme={theme}
@@ -67,9 +69,12 @@ export const MemberZoneShell: React.FC<MemberZoneShellProps> = ({
         setTheme={setTheme}
         uiCopy={chrome.copy.ui}
         diabetesType={diabetesType}
+        showMemberZone
       />
+      <MemberZoneStrip lang={lang} theme={theme} isRTL={isRTL} diabetesType={diabetesType} />
+      {diabetesType ? <DiabetesTypeRibbon lang={lang} theme={theme} diabetesType={diabetesType} isRTL={isRTL} /> : null}
       {hero ? <div className="relative z-10 w-full">{hero}</div> : null}
-      <main className={`t1d-container relative z-10 flex-1 pt-4 md:pt-5 pb-10 ${memberLayoutTypeClass(diabetesType)}`}>
+      <main className={`t1d-container relative z-10 flex-1 ${hero ? 'pt-1 md:pt-2 pb-10' : 'pt-4 md:pt-5 pb-10'} ${memberLayoutTypeClass(diabetesType)}`}>
         {children}
       </main>
       <T1DFooter
@@ -81,6 +86,7 @@ export const MemberZoneShell: React.FC<MemberZoneShellProps> = ({
         signInLabel={chrome.copy.signIn}
         type1SignUpLabel={chrome.typeCopy.home.type1.cta}
         type2SignUpLabel={chrome.typeCopy.home.type2.cta}
+        bothSignUpLabel={AUTH_TYPE_COPY[lang].both.title}
         activePageLabel={activePageLabel}
         copyright={chrome.legalUi.copyright}
         reserved={chrome.legalUi.reserved}
@@ -96,7 +102,6 @@ export const MemberZoneShell: React.FC<MemberZoneShellProps> = ({
         sectionDownload={chrome.downloadSectionLabel}
         sectionAccount={chrome.copy.footerSections.account}
         legalNote={chrome.legalUi.classicNote}
-        trustLegalLabel={chrome.copy.footer.legal}
         productLinks={chrome.footerProductLinks}
         knowledgeLinks={chrome.footerKnowledgeLinks}
         legalLinks={chrome.footerLegalLinks}

@@ -5,6 +5,12 @@ export interface SessionUser {
   fullName: string;
   role: UserRole;
   organization?: string;
+  timezone?: string;
+  locale?: string;
+  emailNotifications?: boolean;
+  pushNotifications?: boolean;
+  marketingEmails?: boolean;
+  isSuperAdmin?: boolean;
 }
 
 export interface HouseholdMember {
@@ -324,6 +330,66 @@ export interface WorkspacePayload {
   selectedSession: SessionDetail | null;
   quickActions: Array<{ id: SupportActionId }>;
   nutrition: NutritionPayload | null;
+  healthRecords: HealthRecordsSummary;
+}
+
+export interface HealthRecordEntry {
+  id: string;
+  type: string;
+  title: string;
+  value: string;
+  unit: string;
+  date: string;
+  source: string;
+  status: string;
+  patientName?: string;
+}
+
+export interface HealthPortalConnection {
+  portalId: string;
+  status: 'connected' | 'disconnected';
+  connectedAt: string | null;
+  lastSyncAt: string | null;
+  nextSyncDueAt: string | null;
+  recordCount: number;
+  syncStatus: string;
+  message: string;
+  records: HealthRecordEntry[];
+}
+
+export interface HealthPortalCatalogEntry {
+  id: string;
+  name: string;
+  vendor: string;
+  authMode: string;
+  fhirVersion: string;
+  accent: string;
+  recordTypes: string[];
+  connection: HealthPortalConnection;
+  oauthProvider?: string;
+}
+
+export interface HealthRecordsSummary {
+  connectedCount: number;
+  totalRecords: number;
+  lastSyncAt: string | null;
+  nextAutoSyncAt?: string | null;
+  autoSyncEnabled?: boolean;
+  liveMode?: boolean;
+  portals: HealthPortalCatalogEntry[];
+  unifiedTimeline: HealthRecordEntry[];
+  byType: Record<string, number>;
+  syncHealth: 'none' | 'partial' | 'strong';
+}
+
+export interface AccountProfileInput {
+  fullName?: string;
+  organization?: string;
+  timezone?: string;
+  locale?: string;
+  emailNotifications?: boolean;
+  pushNotifications?: boolean;
+  marketingEmails?: boolean;
 }
 
 export interface HouseholdSetupInput {
@@ -534,6 +600,56 @@ export async function refreshDexcomAuthToken() {
   return readJson<WorkspacePayload>(res);
 }
 
+export async function connectHealthPortal(portalId: string) {
+  const res = await fetch('/api/health-portal/connect', {
+    method: 'POST',
+    headers: requestHeaders(),
+    credentials: 'include',
+    body: JSON.stringify({ portalId }),
+  });
+  return readJson<{ ok: boolean; summary: HealthRecordsSummary; workspace: WorkspacePayload }>(res);
+}
+
+export async function startHealthPortalOAuth(portalId: string) {
+  const res = await fetch('/api/health-portal/oauth/start', {
+    method: 'POST',
+    headers: requestHeaders(),
+    credentials: 'include',
+    body: JSON.stringify({ portalId }),
+  });
+  return readJson<{ ok: boolean; redirectUrl: string; workspace: WorkspacePayload }>(res);
+}
+
+export async function syncHealthPortal(portalId: string) {
+  const res = await fetch('/api/health-portal/sync', {
+    method: 'POST',
+    headers: requestHeaders(),
+    credentials: 'include',
+    body: JSON.stringify({ portalId }),
+  });
+  return readJson<{ ok: boolean; summary: HealthRecordsSummary; workspace: WorkspacePayload }>(res);
+}
+
+export async function disconnectHealthPortal(portalId: string) {
+  const res = await fetch('/api/health-portal/disconnect', {
+    method: 'POST',
+    headers: requestHeaders(),
+    credentials: 'include',
+    body: JSON.stringify({ portalId }),
+  });
+  return readJson<{ ok: boolean; summary: HealthRecordsSummary; workspace: WorkspacePayload }>(res);
+}
+
+export async function updateAccountProfile(body: AccountProfileInput) {
+  const res = await fetch('/api/account/profile', {
+    method: 'PATCH',
+    headers: requestHeaders(),
+    credentials: 'include',
+    body: JSON.stringify(body),
+  });
+  return readJson<{ ok: boolean; user: SessionUser }>(res);
+}
+
 export async function analyzeNutrition(body: { imageBase64?: string; note?: string }) {
   const res = await fetch('/api/nutrition/analyze', {
     method: 'POST',
@@ -600,6 +716,28 @@ export async function submitFeedback(body: { message: string; rating?: number })
     body: JSON.stringify(body),
   });
   return readJson<{ ok: boolean }>(res);
+}
+
+export type BillingStatus = {
+  enabled: boolean;
+  publishableKey: string;
+  configuredPrices: number;
+  totalPrices: number;
+};
+
+export async function getBillingStatus() {
+  const res = await fetch('/api/billing/status', { credentials: 'include' });
+  return readJson<BillingStatus>(res);
+}
+
+export async function createBillingCheckout(priceKey: string) {
+  const res = await fetch('/api/billing/checkout', {
+    method: 'POST',
+    headers: requestHeaders(),
+    credentials: 'include',
+    body: JSON.stringify({ priceKey }),
+  });
+  return readJson<{ url?: string; sessionId?: string; error?: string; message?: string }>(res);
 }
 
 export type ResponderState =
@@ -734,19 +872,140 @@ async function readAdminJson<T>(res: Response): Promise<T> {
   return data as T;
 }
 
-export async function getAdminSummary(token: string) {
-  const res = await fetch('/api/admin/summary', {
-    headers: adminHeaders(token),
-  });
+export type AdminAuth = string | 'session';
+
+const adminRequestInit = (auth: AdminAuth): RequestInit => {
+  if (auth === 'session') {
+    return {
+      credentials: 'include',
+      headers: langHeaders(),
+    };
+  }
+
+  return {
+    credentials: 'include',
+    headers: adminHeaders(auth),
+  };
+};
+
+export async function getAdminSummary(auth: AdminAuth) {
+  const res = await fetch('/api/admin/summary', adminRequestInit(auth));
   return readAdminJson<AdminSummaryPayload>(res);
 }
 
-export async function getAdminHouseholds(token: string, limit = 20) {
-  const res = await fetch(`/api/admin/households?limit=${limit}`, {
-    headers: adminHeaders(token),
-  });
+export async function getAdminHouseholds(auth: AdminAuth, limit = 20) {
+  const res = await fetch(`/api/admin/households?limit=${limit}`, adminRequestInit(auth));
   return readAdminJson<AdminHouseholdsPayload>(res);
 }
+
+export interface AdminUserMetrics {
+  total: number;
+  today: number;
+  week: number;
+  month: number;
+  year: number;
+  byMonth: Array<{ period: string; count: number }>;
+  byType: { type1: number; type2: number; unknown: number };
+  superAdmins: number;
+}
+
+export interface AdminAnalyticsPayload {
+  ok: boolean;
+  visitors: { today: number; week: number; month: number; year: number };
+  signups: AdminUserMetrics;
+  conversionRate: number;
+  channels: Array<{ channel: string; visits: number; signups: number; share: number }>;
+  campaigns: Array<{ id: string; name: string; sent: number; opened: number; clicked: number; converted: number }>;
+  users: AdminUserMetrics;
+}
+
+export interface AdminFinancePayload {
+  ok: boolean;
+  currency: string;
+  plans: Array<{ id: string; name: string; price: number; interval: string }>;
+  revenue: { mrr: number; arr: number; today: number; month: number; year: number; allTime: number };
+  subscribers: { paid: number; trial: number; free: number; churned: number };
+  transactions: Array<{ id: string; type: string; amount: number; user: string; reason: string; at: string }>;
+  refunds: { count: number; amount: number };
+  note: string;
+  users: AdminUserMetrics;
+}
+
+export interface AdminMarketingAsset {
+  id: string;
+  title: string;
+  kind: string;
+  format: string;
+  size: string;
+  updatedAt: string;
+  url: string;
+  description: string;
+}
+
+export interface AdminEmailTemplate {
+  id: string;
+  name: string;
+  category: string;
+  subject: string;
+  preheader: string;
+  html: string;
+}
+
+export interface AdminPermissionsPayload {
+  ok: boolean;
+  roles: Array<{ id: string; label: string; description: string }>;
+  admins: Array<{ id: string; email: string; name: string; role: string; lastActive: string; scopes: string[] }>;
+}
+
+export interface AdminSettingsPayload {
+  ok: boolean;
+  settings: {
+    site: { name: string; domain: string; url: string; supportEmail: string; noreplyEmail: string };
+    email: { provider: string; inviteEnabled: boolean; marketingEnabled: boolean; dailyLimit: number };
+    security: { adminSecretConfigured: boolean; sqlReadMode: string; cookieSecure: boolean };
+    features: { dexcomLive: boolean; googleAuth: boolean; pushNotifications: boolean };
+  };
+}
+
+export interface AdminSupportPayload {
+  ok: boolean;
+  tickets: Array<{ id: string; subject: string; status: string; priority: string; user: string; updatedAt: string }>;
+}
+
+export interface AdminInvitationsPayload {
+  ok: boolean;
+  campaigns: Array<{ id: string; name: string; status: string; audience: string; sent: number; scheduled: number; templateId: string }>;
+  templates: AdminEmailTemplate[];
+}
+
+export interface AdminMonitoringPayload {
+  ok: boolean;
+  summary: AdminSummaryPayload;
+  monitoring: {
+    uptime: string;
+    apiLatencyMs: number;
+    errorRate: number;
+    backgroundJobs: Record<string, string>;
+    storage: string;
+    alerts: string[];
+    env: Record<string, string>;
+  };
+}
+
+async function adminGet<T>(auth: AdminAuth, path: string) {
+  const res = await fetch(path, adminRequestInit(auth));
+  return readAdminJson<T>(res);
+}
+
+export const getAdminAnalytics = (auth: AdminAuth) => adminGet<AdminAnalyticsPayload>(auth, '/api/admin/analytics');
+export const getAdminFinance = (auth: AdminAuth) => adminGet<AdminFinancePayload>(auth, '/api/admin/finance');
+export const getAdminMarketingAssets = (auth: AdminAuth) => adminGet<{ ok: boolean; items: AdminMarketingAsset[] }>(auth, '/api/admin/marketing/assets');
+export const getAdminEmailTemplates = (auth: AdminAuth) => adminGet<{ ok: boolean; items: AdminEmailTemplate[] }>(auth, '/api/admin/email-templates');
+export const getAdminPermissions = (auth: AdminAuth) => adminGet<AdminPermissionsPayload>(auth, '/api/admin/permissions');
+export const getAdminSettings = (auth: AdminAuth) => adminGet<AdminSettingsPayload>(auth, '/api/admin/settings');
+export const getAdminSupport = (auth: AdminAuth) => adminGet<AdminSupportPayload>(auth, '/api/admin/support');
+export const getAdminInvitations = (auth: AdminAuth) => adminGet<AdminInvitationsPayload>(auth, '/api/admin/invitations');
+export const getAdminMonitoring = (auth: AdminAuth) => adminGet<AdminMonitoringPayload>(auth, '/api/admin/monitoring');
 
 export interface PushConfigPayload {
   enabled: boolean;

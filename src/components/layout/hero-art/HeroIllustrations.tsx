@@ -19,7 +19,8 @@ export type HeroIllustrationVariant =
   | 'access-signin'
   | 'access-signup'
   | 'setup'
-  | 'workspace';
+  | 'workspace'
+  | 'voice-guide';
 
 const HERO_IMAGE_SRC: Record<HeroIllustrationVariant, string> = {
   home: '/hero/hero-home.jpg',
@@ -39,6 +40,7 @@ const HERO_IMAGE_SRC: Record<HeroIllustrationVariant, string> = {
   'access-signup': '/hero/hero-access-signup.jpg',
   setup: '/hero/hero-setup.jpg',
   workspace: '/hero/hero-workspace.jpg',
+  'voice-guide': '/hero/hero-faq.jpg',
 };
 
 type HeroIllustrationProps = {

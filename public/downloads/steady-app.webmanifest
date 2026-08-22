@@ -1,6 +1,6 @@
 {
-  "name": "Steady",
-  "short_name": "Steady",
+  "name": "Type1 and 2",
+  "short_name": "Type1 and 2",
   "description": "Calm support for children, parents, and adults with type 1 or type 2 diabetes.",
   "start_url": "http://localhost:3002/",
   "scope": "http://localhost:3002/",

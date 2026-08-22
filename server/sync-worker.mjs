@@ -6,6 +6,8 @@ export const startDexcomSyncWorker = ({
   applyDexcomPollToHousehold,
   appendDexcomAudit,
   runEscalationPass,
+  shouldRunBackgroundHealthPortalSync,
+  applyHealthPortalSyncToHousehold,
   logger = console,
 }) => {
   let inFlight = false;
@@ -45,7 +47,16 @@ export const startDexcomSyncWorker = ({
           continue;
         }
         if (!shouldRunBackgroundDexcomPoll(household)) {
-          nextHouseholds.push(withWorkerState(activeHousehold, {
+          let healthUpdated = activeHousehold;
+          if (shouldRunBackgroundHealthPortalSync?.(household) && applyHealthPortalSyncToHousehold) {
+            try {
+              healthUpdated = await applyHealthPortalSyncToHousehold(activeHousehold, 'background');
+              changed = true;
+            } catch (error) {
+              logger.warn('[t1d-api] health portal background sync error', error);
+            }
+          }
+          nextHouseholds.push(withWorkerState(healthUpdated, {
             workerState: 'scheduled',
             pausedUntil: '',
           }));
@@ -65,6 +76,19 @@ export const startDexcomSyncWorker = ({
             pausedUntil: pauseUntil,
           }));
           changed = true;
+
+          if (shouldRunBackgroundHealthPortalSync?.(nextHousehold) && applyHealthPortalSyncToHousehold) {
+            try {
+              const healthSynced = await applyHealthPortalSyncToHousehold(nextHousehold, 'background');
+              nextHouseholds[nextHouseholds.length - 1] = withWorkerState(healthSynced, {
+                workerState: pauseUntil ? 'paused' : 'scheduled',
+                nextWorkerRunAt: nextHousehold.dexcom?.nextPollDueAt || '',
+                pausedUntil: pauseUntil,
+              });
+            } catch (error) {
+              logger.warn('[t1d-api] health portal background sync error', error);
+            }
+          }
         } catch (error) {
           nextHouseholds.push(withWorkerState(appendDexcomAudit({
             ...activeHousehold,

@@ -1,6 +1,15 @@
 import type { HeroIllustrationVariant } from '../components/layout/hero-art/HeroIllustrations';
 import type { DiabetesType } from '../types';
 
+/** Public site — both types; prefer adult-neutral scenes over child-only art. */
+const PUBLIC_HERO_VARIANT: Partial<Record<HeroIllustrationVariant, HeroIllustrationVariant>> = {
+  family: 'how',
+  trust: 'compliance',
+  medical: 'compliance',
+  'access-signin': 'access-signin',
+  'access-signup': 'access-signup',
+};
+
 /** T2 uses only adult-safe art — no child hands, no family-with-children scenes. */
 const TYPE2_HERO_VARIANT: Partial<Record<HeroIllustrationVariant, HeroIllustrationVariant>> = {
   home: 'workspace',
@@ -35,7 +44,7 @@ export const resolveHeroVariant = (
   if (diabetesType === 'type1') {
     return TYPE1_HERO_VARIANT[variant] ?? variant;
   }
-  return variant;
+  return PUBLIC_HERO_VARIANT[variant] ?? variant;
 };
 
 export const memberLayoutTypeClass = (diabetesType?: DiabetesType | null) =>

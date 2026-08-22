@@ -22,6 +22,8 @@ export const googleJavascriptOrigins = () => [
   'http://localhost:3002',
   'http://127.0.0.1:3002',
   'https://t1-d.vercel.app',
+  'https://type1and2.com',
+  'https://www.type1and2.com',
 ];
 
 export const isGoogleAuthEnabled = () => {

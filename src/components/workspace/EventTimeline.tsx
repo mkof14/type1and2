@@ -38,7 +38,7 @@ const RESPONDER_LABELS: Record<Language, Record<string, string>> = {
     staleTitle: 'CGM data may be stale',
     staleDetail: 'Do not treat glucose as current until fresher readings arrive.',
     loading: 'Loading timeline…',
-    empty: 'No events yet. Steady will log alerts, readings, and responses here.',
+    empty: 'No events yet. Type1 and 2 will log alerts, readings, and responses here.',
     error: 'Could not load timeline. Try again.',
     retry: 'Retry',
     glucose: 'Glucose',
@@ -60,7 +60,7 @@ const RESPONDER_LABELS: Record<Language, Record<string, string>> = {
     staleTitle: 'Данные CGM могут быть устаревшими',
     staleDetail: 'Не опирайтесь на текущую глюкозу, пока не придут свежие показания.',
     loading: 'Загрузка хронологии…',
-    empty: 'Пока событий нет. Steady будет записывать сигналы, показания и ответы здесь.',
+    empty: 'Пока событий нет. Type1 and 2 будет записывать сигналы, показания и ответы здесь.',
     error: 'Не удалось загрузить хронологию. Попробуйте снова.',
     retry: 'Повторить',
     glucose: 'Глюкоза',
@@ -82,7 +82,7 @@ const RESPONDER_LABELS: Record<Language, Record<string, string>> = {
     staleTitle: 'Дані CGM можуть бути застарілими',
     staleDetail: 'Не покладайтеся на поточну глюкозу, доки не надійдуть свіжі показники.',
     loading: 'Завантаження хронології…',
-    empty: 'Подій поки немає. Steady записуватиме сигнали, показники та відповіді тут.',
+    empty: 'Подій поки немає. Type1 and 2 записуватиме сигнали, показники та відповіді тут.',
     error: 'Не вдалося завантажити хронологію. Спробуйте знову.',
     retry: 'Повторити',
     glucose: 'Глюкоза',
@@ -104,7 +104,7 @@ const RESPONDER_LABELS: Record<Language, Record<string, string>> = {
     staleTitle: 'Datos CGM posiblemente antiguos',
     staleDetail: 'No confíes en la glucosa actual hasta tener lecturas más recientes.',
     loading: 'Cargando línea de tiempo…',
-    empty: 'Sin eventos aún. Steady registrará alertas, lecturas y respuestas aquí.',
+    empty: 'Sin eventos aún. Type1 and 2 registrará alertas, lecturas y respuestas aquí.',
     error: 'No se pudo cargar la línea de tiempo.',
     retry: 'Reintentar',
     glucose: 'Glucosa',
@@ -268,10 +268,10 @@ const RESPONDER_LABELS: Record<Language, Record<string, string>> = {
   },
 };
 
-const statusTone = (status: string | undefined) => {
-  if (status === 'active') return 'bg-amber-100 text-amber-900 dark:bg-amber-500/12 dark:text-amber-200';
-  if (status === 'waiting') return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
-  return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/12 dark:text-emerald-300';
+const statusTone = (status: string | undefined, dark: boolean) => {
+  if (status === 'active') return dark ? 't1d-timeline-status-pill--active-dark' : 't1d-timeline-status-pill--active';
+  if (status === 'waiting') return dark ? 't1d-timeline-status-pill--waiting-dark' : 't1d-timeline-status-pill--waiting';
+  return dark ? 't1d-timeline-status-pill--done-dark' : 't1d-timeline-status-pill--done';
 };
 
 const typeLabel = (entry: PatientTimelineEntry, labels: Record<string, string>) => {
@@ -434,27 +434,27 @@ export const EventTimeline: React.FC<EventTimelineProps> = ({
         <p className="text-sm text-slate-600 dark:text-slate-300">{labels.empty}</p>
       ) : (
         entries.map((entry) => (
-          <div key={entry.id} className={compactCardClass}>
-            <div className={`flex flex-wrap items-center justify-between gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <p className="text-[15px] font-black tracking-tight md:text-base">{entry.title}</p>
-              <div className={`flex flex-wrap items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+          <div key={entry.id} className={`${compactCardClass} t1d-timeline-entry`}>
+            <div className={`flex flex-wrap items-start justify-between gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <p className="t1d-timeline-entry__title">{entry.title}</p>
+              <div className={`flex flex-wrap items-center gap-2 shrink-0 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <span className={`t1d-timeline-type-pill ${theme === 'dark' ? 't1d-timeline-type-pill--dark' : ''}`}>
                   {typeLabel(entry, labels)}
                 </span>
                 {entry.status ? (
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusTone(entry.status)}`}>
+                  <span className={`t1d-timeline-status-pill ${statusTone(entry.status, theme === 'dark')}`}>
                     {copy.timelineStatus[entry.status as keyof typeof copy.timelineStatus] || entry.status}
                   </span>
                 ) : null}
               </div>
             </div>
             {(entry.actor || entry.timestamp) ? (
-              <p className="mt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">
+              <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300 break-words">
                 {[entry.actor, formatTimestamp(entry.timestamp, lang)].filter(Boolean).join(' · ')}
               </p>
             ) : null}
             {entry.detail ? (
-              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{entry.detail}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 break-words">{entry.detail}</p>
             ) : null}
           </div>
         ))

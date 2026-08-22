@@ -1,21 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, BellRing, Heart, HeartHandshake, MoonStar, ShieldAlert, Siren, TimerReset, Users, Workflow } from 'lucide-react';
-import { Language, RTL_LANGUAGES, type DiabetesType } from '../types';
+import { BellRing, Heart, HeartHandshake, MoonStar, ShieldAlert, Siren, Users } from 'lucide-react';
+import { Language, RTL_LANGUAGES } from '../types';
+import type { SignupDiabetesChoice } from '../lib/signup-diabetes-type';
+import { AUTH_TYPE_COPY } from '../content/access-copy';
 import { COPY, HOME_TERMS, PUBLIC_MICROCOPY, PUBLIC_UI_COPY, buildPagePaths, pageIcons, resolvePage, type Page } from '../content/landing-copy';
 import { LANDING_TYPE_COPY } from '../content/landing-type-copy';
 import { LEGAL_PAGE_LABELS, LEGAL_UI_COPY, type LegalPage } from '../content/legal-labels';
 import { KNOWLEDGE_LABELS } from '../content/knowledge-labels';
 import { applyOrganizationJsonLd, applySeo } from '../lib/seo';
-import { t1dWarmNote } from '../lib/t1d-ui';
+import { t1dWarmNote, t1dSurfaceStack, t1dInnerSubcard, t1dNightPanel, t1dIconWell, t1dFilterPill, t1dSurfaceInset, t1dInput, type InnerTone } from '../lib/t1d-ui';
 import { T1DPageBackdrop } from './layout/T1DPageBackdrop';
 import { T1DFooter } from './layout/T1DFooter';
 import { T1DTopbar } from './layout/T1DTopbar';
 import { buildPublicSiteChrome } from '../lib/public-site-chrome';
 import { DOWNLOAD_COPY } from '../content/download-copy';
 import { LandingNutritionShowcase } from './landing/LandingNutritionShowcase';
+import { HomeHeroPanels } from './landing/HomeHeroPanels';
 import { DownloadInstallPanel } from './download/DownloadInstallPanel';
+import { KNOWLEDGE_QUICK_TIPS, KNOWLEDGE_TIPS_LABEL } from '../content/knowledge-extra';
+import { COMPLIANCE_DISCLAIMER } from '../content/compliance-disclaimer';
+import { LegalFootnote } from './layout/LegalFootnote';
 import { PageHeroBanner, type PageHeroVariant } from './layout/PageHeroBanner';
 import { HeroIllustration } from './layout/hero-art/HeroIllustrations';
+import { VoiceGuideWidget } from './voice/VoiceGuideWidget';
+import { VoiceGuidePromo } from './voice/VoiceGuidePromo';
+import { PRICING_COPY } from '../content/pricing-copy';
+import { VOICE_GUIDE_COPY } from '../content/voice-guide-copy';
+import { resolvePublicPageHeroHighlights, type PublicHeroHighlightPage } from '../content/public-page-hero-highlights';
+import { PricingPage } from './pricing/PricingPage';
 
 interface T1DPublicLandingViewProps {
   lang: Language;
@@ -23,7 +35,7 @@ interface T1DPublicLandingViewProps {
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
   onSignIn: () => void;
-  onSignUp: (type: DiabetesType) => void;
+  onSignUp: (choice: SignupDiabetesChoice) => void;
   basePath?: string;
 }
 export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
@@ -37,6 +49,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
 }) => {
   const copy = COPY[lang];
   const downloadCopy = DOWNLOAD_COPY[lang];
+  const pricingCopy = PRICING_COPY[lang];
+  const voiceGuideCopy = VOICE_GUIDE_COPY[lang];
   const typeCopy = LANDING_TYPE_COPY[lang];
   const publicUi = PUBLIC_UI_COPY[lang];
   const publicMicro = PUBLIC_MICROCOPY[lang];
@@ -425,6 +439,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
       activePage === 'compliance' ? legalPageContent?.compliance.intro || publicMicro.homeSubtitle :
       activePage === 'downloadDesktop' ? downloadCopy.desktop.subtitle :
       activePage === 'downloadMobile' ? downloadCopy.mobile.subtitle :
+      activePage === 'pricing' ? pricingCopy.subtitle :
+      activePage === 'voiceGuide' ? voiceGuideCopy.pageSubtitle :
       publicMicro.homeSubtitle;
     const pageTitle =
       activePage === 'how' ? knowledgeLabels.how :
@@ -438,6 +454,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
       activePage === 'trust' ? legalLabels.trust :
       activePage === 'downloadDesktop' ? downloadCopy.desktop.title :
       activePage === 'downloadMobile' ? downloadCopy.mobile.title :
+      activePage === 'pricing' ? pricingCopy.title :
+      activePage === 'voiceGuide' ? voiceGuideCopy.pageTitle :
       copy.titleByPage[activePage];
 
     if (window.location.pathname !== path) {
@@ -451,8 +469,34 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
     });
   }, [activePage, copy, legalLabels, pagePaths, publicMicro]);
 
-  const shellTone = theme === 'dark' ? 't1d-page-shell t1d-page-shell--dark text-slate-100' : 't1d-page-shell text-slate-900';
+  const shellTone = theme === 'dark' ? 't1d-page-shell t1d-page-shell--dark text-slate-100' : 't1d-page-shell text-stone-900';
   const cardTone = theme === 'dark' ? 't1d-home-card t1d-home-card--dark' : 't1d-home-card t1d-home-card--light';
+  const subcardClass = t1dInnerSubcard(theme);
+  const surfaceInsetClass = t1dSurfaceInset(theme);
+  const nightPanelClass = t1dNightPanel(theme);
+  const accentCardClass = theme === 'dark' ? 't1d-home-card t1d-home-card--accent-dark' : 't1d-home-card t1d-home-card--accent-light';
+  const mintCardClass = theme === 'dark' ? 't1d-home-card t1d-home-card--mint-dark' : 't1d-home-card t1d-home-card--mint-light';
+  const toneSubcard = (tone: InnerTone) => t1dInnerSubcard(theme, tone);
+  const iconWellClass = t1dIconWell(theme);
+  const topicTones: InnerTone[] = ['accent', 'amber', 'mint', 'rose'];
+  const topicTone = (index: number) => topicTones[index % topicTones.length];
+  const newsItemTone = (tone?: string): InnerTone => {
+    if (tone === 'sky') return 'accent';
+    if (tone === 'emerald') return 'mint';
+    if (tone === 'amber') return 'amber';
+    return 'rose';
+  };
+  const knowledgeTipsPanel = (page: 'how' | 'faq' | 'learn' | 'news' | 'trust') => (
+    <section className={`t1d-knowledge-tips ${theme === 'dark' ? 't1d-knowledge-tips--dark' : ''}`}>
+      <p className={softLabelClass}>{KNOWLEDGE_TIPS_LABEL[lang]}</p>
+      <ul className={`t1d-knowledge-tips__list ${subtleTextTone}`}>
+        {KNOWLEDGE_QUICK_TIPS[lang][page].map((tip) => (
+          <li key={tip}>{tip}</li>
+        ))}
+      </ul>
+    </section>
+  );
+  const complianceCopy = COMPLIANCE_DISCLAIMER[lang];
   const sectionLabelTone = theme === 'dark' ? 'text-amber-200' : 'text-amber-800';
   const softLabelClass = theme === 'dark' ? 't1d-soft-label t1d-soft-label--dark' : 't1d-soft-label t1d-soft-label--light';
   const primaryButtonClass = theme === 'dark' ? 't1d-btn-warm-primary t1d-btn-warm-primary--dark' : 't1d-btn-warm-primary t1d-btn-warm-primary--light';
@@ -485,26 +529,18 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
     { value: copy.night.points[2], Icon: Siren },
   ];
   const homeSteps = [homeTerms.step1, homeTerms.step2, homeTerms.step3];
-  const concernCards = [
-    { title: publicUi.whatYouGet, body: copy.product.body, Icon: Workflow },
-    { title: publicUi.nightSupport, body: copy.night.intro, Icon: BellRing },
-    { title: publicUi.familySupport, body: copy.family.intro, Icon: Users },
-    { title: publicUi.shortSummary, body: copy.summary.body, Icon: TimerReset },
-  ];
+  const surfaceStackClass = t1dSurfaceStack(theme);
   const confidenceCards = [
     { label: copy.states.items[1].name, body: copy.states.items[1].body },
     { label: copy.states.items[2].name, body: copy.states.items[2].body },
     { label: copy.states.items[4].name, body: copy.states.items[4].body },
   ];
 
-  const homeCardClass = theme === 'dark' ? 't1d-home-card t1d-home-card--dark' : 't1d-home-card t1d-home-card--light';
-  const homeAccentCardClass = theme === 'dark' ? 't1d-home-card t1d-home-card--accent-dark' : 't1d-home-card t1d-home-card--accent-light';
   const homeMintCardClass = theme === 'dark' ? 't1d-home-card t1d-home-card--mint-dark' : 't1d-home-card t1d-home-card--mint-light';
   const homeChipClass = theme === 'dark' ? 't1d-home-chip t1d-home-chip--dark' : 't1d-home-chip t1d-home-chip--light';
   const homeFlowStepClass = theme === 'dark' ? 't1d-home-flow-step t1d-home-flow-step--dark' : 't1d-home-flow-step t1d-home-flow-step--light';
   const homeStateClass = theme === 'dark' ? 't1d-home-state t1d-home-state--dark' : 't1d-home-state t1d-home-state--light';
   const homeTypePointClass = theme === 'dark' ? 't1d-home-type-point t1d-home-type-point--dark' : 't1d-home-type-point t1d-home-type-point--light';
-  const homePointClass = theme === 'dark' ? 't1d-home-point t1d-home-point--dark' : 't1d-home-point t1d-home-point--light';
 
   const typePageNote = (page: keyof typeof typeCopy.pages) => {
     const note = typeCopy.pages[page];
@@ -516,7 +552,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
     );
   };
 
-  const pageHero = ((): { variant: PageHeroVariant; eyebrow?: string; title: string; subtitle?: string } | null => {
+  const pageHero = ((): { variant: PageHeroVariant; eyebrow?: string; title: string; subtitle?: string; copyAlign?: 'start' | 'end' } | null => {
     switch (activePage) {
       case 'home':
         return null;
@@ -525,7 +561,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
       case 'night':
         return { variant: 'night', eyebrow: publicUi.nightSupport, title: copy.titleByPage.night, subtitle: publicMicro.nightIntro };
       case 'family':
-        return { variant: 'family', eyebrow: publicUi.familySupport, title: copy.titleByPage.family, subtitle: publicMicro.familyIntro };
+        return { variant: 'family', copyAlign: 'end', eyebrow: publicUi.familySupport, title: copy.titleByPage.family, subtitle: publicMicro.familyIntro };
       case 'how':
         return {
           variant: 'how',
@@ -555,16 +591,20 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
         return { variant: 'workspace', eyebrow: downloadCopy.footerSection, title: downloadCopy.desktop.title, subtitle: downloadCopy.desktop.subtitle };
       case 'downloadMobile':
         return { variant: 'compliance', eyebrow: downloadCopy.footerSection, title: downloadCopy.mobile.title, subtitle: downloadCopy.mobile.subtitle };
+      case 'pricing':
+        return { variant: 'trust', eyebrow: pricingCopy.eyebrow, title: pricingCopy.title, subtitle: pricingCopy.subtitle };
+      case 'voiceGuide':
+        return { variant: 'voice-guide', eyebrow: knowledgeLabels.voiceGuide, title: voiceGuideCopy.pageTitle, subtitle: voiceGuideCopy.pageSubtitle };
       default:
         return null;
     }
   })();
 
   return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className={`min-h-screen w-full relative flex flex-col ${shellTone} ${isRTL ? 'text-right' : 'text-left'}`}>
+    <div dir={isRTL ? 'rtl' : 'ltr'} className={`min-h-screen w-full relative flex flex-col ${shellTone} t1d-page-shell--public ${isRTL ? 'text-right' : 'text-left'}`}>
       <T1DPageBackdrop theme={theme} />
 
-      <div className={`t1d-accent-bar ${theme === 'dark' ? 't1d-accent-bar--dark' : ''}`} />
+      <div className={`t1d-accent-bar t1d-accent-bar--both ${theme === 'dark' ? 't1d-accent-bar--dark' : ''}`} />
 
       <T1DTopbar
         lang={lang}
@@ -590,14 +630,17 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             theme={theme}
             isRTL={isRTL}
             priority
+            className="t1d-page-hero--public"
+            copyAlign={pageHero.copyAlign}
             eyebrow={pageHero.eyebrow}
             title={pageHero.title}
             subtitle={pageHero.subtitle}
+            highlights={resolvePublicPageHeroHighlights(lang, activePage as PublicHeroHighlightPage)}
           />
         </div>
       ) : null}
 
-      <main className={`t1d-container relative z-10 ${activePage === 'home' ? 'pt-4 md:pt-5 pb-14 md:pb-16' : 'pt-2 md:pt-4 pb-16 md:pb-24 space-y-10'}`}>
+      <main className={`t1d-container relative z-10 ${activePage === 'home' ? 'pt-4 md:pt-5 pb-14 md:pb-16' : 't1d-main--hero-integrated pb-14 md:pb-20 space-y-6'}`}>
 
         {activePage === 'home' ? (
           <section className="t1d-home">
@@ -608,7 +651,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                     <HeroIllustration variant="home" theme={theme} diabetesType="type1" priority />
                   </div>
                   <div className="t1d-home-hero-split__pane t1d-home-hero-split__pane--type2">
-                    <HeroIllustration variant="workspace" theme={theme} diabetesType="type2" priority />
+                    <HeroIllustration variant="night" theme={theme} diabetesType="type2" priority />
                   </div>
                 </div>
                 <div className="t1d-home-hero-type-bands" aria-hidden="true">
@@ -617,76 +660,38 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                 </div>
               </div>
               <div className="t1d-home-hero-fade" aria-hidden="true" />
-              <div className="t1d-home-grid t1d-home-grid--hero">
-                <div className="flex flex-col gap-5">
-                  <div className={`t1d-home-hero-copy-panel ${theme === 'dark' ? 't1d-home-hero-copy-panel--dark' : 't1d-home-hero-copy-panel--light'}`}>
-                    <div className={`${heroBadgeClass} ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Heart size={16} />
-                      <span>{copy.hero.eyebrow}</span>
-                    </div>
-                    <div className="space-y-3">
-                      <p className={`text-xl md:text-2xl font-black tracking-tight max-w-[22ch] ${theme === 'dark' ? 'text-slate-50' : 'text-stone-900'}`}>{copy.hero.title}</p>
-                      <p className={`max-w-2xl text-base md:text-lg font-medium leading-relaxed ${subtleTextTone}`}>{publicMicro.homeSubtitle}</p>
-                      {publicMicro.homeNote ? (
-                        <p className={`text-base font-semibold ${mutedTextTone}`}>{publicMicro.homeNote}</p>
-                      ) : null}
-                    </div>
-                    <div className={`flex flex-wrap gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <button type="button" onClick={() => setActivePage('system')} className={secondaryButtonClass}>
-                        {copy.hero.secondary}
-                      </button>
-                    </div>
-                    <div className="t1d-home-chip-row">
-                      {promiseCards.map(({ value, Icon }) => (
-                        <span key={value} className={homeChipClass}>
-                          <Icon size={15} />
-                          {value}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <article className={`${homeAccentCardClass} gap-4`}>
-                  <div className={`flex items-start justify-between gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    <div>
-                      <p className="text-base font-bold">{publicUi.shortSummary}</p>
-                      <p className="mt-2 text-xl md:text-2xl font-bold tracking-tight leading-snug">{copy.summary.body}</p>
-                    </div>
-                    <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${theme === 'dark' ? 'bg-rose-400/10 text-rose-200' : 'bg-rose-50 text-rose-700'}`}>
-                      <BellRing size={20} />
-                    </span>
-                  </div>
-                  <p className={`text-base leading-relaxed ${subtleTextTone}`}>{publicMicro.nightIntro}</p>
-                  <div className="t1d-home-flow">
-                    {homeSteps.map((step, index) => (
-                      <div key={step} className={homeFlowStepClass}>
-                        <span className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${theme === 'dark' ? 'bg-amber-300 text-stone-950' : 'bg-orange-600 text-white'}`}>
-                          {index + 1}
-                        </span>
-                        <div>
-                          <p className="text-base font-black tracking-tight">{step}</p>
-                          <p className={`mt-1 text-base leading-relaxed ${subtleTextTone}`}>
-                            {index === 0 ? copy.product.points[2] : index === 1 ? copy.family.points[1] : copy.family.points[2]}
-                          </p>
-                        </div>
-                        <span className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl ${theme === 'dark' ? 'bg-amber-400/12 text-amber-200' : 'bg-orange-100 text-orange-800'}`}>
-                          {index === 0 ? <BellRing size={16} /> : index === 1 ? <Users size={16} /> : <HeartHandshake size={16} />}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="t1d-home-states">
-                    {confidenceCards.map((item) => (
-                      <div key={item.label} className={homeStateClass}>
-                        <p className="text-sm font-bold leading-snug">{item.label}</p>
-                        <p className={`mt-1 text-sm leading-snug font-semibold md:text-base ${subtleTextTone}`}>{item.body}</p>
-                      </div>
-                    ))}
-                  </div>
-                </article>
-              </div>
+              <HomeHeroPanels
+                lang={lang}
+                theme={theme}
+                isRTL={isRTL}
+                heroEyebrow={copy.hero.eyebrow}
+                heroTitle={copy.hero.title}
+                heroSubtitle={publicMicro.homeSubtitle}
+                heroNote={publicMicro.homeNote}
+                heroSecondary={copy.hero.secondary}
+                onSecondaryAction={() => setActivePage('system')}
+                secondaryButtonClass={secondaryButtonClass}
+                typeCopy={typeCopy}
+                nightIntro={publicMicro.nightIntro}
+                summaryTitle={publicUi.shortSummary}
+                summaryBody={copy.summary.body}
+                productPoints={copy.product.points}
+                architectureItems={copy.architecture.items}
+                homeSteps={homeSteps as [string, string, string]}
+                stepBodies={[copy.product.points[2], copy.family.points[1], copy.family.points[2]]}
+                promiseCards={promiseCards}
+                confidenceCards={confidenceCards}
+                heroBadgeClass={heroBadgeClass}
+                homeChipClass={homeChipClass}
+                homeFlowStepClass={homeFlowStepClass}
+                homeStateClass={homeStateClass}
+                subtleTextTone={subtleTextTone}
+                mutedTextTone={mutedTextTone}
+                softLabelClass={softLabelClass}
+              />
             </div>
+
+            <VoiceGuidePromo lang={lang} theme={theme} onOpenGuide={() => setActivePage('voiceGuide')} onSignIn={onSignIn} />
 
             <div id="choose-type" className="t1d-home-entry t1d-home-entry--top space-y-4 scroll-mt-24">
               <div className={`flex flex-col gap-3 md:flex-row md:items-end md:justify-between ${isRTL ? 'md:flex-row-reverse' : ''}`}>
@@ -705,7 +710,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                   const card = typeCopy.home[typeKey];
                   const typeCardClass = typeKey === 'type1'
                     ? `${homeMintCardClass} t1d-home-entry-gate--type1`
-                    : `${homeAccentCardClass} t1d-home-entry-gate--type2`;
+                    : `${theme === 'dark' ? 't1d-home-card t1d-home-card--accent-dark' : 't1d-home-card t1d-home-card--accent-light'} t1d-home-entry-gate--type2`;
                   const entryButtonClass = typeKey === 'type1'
                     ? theme === 'dark' ? 't1d-btn-mint-primary t1d-btn-mint-primary--dark' : 't1d-btn-mint-primary t1d-btn-mint-primary--light'
                     : primaryButtonClass;
@@ -737,55 +742,23 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
 
             <LandingNutritionShowcase lang={lang} theme={theme} isRTL={isRTL} />
 
-            <div className="t1d-home-grid t1d-home-grid--features">
-              {concernCards.map(({ title, body, Icon }, index) => (
-                <article key={title} className={index === 0 ? homeMintCardClass : homeCardClass}>
-                  <span className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl ${index === 0 ? theme === 'dark' ? 'bg-emerald-400/12 text-emerald-300' : 'bg-emerald-100 text-emerald-700' : theme === 'dark' ? 'bg-amber-400/12 text-amber-200' : 'bg-orange-100 text-orange-800'}`}>
-                    <Icon size={17} />
-                  </span>
-                  <h2 className="mt-3 text-lg font-black tracking-tight">{title}</h2>
-                  <p className={`mt-2 text-sm leading-relaxed ${subtleTextTone}`}>{body}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="t1d-home-grid t1d-home-grid--roles">
+            <div className={`t1d-home-family-strip ${surfaceStackClass}`}>
               {roleCards.map(({ title, body, Icon }) => (
-                <article key={title} className={homeCardClass}>
-                  <span className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl ${theme === 'dark' ? 'bg-amber-400/12 text-amber-200' : 'bg-orange-100 text-orange-800'}`}>
-                    <Icon size={17} />
-                  </span>
-                  <h2 className="mt-3 text-base font-black tracking-tight">{title}</h2>
-                  <p className={`mt-2 text-sm leading-relaxed ${subtleTextTone}`}>{body}</p>
-                </article>
+                <div key={title} className={`t1d-home-family-strip__item ${isRTL ? 'text-right' : 'text-left'}`}>
+                  <Icon size={15} />
+                  <div>
+                    <p className="t1d-home-family-strip__title">{title}</p>
+                    <p className={`t1d-home-family-strip__body ${subtleTextTone}`}>{body}</p>
+                  </div>
+                </div>
               ))}
-              <article className={homeAccentCardClass}>
-                <p className={softLabelClass}>{publicUi.coreIdea}</p>
-                <p className="mt-2 text-xl font-black tracking-tight leading-tight">{copy.principle.body}</p>
-                <div className="t1d-home-point-list">
-                  {copy.product.points.map((point) => (
-                    <div key={point} className={homePointClass}>{point}</div>
-                  ))}
-                </div>
-              </article>
-            </div>
-
-            <article className={`${homeCardClass} gap-4`}>
-              <div className={`flex items-start justify-between gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <div className={`t1d-home-family-strip__item t1d-home-family-strip__item--wide ${isRTL ? 'text-right' : 'text-left'}`}>
                 <div>
-                  <p className={softLabelClass}>{publicUi.limits}</p>
-                  <h2 className="mt-2 text-lg md:text-xl font-black tracking-tight leading-snug">{publicMicro.limitsIntro}</h2>
+                  <p className={softLabelClass}>{publicUi.coreIdea}</p>
+                  <p className="t1d-home-family-strip__title">{copy.principle.body}</p>
                 </div>
-                <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${theme === 'dark' ? 'bg-slate-900 text-slate-200 border border-slate-700' : 'bg-white text-slate-700 border border-slate-200'}`}>
-                  <AlertTriangle size={17} />
-                </span>
               </div>
-              <div className="t1d-home-legal-grid">
-                {copy.trust.legal.map((item) => (
-                  <div key={item} className={homePointClass}>{item}</div>
-                ))}
-              </div>
-            </article>
+            </div>
           </section>
         ) : null}
 
@@ -795,7 +768,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             <section className={`rounded-[2rem] border ${cardTone} p-6 md:p-8`}>
               <div className="grid gap-4 sm:grid-cols-3">
                 {copy.states.items.slice(0, 3).map((item) => (
-                    <article key={item.name} className={`rounded-[1.4rem] border p-4 ${theme === 'dark' ? 'border-white/10 bg-white/[0.07]' : 'border-slate-200 bg-white/85'}`}>
+                    <article key={item.name} className={`rounded-[1.4rem] border p-4 ${subcardClass}`}>
                       <p className={softLabelClass}>{item.name}</p>
                       <p className={`mt-3 text-sm leading-relaxed ${subtleTextTone}`}>{item.body}</p>
                     </article>
@@ -805,8 +778,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
 
             <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
               {architectureCards.map(({ title, body, Icon }) => (
-                <article key={title} className={`rounded-[1.6rem] border p-5 md:p-6 ${theme === 'dark' ? 'border-slate-700/80 bg-[linear-gradient(160deg,rgba(18,32,49,0.92),rgba(16,28,43,0.88))]' : 'border-slate-200 bg-white/95'}`}>
-                  <span className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl ${theme === 'dark' ? 'bg-amber-400/12 text-amber-200' : 'bg-orange-100 text-orange-800'}`}>
+                <article key={title} className={`rounded-[1.6rem] border p-5 md:p-6 ${subcardClass}`}>
+                  <span className={iconWellClass}>
                     <Icon size={18} />
                   </span>
                   <h3 className="mt-4 text-lg font-black tracking-tight">{title}</h3>
@@ -821,11 +794,11 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
           <section className="space-y-6">
 {typePageNote('night')}
             <section className="grid grid-cols-1 gap-6 lg:grid-cols-[1.02fr_0.98fr]">
-              <article className={`rounded-[2rem] border ${theme === 'dark' ? 'border-indigo-500/25 bg-[linear-gradient(160deg,rgba(49,46,129,0.55),rgba(30,27,75,0.72))]' : 'border-indigo-200 bg-indigo-950 text-white'} p-6 md:p-8`}>
+              <article className={`${nightPanelClass} p-6 md:p-8`}>
                 <p className={softLabelClass}>{copy.night.escalationTitle}</p>
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   {copy.night.points.slice(0, 3).map((item) => (
-                    <div key={item} className="rounded-[1.4rem] bg-white/[0.12] px-4 py-4 text-sm font-semibold text-slate-100/92">
+                    <div key={item} className="t1d-night-panel__chip">
                       {item}
                     </div>
                   ))}
@@ -836,7 +809,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                 <p className="mt-3 text-3xl font-black tracking-tight">{copy.summary.body}</p>
                 <div className="mt-5 grid gap-4">
                   {copy.states.items.slice(2, 5).map((item) => (
-                    <article key={item.name} className={`rounded-[1.35rem] border p-4 ${theme === 'dark' ? 'border-slate-700/80 bg-[linear-gradient(160deg,rgba(23,38,58,0.92),rgba(18,31,49,0.88))]' : 'border-slate-200 bg-slate-50/90'}`}>
+                    <article key={item.name} className={`rounded-[1.35rem] border p-4 ${subcardClass}`}>
                       <p className="text-sm font-black tracking-tight">{item.name}</p>
                       <p className={`mt-2 text-sm leading-relaxed ${subtleTextTone}`}>{item.body}</p>
                     </article>
@@ -848,7 +821,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
               <p className={softLabelClass}>{copy.night.escalationTitle}</p>
               <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 {copy.night.escalation.map((item, index) => (
-                  <div key={item} className={`rounded-[1.35rem] border p-4 ${theme === 'dark' ? 'border-slate-700/80 bg-[linear-gradient(160deg,rgba(23,38,58,0.92),rgba(18,31,49,0.88))] text-slate-200' : 'border-slate-200 bg-slate-50/90 text-slate-700'}`}>
+                  <div key={item} className={`rounded-[1.35rem] border p-4 ${subcardClass} ${subtleTextTone}`}>
                     <p className="text-sm font-black tracking-tight">{item}</p>
                     <p className={`mt-2 text-sm leading-relaxed ${subtleTextTone}`}>
                       {index === 0 ? copy.states.items[1].body : index === 1 ? copy.states.items[2].body : index === 2 ? copy.states.items[3].body : copy.family.points[1]}
@@ -866,8 +839,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             <section className={`rounded-[2rem] border ${cardTone} p-6 md:p-8`}>
               <div className="grid gap-4 sm:grid-cols-3">
                 {roleCards.map(({ title, body, Icon }) => (
-                    <article key={title} className={`rounded-[1.4rem] border p-4 ${theme === 'dark' ? 'border-slate-700/80 bg-[linear-gradient(160deg,rgba(23,38,58,0.92),rgba(18,31,49,0.88))]' : 'border-slate-200 bg-slate-50/90'}`}>
-                      <span className={`inline-flex h-9 w-9 items-center justify-center rounded-2xl ${theme === 'dark' ? 'bg-amber-400/12 text-amber-200' : 'bg-orange-100 text-orange-800'}`}>
+                    <article key={title} className={`rounded-[1.4rem] border p-4 ${subcardClass}`}>
+                      <span className={`${iconWellClass} h-9 w-9`}>
                         <Icon size={16} />
                       </span>
                       <h3 className="mt-3 text-base font-black tracking-tight">{title}</h3>
@@ -878,7 +851,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             </section>
             <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {copy.family.points.map((item, index) => (
-                <article key={item} className={`rounded-[1.5rem] border p-5 ${index === 3 ? theme === 'dark' ? 'border-emerald-400/20 bg-[linear-gradient(160deg,rgba(24,56,54,0.45),rgba(18,38,44,0.55))]' : 'border-emerald-200 bg-emerald-50/70' : theme === 'dark' ? 'border-slate-700/80 bg-[linear-gradient(160deg,rgba(23,38,58,0.92),rgba(18,31,49,0.88))]' : 'border-slate-200 bg-slate-50/90'}`}>
+                <article key={item} className={`rounded-[1.5rem] border p-5 ${index === 3 ? toneSubcard('mint') : subcardClass}`}>
                   <p className="text-sm font-semibold leading-relaxed">{item}</p>
                 </article>
               ))}
@@ -893,6 +866,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             </section>
           ) : (
           <section className="space-y-6">
+            <VoiceGuidePromo lang={lang} theme={theme} onOpenGuide={() => setActivePage('voiceGuide')} onSignIn={onSignIn} />
+{knowledgeTipsPanel('how')}
 <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
               {howContent.steps.map((step) => (
                 <article key={step.title} className={`rounded-[1.6rem] border p-5 md:p-6 ${cardTone}`}>
@@ -907,7 +882,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                   <h3 className="text-2xl font-black tracking-tight">{column.title}</h3>
                   <div className="mt-4 space-y-3">
                     {column.bullets.map((bullet) => (
-                      <div key={bullet} className={`rounded-2xl border px-4 py-3 text-sm leading-relaxed ${theme === 'dark' ? 'border-white/10 bg-white/[0.07]' : 'border-slate-200 bg-white/85'}`}>
+                      <div key={bullet} className={`rounded-2xl border px-4 py-3 text-sm leading-relaxed ${subcardClass}`}>
                         {bullet}
                       </div>
                     ))}
@@ -926,6 +901,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             </section>
           ) : (
           <section className="space-y-6">
+            <VoiceGuidePromo lang={lang} theme={theme} onOpenGuide={() => setActivePage('voiceGuide')} onSignIn={onSignIn} />
+{knowledgeTipsPanel('faq')}
 <section className="space-y-3">
               {faqItems.map((item) => {
                 const open = faqOpen === item.question;
@@ -937,7 +914,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                       className={`w-full px-5 py-4 text-left ${isRTL ? 'text-right' : 'text-left'} flex items-center justify-between gap-4`}
                     >
                       <span className="text-base md:text-lg font-black tracking-tight">{item.question}</span>
-                      <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${theme === 'dark' ? 'border-slate-600 bg-white/[0.06] text-slate-200' : 'border-slate-300 bg-white text-slate-700'}`}>
+                      <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${subcardClass}`}>
                         {open ? '−' : '+'}
                       </span>
                     </button>
@@ -961,16 +938,18 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             </section>
           ) : (
           <section className="space-y-6">
+            <VoiceGuidePromo lang={lang} theme={theme} onOpenGuide={() => setActivePage('voiceGuide')} onSignIn={onSignIn} />
+{knowledgeTipsPanel('learn')}
 <section className={`rounded-[2rem] border ${cardTone} p-6 md:p-8`}>
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                 <p className={`text-sm leading-relaxed ${mutedTextTone}`}>{knowledgePageLabels.articleHint}</p>
-                <div className={`rounded-[1.6rem] border p-5 ${theme === 'dark' ? 'border-slate-700/80 bg-[linear-gradient(160deg,rgba(24,36,53,0.9),rgba(20,31,46,0.86))]' : 'border-slate-200 bg-slate-50/90'}`}>
+                <div className={`rounded-[1.6rem] border p-5 ${surfaceInsetClass}`}>
                   <p className={softLabelClass}>{knowledgePageLabels.search}</p>
                   <input
                     value={learningQuery}
                     onChange={(event) => setLearningQuery(event.target.value)}
                     placeholder={knowledgePageLabels.search}
-                    className={`mt-3 w-full rounded-2xl border px-4 py-3 text-sm ${theme === 'dark' ? 'border-slate-700 bg-slate-950/70 text-slate-100 placeholder:text-slate-400' : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400'}`}
+                    className={`mt-3 w-full ${t1dInput(theme)}`}
                   />
                 </div>
               </div>
@@ -982,34 +961,14 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                       key={category}
                       type="button"
                       onClick={() => setLearningCategory(category === knowledgePageLabels.all ? 'all' : category)}
-                      className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                        isActive
-                          ? theme === 'dark'
-                            ? 'bg-orange-600 text-white'
-                            : 'bg-slate-950 text-white'
-                          : index % 4 === 1
-                            ? theme === 'dark'
-                              ? 'border border-rose-400/20 bg-rose-400/10 text-rose-100'
-                              : 'border border-rose-200 bg-rose-50 text-rose-700'
-                            : index % 4 === 2
-                              ? theme === 'dark'
-                                ? 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-100'
-                                : 'border border-emerald-200 bg-emerald-50 text-emerald-700'
-                              : index % 4 === 3
-                                ? theme === 'dark'
-                                  ? 'border border-amber-400/20 bg-amber-400/10 text-amber-100'
-                                  : 'border border-amber-200 bg-amber-50 text-amber-700'
-                                : theme === 'dark'
-                                  ? 'border border-amber-400/20 bg-amber-400/10 text-amber-100'
-                                  : 'border border-orange-200 bg-orange-50 text-orange-800'
-                      }`}
+                      className={t1dFilterPill(theme, isActive)}
                     >
                       {category}
                     </button>
                   );
                 })}
               </div>
-              <div className={`mt-6 rounded-[1.5rem] border p-4 md:p-5 ${theme === 'dark' ? 'border-white/10 bg-white/[0.06]' : 'border-slate-200 bg-white/80'}`}>
+              <div className={`mt-6 rounded-[1.5rem] border p-4 md:p-5 ${subcardClass}`}>
                 <div className={`flex items-center justify-between gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <p className={softLabelClass}>{knowledgePageLabels.explore}</p>
                   <span className={`text-xs ${mutedTextTone}`}>{knowledgePageLabels.learnTitle}</span>
@@ -1024,19 +983,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                       key={item.id}
                       type="button"
                       onClick={() => jumpToPageSection(item.id)}
-                      className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                        index === 0
-                          ? theme === 'dark'
-                            ? 'bg-orange-600 text-white'
-                            : 'bg-slate-950 text-white'
-                          : index === 1
-                            ? theme === 'dark'
-                              ? 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-100'
-                              : 'border border-emerald-200 bg-emerald-50 text-emerald-700'
-                            : theme === 'dark'
-                              ? 'border border-amber-400/20 bg-amber-400/10 text-amber-100'
-                              : 'border border-amber-200 bg-amber-50 text-amber-700'
-                      }`}
+                      className={t1dFilterPill(theme, index === 0)}
                     >
                       {item.label}
                     </button>
@@ -1049,23 +996,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
               {knowledgeUiCopy.learningTopics[lang].map((item, index) => (
                 <article
                   key={item.title}
-                  className={`rounded-[1.6rem] border p-5 md:p-6 ${
-                    index === 0
-                      ? theme === 'dark'
-                        ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(42,28,24,0.55),rgba(28,22,34,0.62))]'
-                        : 'border-orange-200 bg-orange-50/80'
-                      : index === 1
-                        ? theme === 'dark'
-                          ? 'border-rose-400/20 bg-[linear-gradient(160deg,rgba(70,34,52,0.45),rgba(44,24,36,0.55))]'
-                          : 'border-rose-200 bg-rose-50/80'
-                        : index === 2
-                          ? theme === 'dark'
-                            ? 'border-emerald-400/20 bg-[linear-gradient(160deg,rgba(24,56,54,0.45),rgba(18,38,44,0.55))]'
-                            : 'border-emerald-200 bg-emerald-50/80'
-                          : theme === 'dark'
-                            ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(68,50,26,0.4),rgba(44,32,18,0.5))]'
-                            : 'border-amber-200 bg-amber-50/80'
-                  }`}
+                  className={`rounded-[1.6rem] border p-5 md:p-6 ${toneSubcard(topicTone(index))}`}
                 >
                   <h3 className="text-xl font-black tracking-tight">{item.title}</h3>
                   <p className={`mt-3 text-sm leading-relaxed ${subtleTextTone}`}>{item.body}</p>
@@ -1096,7 +1027,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                             <h4 className="text-2xl font-black tracking-tight">{article.title}</h4>
                             <p className={`mt-3 text-sm leading-relaxed ${subtleTextTone}`}>{article.summary}</p>
                           </div>
-                          <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border ${theme === 'dark' ? 'border-slate-600 bg-white/[0.06] text-slate-200' : 'border-slate-300 bg-white text-slate-700'}`}>
+                          <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border ${subcardClass}`}>
                             {openArticleId === article.id ? '−' : '+'}
                           </span>
                         </div>
@@ -1106,15 +1037,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                           {article.sections.map((section, sectionIndex) => (
                             <div
                               key={section.title}
-                              className={`rounded-[1.25rem] border px-4 py-4 ${
-                                sectionIndex === 0
-                                  ? theme === 'dark'
-                                    ? 'border-amber-400/15 bg-[linear-gradient(160deg,rgba(42,28,24,0.42),rgba(28,22,34,0.52))]'
-                                    : 'border-orange-200 bg-orange-50/80'
-                                  : theme === 'dark'
-                                    ? 'border-white/10 bg-white/[0.07]'
-                                    : 'border-slate-200 bg-white/85'
-                              }`}
+                              className={`rounded-[1.25rem] border px-4 py-4 ${sectionIndex === 0 ? toneSubcard('accent') : subcardClass}`}
                             >
                               <p className="text-sm font-black tracking-tight">{section.title}</p>
                               <p className={`mt-2 text-sm leading-relaxed ${subtleTextTone}`}>{section.body}</p>
@@ -1140,7 +1063,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                   </div>
                   <div className="mt-4 space-y-3">
                     {filteredGlossary.map((item) => (
-                      <div key={item.term} className={`rounded-[1.25rem] border px-4 py-4 ${theme === 'dark' ? 'border-white/10 bg-white/[0.07]' : 'border-slate-200 bg-white/85'}`}>
+                      <div key={item.term} className={`rounded-[1.25rem] border px-4 py-4 ${subcardClass}`}>
                         <div className={`flex items-center justify-between gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <p className="text-base font-black tracking-tight">{item.term}</p>
                           <span className={`text-xs font-semibold ${softLabelClass}`}>{item.category}</span>
@@ -1149,7 +1072,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                       </div>
                     ))}
                     {filteredGlossary.length === 0 ? (
-                      <div className={`rounded-[1.25rem] border px-4 py-4 ${theme === 'dark' ? 'border-white/10 bg-white/[0.07]' : 'border-slate-200 bg-white/85'}`}>
+                      <div className={`rounded-[1.25rem] border px-4 py-4 ${subcardClass}`}>
                         <p className={`text-sm leading-relaxed ${subtleTextTone}`}>{knowledgeUiCopy.noResults[lang]}</p>
                       </div>
                     ) : null}
@@ -1162,23 +1085,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                     {knowledgeUiCopy.pathways[lang].map((item, index) => (
                       <div
                         key={item}
-                        className={`rounded-[1.25rem] border px-4 py-4 text-sm font-semibold ${
-                          index === 0
-                            ? theme === 'dark'
-                              ? 'border-amber-400/15 bg-[linear-gradient(160deg,rgba(42,28,24,0.42),rgba(28,22,34,0.52))]'
-                              : 'border-orange-200 bg-orange-50/80'
-                            : index === 1
-                              ? theme === 'dark'
-                                ? 'border-rose-400/15 bg-[linear-gradient(160deg,rgba(70,34,52,0.38),rgba(44,24,36,0.48))]'
-                                : 'border-rose-200 bg-rose-50/80'
-                              : index === 2
-                                ? theme === 'dark'
-                                  ? 'border-emerald-400/15 bg-[linear-gradient(160deg,rgba(24,56,54,0.38),rgba(18,38,44,0.48))]'
-                                  : 'border-emerald-200 bg-emerald-50/80'
-                                : theme === 'dark'
-                                  ? 'border-amber-400/15 bg-[linear-gradient(160deg,rgba(68,50,26,0.34),rgba(44,32,18,0.44))]'
-                                  : 'border-amber-200 bg-amber-50/80'
-                        }`}
+                        className={`rounded-[1.25rem] border px-4 py-4 text-sm font-semibold ${toneSubcard(topicTone(index))}`}
                       >
                         {item}
                       </div>
@@ -1198,16 +1105,17 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             </section>
           ) : (
           <section className="space-y-6">
+{knowledgeTipsPanel('news')}
 <section className={`rounded-[2rem] border ${cardTone} p-6 md:p-8`}>
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                 <p className={`text-sm leading-relaxed ${mutedTextTone}`}>{knowledgePageLabels.newsNote}</p>
-                <div className={`rounded-[1.6rem] border p-5 ${theme === 'dark' ? 'border-amber-400/15 bg-[linear-gradient(160deg,rgba(42,28,24,0.42),rgba(28,22,34,0.52))]' : 'border-orange-200 bg-orange-50/90'}`}>
+                <div className={`rounded-[1.6rem] border p-5 ${toneSubcard('accent')}`}>
                   <p className={softLabelClass}>{knowledgePageLabels.searchNews}</p>
                   <input
                     value={newsQuery}
                     onChange={(event) => setNewsQuery(event.target.value)}
                     placeholder={knowledgePageLabels.searchNews}
-                    className={`mt-3 w-full rounded-2xl border px-4 py-3 text-sm ${theme === 'dark' ? 'border-slate-700 bg-slate-950/70 text-slate-100 placeholder:text-slate-400' : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400'}`}
+                    className={`mt-3 w-full ${t1dInput(theme)}`}
                   />
                 </div>
               </div>
@@ -1219,27 +1127,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                       key={category}
                       type="button"
                       onClick={() => setNewsCategory(category === knowledgePageLabels.all ? 'all' : category)}
-                      className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                        isActive
-                          ? theme === 'dark'
-                            ? 'bg-orange-600 text-white'
-                            : 'bg-slate-950 text-white'
-                          : index % 4 === 1
-                            ? theme === 'dark'
-                              ? 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-100'
-                              : 'border border-emerald-200 bg-emerald-50 text-emerald-700'
-                            : index % 4 === 2
-                              ? theme === 'dark'
-                                ? 'border border-amber-400/20 bg-amber-400/10 text-amber-100'
-                                : 'border border-amber-200 bg-amber-50 text-amber-700'
-                              : index % 4 === 3
-                                ? theme === 'dark'
-                                  ? 'border border-rose-400/20 bg-rose-400/10 text-rose-100'
-                                  : 'border border-rose-200 bg-rose-50 text-rose-700'
-                                : theme === 'dark'
-                                  ? 'border border-amber-400/20 bg-amber-400/10 text-amber-100'
-                                  : 'border border-orange-200 bg-orange-50 text-orange-800'
-                      }`}
+                      className={t1dFilterPill(theme, isActive)}
                     >
                       {category}
                     </button>
@@ -1249,11 +1137,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
             </section>
             {featuredNews ? (
               <section className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-                <article className={`rounded-[2rem] border p-6 md:p-8 ${
-                  theme === 'dark'
-                    ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(42,28,24,0.56),rgba(28,22,34,0.66))]'
-                    : 'border-orange-200 bg-orange-50/90'
-                }`}>
+                <article className={`rounded-[2rem] border p-6 md:p-8 ${toneSubcard('accent')}`}>
                   <div className={`flex items-center justify-between gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <span className={`rounded-full px-3 py-1 text-xs font-semibold ${theme === 'dark' ? 'bg-white/12 text-amber-100' : 'bg-white text-orange-800'}`}>{featuredNews.category}</span>
                     <span className={`text-xs ${theme === 'dark' ? 'text-amber-100/80' : 'text-orange-800/80'}`}>{featuredNews.horizon}</span>
@@ -1261,7 +1145,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                   <p className={`mt-5 ${softLabelClass}`}>{knowledgePageLabels.updated}</p>
                   <h3 className="mt-3 max-w-3xl text-3xl md:text-4xl font-black tracking-tight">{featuredNews.title}</h3>
                   <p className={`mt-4 max-w-3xl text-sm md:text-[15px] leading-relaxed ${subtleTextTone}`}>{featuredNews.summary}</p>
-                  <div className={`mt-6 inline-flex rounded-[1.2rem] border px-4 py-3 ${theme === 'dark' ? 'border-white/10 bg-white/[0.08] text-slate-100' : 'border-slate-200 bg-white text-slate-800'}`}>
+                  <div className={`mt-6 inline-flex rounded-[1.2rem] border px-4 py-3 ${subcardClass}`}>
                     <p className="text-sm font-semibold">{featuredNews.status}</p>
                   </div>
                 </article>
@@ -1269,15 +1153,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                   {knowledgeUiCopy.newsTopics[lang].slice(0, 2).map((item) => (
                     <article
                       key={`${item.title}-lead`}
-                      className={`rounded-[1.8rem] border p-5 md:p-6 ${
-                        item.tone === 'sky'
-                          ? theme === 'dark'
-                            ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(42,28,24,0.55),rgba(28,22,34,0.62))]'
-                            : 'border-orange-200 bg-orange-50/80'
-                          : theme === 'dark'
-                            ? 'border-emerald-400/20 bg-[linear-gradient(160deg,rgba(24,56,54,0.45),rgba(18,38,44,0.55))]'
-                            : 'border-emerald-200 bg-emerald-50/80'
-                      }`}
+                      className={`rounded-[1.8rem] border p-5 md:p-6 ${toneSubcard(newsItemTone(item.tone))}`}
                     >
                       <h3 className="text-xl font-black tracking-tight">{item.title}</h3>
                       <p className={`mt-3 text-sm leading-relaxed ${subtleTextTone}`}>{item.body}</p>
@@ -1290,23 +1166,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
               {knowledgeUiCopy.newsTopics[lang].map((item) => (
                 <article
                   key={item.title}
-                  className={`rounded-[1.6rem] border p-5 md:p-6 ${
-                    item.tone === 'sky'
-                      ? theme === 'dark'
-                        ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(42,28,24,0.55),rgba(28,22,34,0.62))]'
-                        : 'border-orange-200 bg-orange-50/80'
-                      : item.tone === 'emerald'
-                        ? theme === 'dark'
-                          ? 'border-emerald-400/20 bg-[linear-gradient(160deg,rgba(24,56,54,0.45),rgba(18,38,44,0.55))]'
-                          : 'border-emerald-200 bg-emerald-50/80'
-                        : item.tone === 'amber'
-                          ? theme === 'dark'
-                            ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(68,50,26,0.4),rgba(44,32,18,0.5))]'
-                            : 'border-amber-200 bg-amber-50/80'
-                          : theme === 'dark'
-                            ? 'border-rose-400/20 bg-[linear-gradient(160deg,rgba(70,34,52,0.42),rgba(44,24,36,0.52))]'
-                            : 'border-rose-200 bg-rose-50/80'
-                  }`}
+                  className={`rounded-[1.6rem] border p-5 md:p-6 ${toneSubcard(newsItemTone(item.tone))}`}
                 >
                   <h3 className="text-xl font-black tracking-tight">{item.title}</h3>
                   <p className={`mt-3 text-sm leading-relaxed ${subtleTextTone}`}>{item.body}</p>
@@ -1317,23 +1177,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
               {secondaryNews.map((item, index) => (
                 <article
                   key={item.id}
-                  className={`rounded-[1.8rem] border p-5 md:p-6 ${
-                    index % 4 === 0
-                      ? theme === 'dark'
-                        ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(42,28,24,0.48),rgba(28,22,34,0.58))]'
-                        : 'border-orange-200 bg-orange-50/85'
-                      : index % 4 === 1
-                        ? theme === 'dark'
-                          ? 'border-emerald-400/20 bg-[linear-gradient(160deg,rgba(24,56,54,0.42),rgba(18,38,44,0.52))]'
-                          : 'border-emerald-200 bg-emerald-50/85'
-                        : index % 4 === 2
-                          ? theme === 'dark'
-                            ? 'border-amber-400/20 bg-[linear-gradient(160deg,rgba(68,50,26,0.38),rgba(44,32,18,0.48))]'
-                            : 'border-amber-200 bg-amber-50/85'
-                          : theme === 'dark'
-                            ? 'border-rose-400/20 bg-[linear-gradient(160deg,rgba(70,34,52,0.4),rgba(44,24,36,0.5))]'
-                            : 'border-rose-200 bg-rose-50/85'
-                  }`}
+                  className={`rounded-[1.8rem] border p-5 md:p-6 ${toneSubcard(topicTone(index))}`}
                 >
                   <div className={`flex items-center justify-between gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
                     <span className={`rounded-full px-3 py-1 text-xs font-semibold ${theme === 'dark' ? 'bg-amber-400/12 text-amber-200' : 'bg-orange-100 text-orange-800'}`}>{item.category}</span>
@@ -1341,7 +1185,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                   </div>
                   <h3 className="mt-4 text-2xl font-black tracking-tight">{item.title}</h3>
                   <p className={`mt-3 text-sm leading-relaxed ${subtleTextTone}`}>{item.summary}</p>
-                  <div className={`mt-5 rounded-[1.25rem] border px-4 py-4 ${theme === 'dark' ? 'border-white/10 bg-white/[0.09]' : 'border-slate-200 bg-white/90'}`}>
+                  <div className={`mt-5 rounded-[1.25rem] border px-4 py-4 ${subcardClass}`}>
                     <p className={softLabelClass}>{knowledgePageLabels.updated}</p>
                     <p className="mt-2 text-sm font-semibold">{item.status}</p>
                   </div>
@@ -1360,12 +1204,13 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
         {activePage === 'trust' ? (
           <section className="space-y-6">
 {typePageNote('trust')}
+            {knowledgeTipsPanel('trust')}
             <section className="grid grid-cols-1 gap-6 lg:grid-cols-[0.95fr_1.05fr]">
               <article className={`rounded-[2rem] border ${cardTone} p-6 md:p-8`}>
                 <p className={softLabelClass}>{copy.trust.legalTitle}</p>
                 <div className="mt-4 grid gap-3">
-                  {copy.trust.legal.map((item) => (
-                    <div key={item} className={`rounded-2xl border px-4 py-3 text-sm font-semibold ${theme === 'dark' ? 'border-slate-700/80 bg-[linear-gradient(160deg,rgba(23,38,58,0.92),rgba(18,31,49,0.88))] text-slate-200' : 'border-slate-200 bg-slate-50/90 text-slate-700'}`}>
+                  {[...copy.trust.legal, ...complianceCopy.bullets.slice(0, 3)].map((item) => (
+                    <div key={item} className={`rounded-2xl border px-4 py-3 text-sm font-semibold ${subcardClass} ${subtleTextTone}`}>
                       {item}
                     </div>
                   ))}
@@ -1374,16 +1219,16 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
               <article className={`rounded-[2rem] border ${cardTone} p-6 md:p-8`}>
                 <p className={softLabelClass}>{copy.trust.mvpTitle}</p>
                 <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className={`rounded-[1.4rem] p-5 ${theme === 'dark' ? 'bg-[linear-gradient(160deg,rgba(24,56,54,0.45),rgba(18,38,44,0.55))]' : 'bg-emerald-50'}`}>
-                    <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-emerald-300' : 'text-emerald-700'}`}>{copy.ui.mvpIn}</p>
+                  <div className={`rounded-[1.4rem] p-5 ${toneSubcard('mint')}`}>
+                    <p className={`text-sm font-semibold ${softLabelClass}`}>{copy.ui.mvpIn}</p>
                     <div className="mt-3 space-y-2">
                       {copy.trust.mvpIn.map((item) => (
                         <p key={item} className="text-sm font-semibold">{item}</p>
                       ))}
                     </div>
                   </div>
-                  <div className={`rounded-[1.4rem] p-5 ${theme === 'dark' ? 'bg-[linear-gradient(160deg,rgba(66,32,48,0.42),rgba(44,22,34,0.52))]' : 'bg-rose-50'}`}>
-                    <p className={`text-sm font-semibold ${theme === 'dark' ? 'text-rose-300' : 'text-rose-700'}`}>{copy.ui.mvpOut}</p>
+                  <div className={`rounded-[1.4rem] p-5 ${toneSubcard('rose')}`}>
+                    <p className={`text-sm font-semibold ${softLabelClass}`}>{copy.ui.mvpOut}</p>
                     <div className="mt-3 space-y-2">
                       {copy.trust.mvpOut.map((item) => (
                         <p key={item} className="text-sm font-semibold">{item}</p>
@@ -1418,11 +1263,7 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
                             key={`${legalPage}-toc-${section.title}`}
                             type="button"
                             onClick={() => jumpToPageSection(`${legalPage}-section-${index}`)}
-                            className={`rounded-2xl border px-4 py-3 text-sm font-semibold ${isRTL ? 'text-right' : 'text-left'} ${
-                              theme === 'dark'
-                                ? 'border-white/10 bg-white/[0.06] text-slate-200 hover:border-amber-400/25 hover:bg-amber-400/10'
-                                : 'border-slate-200 bg-white/85 text-slate-700 hover:border-orange-300 hover:bg-orange-50/80'
-                            }`}
+                            className={`rounded-2xl border px-4 py-3 text-sm font-semibold ${isRTL ? 'text-right' : 'text-left'} ${subcardClass} ${subtleTextTone}`}
                           >
                             {section.title}
                           </button>
@@ -1459,6 +1300,24 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
           )
         ) : null}
 
+        {activePage === 'pricing' ? (
+          <PricingPage
+            lang={lang}
+            theme={theme}
+            isRTL={isRTL}
+            onSignIn={onSignIn}
+            onSignUp={onSignUp}
+            checkoutQuery={typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('checkout') : null}
+          />
+        ) : null}
+
+        {activePage === 'voiceGuide' ? (
+          <section className="t1d-voice-public-page space-y-5">
+            <p className={`t1d-voice-public-page__intro ${theme === 'dark' ? 'text-slate-300' : 'text-stone-700'}`}>{voiceGuideCopy.pageIntro}</p>
+            <VoiceGuideWidget lang={lang} theme={theme} mode="preview" isRTL={isRTL} onSignIn={onSignIn} />
+          </section>
+        ) : null}
+
         {activePage === 'downloadDesktop' ? (
           <section className="space-y-6">
             <DownloadInstallPanel
@@ -1486,6 +1345,8 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
           />
           </section>
         ) : null}
+
+        {activePage !== 'home' ? <LegalFootnote lang={lang} theme={theme} /> : null}
       </main>
 
       <T1DFooter
@@ -1497,10 +1358,11 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
         signInLabel={copy.signIn}
         type1SignUpLabel={typeCopy.home.type1.cta}
         type2SignUpLabel={typeCopy.home.type2.cta}
+        bothSignUpLabel={AUTH_TYPE_COPY[lang].both.title}
         activePageLabel={activePageLabel}
         copyright={legalUi.copyright}
         reserved={legalUi.reserved}
-        disclaimer={copy.footer.disclaimer}
+        disclaimer={complianceCopy.footer}
         accountLabel={copy.footer.accountLabel}
         activateLightLabel={copy.ui.activateLightMode}
         activateDarkLabel={copy.ui.activateDarkMode}
@@ -1512,7 +1374,6 @@ export const T1DPublicLandingView: React.FC<T1DPublicLandingViewProps> = ({
         sectionDownload={siteChrome.downloadSectionLabel}
         sectionAccount={copy.footerSections.account}
         legalNote={legalUi.classicNote}
-        trustLegalLabel={copy.footer.legal}
         productLinks={footerProductLinks}
         knowledgeLinks={footerKnowledgeLinks}
         legalLinks={footerLegalLinks}

@@ -56,7 +56,7 @@ export const LANDING_TYPE_COPY: Record<Language, LandingTypeCopy> = {
       system: { eyebrow: 'Separate paths', body: 'Type 1 and type 2 each get thresholds and support tuned to that diagnosis.' },
       night: { eyebrow: 'At night', body: 'Type 1: closer watch for lows. Type 2: balanced night with earlier high alerts.' },
       family: { eyebrow: 'Setup', body: 'Pick your path once at signup. Everyone who joins shares that household type.' },
-      trust: { eyebrow: 'In focus now', body: 'Steady supports type 1 and type 2 families on separate, dedicated paths.' },
+      trust: { eyebrow: 'In focus now', body: 'Type1 and 2 supports type 1 and type 2 families on separate, dedicated paths.' },
     },
   },
   ru: {
@@ -84,7 +84,7 @@ export const LANDING_TYPE_COPY: Record<Language, LandingTypeCopy> = {
       system: { eyebrow: 'Отдельные пути', body: 'Тип 1 и тип 2 получают пороги и поддержку, настроенные под каждый диагноз.' },
       night: { eyebrow: 'Ночью', body: 'Тип 1: ближе следим за низким. Тип 2: сбалансированная ночь и более ранние высокие.' },
       family: { eyebrow: 'Настройка', body: 'Путь выбирается один раз при регистрации. Все, кто присоединится, делят тип семьи.' },
-      trust: { eyebrow: 'Сейчас в фокусе', body: 'Steady поддерживает семьи с типом 1 и типом 2 на отдельных, выделенных путях.' },
+      trust: { eyebrow: 'Сейчас в фокусе', body: 'Type1 and 2 поддерживает семьи с типом 1 и типом 2 на отдельных, выделенных путях.' },
     },
   },
   uk: {

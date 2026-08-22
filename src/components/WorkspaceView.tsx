@@ -5,13 +5,14 @@ import { deleteAccount } from '../lib/api';
 import { RTL_LANGUAGES, type DiabetesType, type Language } from '../types';
 import { MEMBER_CHROME_COPY } from '../content/member-chrome-copy';
 import { readSignupDiabetesType } from '../lib/signup-diabetes-type';
+import type { SignupDiabetesChoice } from '../lib/signup-diabetes-type';
 import { getRoleLabels } from '../lib/role-labels';
 import {
   resolveFailStateHints,
   resolvePreferenceExplainer,
-  resolveRoleFocus,
   resolveWorkspaceCopy,
   resolveWorkspaceInviteCopy,
+  resolveWorkspaceNav,
   resolveWorkspaceSectionHeaders,
 } from '../lib/workspace-content';
 import { ACTION_LABELS } from '../content/action-labels';
@@ -19,7 +20,7 @@ import type { ActionId } from '../lib/api';
 import { t1dBtnPrimary, t1dBtnSecondary, t1dEyebrow, t1dMemberLayout, t1dPanelCompact, t1dPanelCompactSurface, t1dPanelPrimary, t1dPanelSubtle, t1dPanelSurface, t1dSoftLabel } from '../lib/t1d-ui';
 import { MemberPageHero } from './layout/MemberPageHero';
 import { MemberZoneShell } from './layout/MemberZoneShell';
-import { ConnectionPanel } from './workspace/ConnectionPanel';
+import { memberHeroEyebrow } from './layout/MemberZoneStrip';
 import { FoodAnalysisPanel } from './workspace/FoodAnalysisPanel';
 import { WorkspaceActionBanner } from './workspace/WorkspaceActionBanner';
 import { WorkspaceOnboarding } from './workspace/WorkspaceOnboarding';
@@ -29,10 +30,11 @@ import { resolveActionFeedback } from '../content/workspace-ux-copy';
 import { NUTRITION_COPY } from '../content/nutrition-copy';
 import { createEmptyNutritionPayload } from '../lib/nutrition-defaults';
 import { memberLayoutTypeClass } from '../lib/hero-path';
+import { resolveWorkspaceSectionCopyAlign, resolveWorkspaceSectionHero } from '../lib/member-theme-visuals';
 import { glucoseDashboardTypeClass, workspaceShellTypeClass } from '../lib/diabetes-type-theme';
 import { GlucoseNowDashboard } from './workspace/GlucoseNowDashboard';
 import { WorkspaceNowPanel } from './workspace/WorkspaceNowPanel';
-import { WorkspaceBetaBanner } from './workspace/WorkspaceBetaBanner';
+import { LegalFootnote } from './layout/LegalFootnote';
 import { EventTimeline } from './workspace/EventTimeline';
 import { WORKSPACE_NOW_COPY } from '../content/workspace-now-copy';
 import { normalizeGlucoseUnit } from '../lib/glucose-units';
@@ -58,6 +60,13 @@ import { WorkspaceSettingsSection } from './workspace/WorkspaceSettingsSection';
 import { WorkspaceAlertsSection } from './workspace/WorkspaceAlertsSection';
 import { WorkspaceFamilySection } from './workspace/WorkspaceFamilySection';
 import { WorkspaceHistorySection } from './workspace/WorkspaceHistorySection';
+import { WorkspaceConnectionsSection } from './workspace/WorkspaceConnectionsSection';
+import { VoiceGuidePanel } from './workspace/VoiceGuidePanel';
+import { VOICE_GUIDE_COPY } from '../content/voice-guide-copy';
+import { EMPTY_HEALTH_RECORDS_FALLBACK } from '../lib/health-portal-fallback';
+import { MemberProfilePanel, profileFromUser, type MemberProfileInput } from './workspace/MemberProfilePanel';
+import { MEMBER_SETTINGS_COPY } from '../content/member-settings-copy';
+import type { AccountProfileInput } from '../lib/api';
 
 
 interface WorkspaceViewProps {
@@ -68,7 +77,7 @@ interface WorkspaceViewProps {
   setTheme: (theme: 'light' | 'dark') => void;
   onLogout: () => void;
   onBackToPublic: () => void;
-  onSignUp: (type: DiabetesType) => void;
+  onSignUp: (choice: SignupDiabetesChoice) => void;
   workspace: WorkspacePayload | null;
   onAction: (action: ActionId) => Promise<void>;
   onPreferencesSave: (preferences: SafetyPreferencesInput) => Promise<void>;
@@ -78,6 +87,10 @@ interface WorkspaceViewProps {
   onDexcomTokenRefresh: () => Promise<void>;
   onDexcomDisconnect: () => Promise<void>;
   onDexcomPoll: () => Promise<void>;
+  onHealthPortalConnect: (portalId: string) => Promise<void>;
+  onHealthPortalSync: (portalId: string) => Promise<void>;
+  onHealthPortalDisconnect: (portalId: string) => Promise<void>;
+  onProfileSave: (profile: AccountProfileInput) => Promise<unknown>;
   onNutritionAnalyze: (payload: { imageBase64?: string; note?: string }) => Promise<void>;
   onWorkspaceRefresh?: () => Promise<void>;
 }
@@ -92,7 +105,7 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
   onBackToPublic,
   onSignUp,
   workspace,
-  onAction, onPreferencesSave, onDexcomConnect, onDexcomOAuthStart, onDexcomOAuthFinish, onDexcomTokenRefresh, onDexcomDisconnect, onDexcomPoll, onNutritionAnalyze, onWorkspaceRefresh }) => {
+  onAction, onPreferencesSave, onDexcomConnect, onDexcomOAuthStart, onDexcomOAuthFinish, onDexcomTokenRefresh, onDexcomDisconnect, onDexcomPoll, onHealthPortalConnect, onHealthPortalSync, onHealthPortalDisconnect, onProfileSave, onNutritionAnalyze, onWorkspaceRefresh }) => {
   const diabetesType = workspace?.household?.diabetesType ?? readSignupDiabetesType() ?? 'type1';
   const memberCopy = MEMBER_CHROME_COPY[lang];
   const copy = resolveWorkspaceCopy(lang, diabetesType);
@@ -130,9 +143,38 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
   const [actionFeedback, setActionFeedback] = React.useState<{ title: string; body: string; next: string } | null>(null);
   const [actionBusy, setActionBusy] = React.useState(false);
   const [connectionBusy, setConnectionBusy] = React.useState(false);
+  const [healthPortalBusy, setHealthPortalBusy] = React.useState(false);
   const [nutritionBusy, setNutritionBusy] = React.useState(false);
   const [inviteCopied, setInviteCopied] = React.useState(false);
   const [oauthCode, setOauthCode] = React.useState('');
+  const memberSettingsCopy = MEMBER_SETTINGS_COPY[lang];
+  const [memberProfile, setMemberProfile] = React.useState<MemberProfileInput>(() => profileFromUser(user));
+  const [savingProfile, setSavingProfile] = React.useState(false);
+  const [profileSavedNotice, setProfileSavedNotice] = React.useState('');
+
+  React.useEffect(() => {
+    setMemberProfile(profileFromUser(user));
+  }, [user.email, user.fullName, user.organization]);
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const section = params.get('section');
+    if (section === 'connections' || section === 'system' || section === 'health-records') {
+      setActiveSection('system');
+    }
+    if (params.get('health_portal_auth') || params.get('dexcom_auth')) {
+      setActiveSection('system');
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [activeSection]);
+
+  const selectSection = React.useCallback((section: WorkspaceSectionId) => {
+    setActiveSection(section);
+  }, []);
 
   React.useEffect(() => {
     setSelectedSessionId(workspace?.selectedSession?.id || workspace?.dailyHistory?.[0]?.id || null);
@@ -170,7 +212,7 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
             theme={theme}
             isRTL={isRTL}
             diabetesType={diabetesType}
-            eyebrow={copy.eyebrow}
+            eyebrow={memberHeroEyebrow(lang, diabetesType)}
             title={copy.currentState}
             subtitle={copy.householdName}
           />
@@ -191,7 +233,6 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
   const deviceStatus = workspace.deviceStatus;
   const dexcom = workspace.dexcomConnection;
   const morningSummary = workspace.morningSummary;
-  const focus = resolveRoleFocus(lang, household.diabetesType, user.role);
   const preferenceExplainer = resolvePreferenceExplainer(lang, household.diabetesType, preferenceCopy.explainer);
   const trendLabel = labels[currentState.trend];
   const confidenceLabel = labels[currentState.confidence];
@@ -361,6 +402,8 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
   const nowCopy = WORKSPACE_NOW_COPY[lang];
   const glucoseUnit = normalizeGlucoseUnit(preferences?.glucoseUnit);
   const sectionHeaders = resolveWorkspaceSectionHeaders(lang, household.diabetesType);
+  const workspaceNav = resolveWorkspaceNav(lang, household.diabetesType);
+  const activeHero = sectionHeaders[activeSection];
   const inviteCopy = resolveWorkspaceInviteCopy(lang, household.diabetesType);
   const nutrition = workspace.nutrition ?? createEmptyNutritionPayload(NUTRITION_COPY[lang].cameraHint);
 
@@ -369,7 +412,7 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
     try {
       await onAction(action);
       setActionFeedback(resolveActionFeedback(lang, action));
-      setActiveSection('timeline');
+      selectSection('timeline');
     } catch {
       setActionFeedback({
         title: lang === 'ru' ? 'Не удалось сохранить действие' : 'Could not save action',
@@ -404,6 +447,38 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
     }
   };
 
+  const wrapHealthPortal = (fn: (portalId: string) => Promise<void>) => async (portalId: string) => {
+    setHealthPortalBusy(true);
+    try {
+      await fn(portalId);
+    } finally {
+      setHealthPortalBusy(false);
+    }
+  };
+
+  const handleProfileSave = async () => {
+    setSavingProfile(true);
+    setProfileSavedNotice('');
+    try {
+      await onProfileSave({
+        fullName: memberProfile.fullName,
+        organization: memberProfile.organization,
+        timezone: memberProfile.timezone,
+        emailNotifications: memberProfile.emailNotifications,
+        pushNotifications: memberProfile.pushNotifications,
+        marketingEmails: memberProfile.marketingEmails,
+      });
+      setProfileSavedNotice(memberSettingsCopy.profileSaved);
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const healthRecords = workspace.healthRecords?.portals?.length
+    ? workspace.healthRecords
+    : EMPTY_HEALTH_RECORDS_FALLBACK();
+  const sensorConnected = dexcom?.status === 'connected' || deviceStatus?.status === 'connected';
+
   const copyInviteCode = async () => {
     if (!household.inviteCode || typeof navigator === 'undefined') return;
     try {
@@ -435,21 +510,30 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
         onSignUp={onSignUp}
         hero={(
           <MemberPageHero
-            variant="workspace"
+            variant={resolveWorkspaceSectionHero(activeSection)}
             theme={theme}
             isRTL={isRTL}
             diabetesType={household.diabetesType}
-            eyebrow={copy.eyebrow}
-            title={`${copy.welcome}, ${user.fullName || user.email}`}
-            subtitle={focus.body}
+            copyAlign={resolveWorkspaceSectionCopyAlign(activeSection)}
+            eyebrow={workspaceNav[activeSection].label}
+            title={activeHero.title}
+            subtitle={activeHero.subtitle}
+            highlights={activeSection === 'guide' ? VOICE_GUIDE_COPY[lang].features : undefined}
           />
         )}
       >
         <div className={`${t1dMemberLayout()} ${memberLayoutTypeClass(household.diabetesType)} relative`}>
-        <WorkspaceBetaBanner lang={lang} theme={theme} isRTL={isRTL} />
-
         <div className={`t1d-workspace-shell ${workspaceShellTypeClass(household.diabetesType)} ${isRTL ? 't1d-workspace-shell--rtl' : ''}`}>
-          <WorkspaceSidebar active={activeSection} onSelect={setActiveSection} theme={theme} lang={lang} isRTL={isRTL} diabetesType={household.diabetesType} />
+          <WorkspaceSidebar
+            active={activeSection}
+            onSelect={selectSection}
+            theme={theme}
+            lang={lang}
+            isRTL={isRTL}
+            diabetesType={household.diabetesType}
+            sensorConnected={sensorConnected}
+            clinicConnectedCount={healthRecords.connectedCount}
+          />
           <div className="t1d-workspace-main">
             {actionFeedback ? (
               <WorkspaceActionBanner
@@ -459,7 +543,7 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
                 theme={theme}
                 isRTL={isRTL}
                 onDismiss={() => setActionFeedback(null)}
-                onOpenTimeline={() => setActiveSection('timeline')}
+                onOpenTimeline={() => selectSection('timeline')}
                 openTimelineLabel={nowCopy.openTimeline}
               />
             ) : null}
@@ -505,7 +589,7 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
             {nutrition?.insight ? (
               <button
                 type="button"
-                onClick={() => setActiveSection('nutrition')}
+                onClick={() => selectSection('nutrition')}
                 className={`mt-5 w-full rounded-2xl border p-4 text-left transition ${theme === 'dark' ? 'border-emerald-500/30 bg-emerald-500/10 hover:border-emerald-400/50' : 'border-emerald-200 bg-emerald-50/90 hover:border-emerald-300'}`}
               >
                 <p className={softLabelClass}>{nowCopy.latestMeal}</p>
@@ -572,7 +656,7 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
             ) : null}
 
             {activeSection === 'system' ? (
-          <ConnectionPanel
+          <WorkspaceConnectionsSection
             lang={lang}
             theme={theme}
             isRTL={isRTL}
@@ -583,10 +667,15 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
             glucoseUnit={glucoseUnit}
             glucoseLabel={labels.glucose}
             trendLabel={dexcom?.latestTrend ? labels[dexcom.latestTrend] : labels.flat}
-            onConnect={wrapConnection(onDexcomConnect)}
-            onDisconnect={wrapConnection(onDexcomDisconnect)}
-            onPoll={wrapConnection(onDexcomPoll)}
-            busy={connectionBusy}
+            connectionBusy={connectionBusy}
+            healthPortalBusy={healthPortalBusy}
+            healthRecords={healthRecords}
+            onDexcomConnect={wrapConnection(onDexcomConnect)}
+            onDexcomDisconnect={wrapConnection(onDexcomDisconnect)}
+            onDexcomPoll={wrapConnection(onDexcomPoll)}
+            onHealthPortalConnect={wrapHealthPortal(onHealthPortalConnect)}
+            onHealthPortalSync={wrapHealthPortal(onHealthPortalSync)}
+            onHealthPortalDisconnect={wrapHealthPortal(onHealthPortalDisconnect)}
           />
             ) : null}
 
@@ -626,6 +715,13 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
                 deleteAccountError={deleteAccountError}
                 deletingAccount={deletingAccount}
                 onDeleteAccount={handleDeleteAccount}
+                memberProfile={memberProfile}
+                setMemberProfile={setMemberProfile}
+                user={user}
+                savingProfile={savingProfile}
+                profileSavedNotice={profileSavedNotice}
+                onProfileSave={handleProfileSave}
+                memberSettingsCopy={memberSettingsCopy}
               />
             ) : null}
 
@@ -681,6 +777,18 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
               />
             ) : null}
 
+            {activeSection === 'guide' ? (
+              <VoiceGuidePanel
+                lang={lang}
+                theme={theme}
+                isRTL={isRTL}
+                sectionTitle={sectionHeaders.guide.title}
+                onAction={(action) => {
+                  if (action.type === 'member_section') selectSection(action.id as WorkspaceSectionId);
+                }}
+              />
+            ) : null}
+
             {activeSection === 'family' ? (
               <WorkspaceFamilySection
                 lang={lang}
@@ -707,9 +815,10 @@ export const WorkspaceView: React.FC<WorkspaceViewProps> = ({
 
           </div>
         </div>
+        <LegalFootnote lang={lang} theme={theme} />
         </div>
       </MemberZoneShell>
-      <WorkspaceOnboarding lang={lang} theme={theme} diabetesType={household.diabetesType} onGoToNutrition={() => setActiveSection('nutrition')} />
+      <WorkspaceOnboarding lang={lang} theme={theme} diabetesType={household.diabetesType} onGoToNutrition={() => selectSection('nutrition')} />
     </>
   );
 };

@@ -16,6 +16,7 @@ import { buildNutritionPayload } from '../nutrition-service.mjs';
 import { requestLang } from '../backend-i18n.mjs';
 import { localizeWorkspacePayload } from '../workspace-i18n.mjs';
 import { ensureDexcomOps } from '../dexcom-ops.mjs';
+import { buildHealthRecordsSummary } from './health-portal-service.mjs';
 
 const safeText = (value, max = 160) => String(value || '').trim().slice(0, max);
 
@@ -301,6 +302,7 @@ export const buildWorkspacePayload = (user, household = null) => {
       selectedSession: null,
       quickActions: [],
       nutrition: null,
+      healthRecords: buildHealthRecordsSummary(null),
     };
   }
 
@@ -489,6 +491,7 @@ export const buildWorkspacePayload = (user, household = null) => {
       : null,
     quickActions: actionSetByRole(user.role, household),
     nutrition: buildNutritionPayload(household, currentState),
+    healthRecords: buildHealthRecordsSummary(household),
   };
 };
 

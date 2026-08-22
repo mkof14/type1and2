@@ -94,8 +94,9 @@ export type ConnectionPanelProps = {
   lang: Language;
   theme: T1DTheme;
   isRTL?: boolean;
-  sectionTitle: string;
-  sectionSubtitle: string;
+  embedded?: boolean;
+  sectionTitle?: string;
+  sectionSubtitle?: string;
   deviceStatus: WorkspacePayload['deviceStatus'];
   dexcom: WorkspacePayload['dexcomConnection'];
   glucoseUnit: GlucoseUnit;
@@ -111,6 +112,7 @@ export const ConnectionPanel: React.FC<ConnectionPanelProps> = ({
   lang,
   theme,
   isRTL = false,
+  embedded = false,
   sectionTitle,
   sectionSubtitle,
   deviceStatus,
@@ -133,11 +135,17 @@ export const ConnectionPanel: React.FC<ConnectionPanelProps> = ({
   const glucoseRaw = dexcom?.latestGlucose ?? null;
   const glucose = Number.isFinite(glucoseRaw) ? formatGlucose(glucoseRaw, glucoseUnit) : '—';
 
-  return (
-    <section className={`t1d-workspace-section ${theme === 'dark' ? 't1d-workspace-section--dark' : 't1d-workspace-section--light'} ${isRTL ? 'text-right' : 'text-left'}`}>
-      <WorkspaceSectionHeader title={sectionTitle} subtitle={sectionSubtitle} theme={theme} isRTL={isRTL} />
+  const shellClass = embedded
+    ? `t1d-connection-panel-embedded ${theme === 'dark' ? 't1d-connection-panel-embedded--dark' : ''}`
+    : `t1d-workspace-section ${theme === 'dark' ? 't1d-workspace-section--dark' : 't1d-workspace-section--light'} ${isRTL ? 'text-right' : 'text-left'}`;
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+  return (
+    <div className={shellClass}>
+      {!embedded && sectionTitle ? (
+        <WorkspaceSectionHeader title={sectionTitle} subtitle={sectionSubtitle} theme={theme} isRTL={isRTL} />
+      ) : null}
+
+      <div className={embedded ? 'grid gap-4 lg:grid-cols-[1.1fr_0.9fr]' : 'mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]'}>
         <div className="space-y-5">
           <div>
             <p className={softLabelClass}>{copy.chooseDevice}</p>
@@ -229,6 +237,6 @@ export const ConnectionPanel: React.FC<ConnectionPanelProps> = ({
           ) : null}
         </div>
       </div>
-    </section>
+    </div>
   );
 };

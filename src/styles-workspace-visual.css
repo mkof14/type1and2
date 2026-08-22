@@ -269,3 +269,630 @@
     display: none;
   }
 }
+
+/* Health records (MyChart-style) */
+.t1d-health-records__hero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 1.35rem;
+  background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(99,102,241,0.1), rgba(16,185,129,0.08));
+  border: 1px solid rgba(14,165,233,0.2);
+}
+
+.t1d-health-records__hero--dark {
+  background: linear-gradient(135deg, rgba(14,165,233,0.16), rgba(99,102,241,0.14), rgba(16,185,129,0.1));
+  border-color: rgba(56,189,248,0.25);
+}
+
+.t1d-health-records__hero-stats {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.t1d-health-records__hero-stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4.5rem;
+}
+
+.t1d-health-records__hero-stats strong {
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.t1d-health-records__hero-stats span {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+.t1d-health-portal-grid {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.t1d-health-portal-card {
+  border-radius: 1.15rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(148,163,184,0.28);
+  background: rgba(255,255,255,0.92);
+  color: rgb(15 23 42);
+}
+
+.t1d-health-records--dark .t1d-health-portal-card,
+.t1d-health-records-embedded--dark .t1d-health-portal-card,
+.t1d-connections-section--dark .t1d-health-portal-card {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(71, 85, 105, 0.55);
+  color: rgb(241 245 249);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.t1d-health-records--dark .t1d-health-portal-card h4,
+.t1d-health-records-embedded--dark .t1d-health-portal-card h4 {
+  color: rgb(248 250 252);
+}
+
+.t1d-health-records--dark .t1d-health-portal-card__types,
+.t1d-health-records-embedded--dark .t1d-health-portal-card__types,
+.t1d-health-records--dark .t1d-health-portal-card p,
+.t1d-health-records-embedded--dark .t1d-health-portal-card p {
+  color: rgb(203 213 225);
+}
+
+.t1d-health-records--dark .t1d-health-portal-card__status,
+.t1d-health-records-embedded--dark .t1d-health-portal-card__status {
+  color: rgb(148 163 184);
+  opacity: 1;
+}
+
+.t1d-health-records--dark .t1d-health-portal-card__status.is-on,
+.t1d-health-records-embedded--dark .t1d-health-portal-card__status.is-on {
+  color: rgb(52 211 153);
+}
+
+.t1d-health-records--dark .t1d-health-portal-card__featured-tag,
+.t1d-health-records-embedded--dark .t1d-health-portal-card__featured-tag {
+  color: rgb(94 234 212);
+}
+
+.t1d-health-records--dark .t1d-health-portal-card__icon,
+.t1d-health-records-embedded--dark .t1d-health-portal-card__icon {
+  background: rgba(20, 184, 166, 0.18);
+  color: rgb(94 234 212);
+}
+
+.t1d-health-records__inline-stats--dark {
+  color: rgb(203 213 225);
+}
+
+.t1d-health-records-embedded--dark {
+  color: rgb(226 232 240);
+}
+
+.t1d-health-timeline--dark {
+  border-color: rgba(71, 85, 105, 0.55);
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.t1d-health-timeline--dark .t1d-health-timeline__head {
+  background: linear-gradient(90deg, rgba(99,102,241,0.14), rgba(6,182,212,0.1));
+  color: rgb(241 245 249);
+}
+
+.t1d-health-timeline--dark .t1d-health-timeline__item {
+  border-top-color: rgba(71, 85, 105, 0.45);
+  color: rgb(226 232 240);
+}
+
+.t1d-health-portal-card--connected {
+  box-shadow: 0 0 0 1px rgba(16,185,129,0.25);
+}
+
+.t1d-health-portal-card--teal { border-top: 3px solid rgb(20 184 166); }
+.t1d-health-portal-card--blue { border-top: 3px solid rgb(59 130 246); }
+.t1d-health-portal-card--indigo { border-top: 3px solid rgb(99 102 241); }
+.t1d-health-portal-card--rose { border-top: 3px solid rgb(244 63 94); }
+.t1d-health-portal-card--green { border-top: 3px solid rgb(34 197 94); }
+
+.t1d-health-portal-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.t1d-health-portal-card__icon {
+  display: inline-flex;
+  padding: 0.35rem;
+  border-radius: 0.65rem;
+  background: rgba(99,102,241,0.1);
+}
+
+.t1d-health-portal-card__status {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.t1d-health-portal-card__status.is-on {
+  color: rgb(16 185 129);
+  opacity: 1;
+}
+
+.t1d-health-portal-card__types {
+  margin: 0.55rem 0;
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.t1d-health-timeline {
+  margin-top: 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(148,163,184,0.28);
+  overflow: hidden;
+}
+
+.t1d-health-timeline__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.1rem;
+  background: linear-gradient(90deg, rgba(99,102,241,0.08), rgba(6,182,212,0.06));
+}
+
+.t1d-health-timeline__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem 0;
+}
+
+.t1d-health-timeline__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1.1rem;
+  border-top: 1px solid rgba(148,163,184,0.15);
+}
+
+.t1d-health-timeline__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-top: 0.45rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  flex-shrink: 0;
+}
+
+.t1d-member-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(148,163,184,0.25);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.t1d-member-toggle--on {
+  border-color: rgba(14,165,233,0.35);
+  background: rgba(14,165,233,0.08);
+}
+
+/* Connections hub — Dexcom + MyChart */
+.t1d-connections-section {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.t1d-connections-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 1rem;
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+.t1d-connections-strip--dark {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.t1d-connections-strip__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.t1d-connections-strip--dark .t1d-connections-strip__item {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(71, 85, 105, 0.5);
+}
+
+.t1d-connections-strip__item.is-live strong {
+  color: rgb(5 150 105);
+}
+
+.t1d-connections-strip__item--hint {
+  flex: 1 1 100%;
+  background: transparent;
+  border: none;
+  font-weight: 500;
+  opacity: 0.75;
+  padding-left: 0.2rem;
+}
+
+.t1d-connections-block {
+  border-radius: 1.15rem;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.t1d-connections-section--dark .t1d-connections-block {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(71, 85, 105, 0.45);
+}
+
+.t1d-connections-block__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.t1d-connections-block__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.75rem;
+  flex-shrink: 0;
+}
+
+.t1d-connections-block__icon--sensor {
+  background: rgba(249, 115, 22, 0.14);
+  color: rgb(234 88 12);
+}
+
+.t1d-connections-block__icon--clinic {
+  background: rgba(20, 184, 166, 0.14);
+  color: rgb(13 148 136);
+}
+
+.t1d-connections-block__title {
+  margin: 0.15rem 0 0;
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.45;
+  opacity: 0.88;
+}
+
+.t1d-health-records__inline-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.t1d-health-portal-card--featured {
+  grid-column: 1 / -1;
+  border-width: 2px;
+  box-shadow: 0 12px 28px rgba(20, 184, 166, 0.12);
+}
+
+.t1d-health-portal-card__featured-tag {
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(13 148 136);
+}
+
+/* Family section */
+.t1d-family-section {
+  min-width: 0;
+}
+
+.t1d-family-stack {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  max-width: 42rem;
+}
+
+.t1d-family-grid {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+}
+
+@media (min-width: 1024px) {
+  .t1d-family-grid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 1rem;
+  }
+}
+
+.t1d-family-card {
+  min-width: 0;
+  padding: 1rem 1.1rem;
+  overflow: hidden;
+}
+
+.t1d-family-card--type {
+  padding: 1rem 1.1rem;
+}
+
+.t1d-family-card__heading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.t1d-family-card__title {
+  margin: 0.45rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.t1d-family-card__body,
+.t1d-family-card__meta {
+  margin: 0.45rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  opacity: 0.88;
+}
+
+.t1d-family-invite {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+  min-width: 0;
+}
+
+.t1d-family-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.65rem 1rem;
+  border-radius: 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.t1d-family-copy-btn--light {
+  border: 1px solid rgba(234, 88, 12, 0.35);
+  background: rgba(255, 255, 255, 0.96);
+  color: rgb(124 45 18);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.t1d-family-copy-btn--dark {
+  border: 1px solid rgba(148, 163, 184, 0.42);
+  background: rgba(30, 41, 59, 0.92);
+  color: rgb(248 250 252);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+
+.t1d-family-copy-btn--copied.t1d-family-copy-btn--light {
+  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(236, 253, 245, 0.95);
+  color: rgb(4 120 87);
+}
+
+.t1d-family-copy-btn--copied.t1d-family-copy-btn--dark {
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(6, 78, 59, 0.35);
+  color: rgb(167 243 208);
+}
+
+.t1d-family-members {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .t1d-family-members {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.t1d-family-member-card {
+  min-width: 0;
+  padding: 0.85rem 0.95rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  overflow: hidden;
+}
+
+.t1d-family-member-card--light {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(203, 213, 225, 0.95);
+}
+
+.t1d-family-member-card--dark {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(71, 85, 105, 0.55);
+}
+
+.t1d-family-member-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.t1d-family-member-card__name {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.t1d-family-member-card__status {
+  flex-shrink: 0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.t1d-family-member-card__status.is-active {
+  background: rgba(16, 185, 129, 0.16);
+  color: rgb(4 120 87);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+}
+
+.t1d-family-member-card--dark .t1d-family-member-card__status.is-active {
+  background: rgba(16, 185, 129, 0.18);
+  color: rgb(167 243 208);
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.t1d-family-member-card__status.is-pending {
+  background: rgba(245, 158, 11, 0.14);
+  color: rgb(180 83 9);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+}
+
+.t1d-family-member-card--dark .t1d-family-member-card__status.is-pending {
+  color: rgb(253 230 138);
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.t1d-family-member-card__role {
+  margin: 0.45rem 0 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  opacity: 0.88;
+}
+
+.t1d-family-member-card__email {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 500;
+  opacity: 0.78;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+/* Timeline pills — clearer on dark cards */
+.t1d-timeline-type-pill {
+  display: inline-flex;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(248, 250, 252, 0.95);
+  color: rgb(71 85 105);
+}
+
+.t1d-timeline-type-pill--dark {
+  background: rgba(30, 41, 59, 0.92);
+  border-color: rgba(100, 116, 139, 0.45);
+  color: rgb(226 232 240);
+}
+
+.t1d-timeline-status-pill {
+  display: inline-flex;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.t1d-timeline-status-pill--done {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.32);
+  color: rgb(4 120 87);
+}
+
+.t1d-timeline-status-pill--done-dark {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: rgb(167 243 208);
+}
+
+.t1d-timeline-status-pill--active {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.32);
+  color: rgb(180 83 9);
+}
+
+.t1d-timeline-status-pill--active-dark {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(251, 191, 36, 0.35);
+  color: rgb(253 230 138);
+}
+
+.t1d-timeline-status-pill--waiting {
+  background: rgba(148, 163, 184, 0.14);
+  border-color: rgba(148, 163, 184, 0.32);
+  color: rgb(71 85 105);
+}
+
+.t1d-timeline-status-pill--waiting-dark {
+  background: rgba(51, 65, 85, 0.55);
+  border-color: rgba(100, 116, 139, 0.4);
+  color: rgb(203 213 225);
+}
+
+.t1d-timeline-entry {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.t1d-timeline-entry__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+  flex: 1 1 12rem;
+}

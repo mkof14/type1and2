@@ -5,7 +5,7 @@ export type { LegalPage, LegalPageContent, LegalSection };
 export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
   trust: {
     title: 'Trust & Limits',
-    intro: 'This product is designed to help people notice change sooner, understand what matters now, and coordinate the next step with less confusion. It is not intended to replace clinical judgment, emergency services, or treatment decisions.',
+    intro: 'This product is designed to help people notice change sooner, understand what matters now, and coordinate the next step with less confusion. It is software for daily coordination only — not for medical decision-making, diagnosis, or treatment.',
     sections: [
       {
         title: 'What This Product Is For',
@@ -18,9 +18,11 @@ export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
         title: 'What This Product Does Not Do',
         bullets: [
           'It does not diagnose, treat, cure, or prevent disease.',
-          'It does not replace a clinician, emergency services, or a user’s own judgment.',
+          'It does not provide medical care, clinical advice, or emergency response.',
           'It does not guarantee that every critical event will be detected or prevented.',
-          'It should not be used as the only source of information in a dangerous or urgent situation.',
+          'It should not be used as the only source of information in any health-related situation.',
+          'Type1 and 2 does not sell, ship, install, or calibrate CGM, pumps, pens, or other medical hardware.',
+          'Type1 and 2 is not a physician, nurse, pharmacy, or medical device manufacturer.',
         ],
       },
       {
@@ -31,9 +33,10 @@ export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
         ],
       },
       {
-        title: 'Emergency Situations',
+        title: 'Software Limits',
         paragraphs: [
-          'If a user appears to be in distress, unresponsive, severely symptomatic, or in a situation that could become immediately dangerous, seek emergency medical assistance and follow clinician guidance without waiting for the product to update.',
+          'The product cannot observe real-life conditions directly. It shows information based on connected device data, account settings, and user actions. That picture may be incomplete, delayed, or wrong.',
+          'Type1 and 2 does not tell users how to respond to medical situations and does not monitor health on a user’s behalf.',
         ],
       },
       {
@@ -126,7 +129,7 @@ export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
         bullets: [
           'Use the service only for lawful, authorized support purposes.',
           'Do not interfere with the service, misuse connected accounts, or attempt unauthorized access.',
-          'Do not represent the service as a substitute for emergency or professional medical care.',
+          'Do not represent the service as medical care, a regulated medical device, or a source of clinical advice.',
         ],
       },
       {
@@ -139,7 +142,7 @@ export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
       {
         title: 'No Medical Service Relationship',
         paragraphs: [
-          'Use of the product does not create a doctor-patient relationship, emergency response relationship, or any guarantee of clinical oversight unless a separate written agreement explicitly states otherwise.',
+          'Use of the product does not create a doctor-patient relationship, clinical oversight relationship, or any guarantee of medical support unless a separate written agreement explicitly states otherwise.',
         ],
       },
       {
@@ -166,19 +169,14 @@ export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
         bullets: [
           'The product does not diagnose medical conditions.',
           'The product does not prescribe or administer treatment.',
-          'The product does not replace a clinician’s judgment, instructions, or monitoring.',
+          'The product does not provide clinical judgment, monitoring, or medical instructions.',
+          'The operator does not sell medical devices or provide clinical services through this website.',
         ],
       },
       {
-        title: 'Use With Professional Care',
+        title: 'Software-Only Role',
         paragraphs: [
-          'People living with type 1 diabetes should continue to follow their clinical care plan, device instructions, and guidance from qualified medical professionals. Product messages should be considered alongside direct observation, device status, and clinician guidance.',
-        ],
-      },
-      {
-        title: 'Emergency Instructions',
-        paragraphs: [
-          'If there is loss of consciousness, confusion, seizure, severe symptoms, or any situation that could become dangerous quickly, seek emergency medical help immediately and do not rely on the product as the sole source of direction.',
+          'Type1 and 2 organizes device signals, household coordination, and recovery follow-up in software. It does not employ clinicians, does not review individual health situations, and does not tell users what medical action to take.',
         ],
       },
       {
@@ -188,9 +186,9 @@ export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
         ],
       },
       {
-        title: 'Human Responsibility',
+        title: 'User Responsibility',
         paragraphs: [
-          'Users and families remain responsible for monitoring real-life conditions, deciding how to respond, and escalating to medical professionals or emergency services when appropriate.',
+          'Users and families decide how they use the software and how they respond to what it shows. Type1 and 2 does not assume responsibility for health outcomes, treatment choices, or real-world response timing.',
         ],
       },
     ],
@@ -225,6 +223,15 @@ export const LEGAL_PAGE_CONTENT: Record<LegalPage, LegalPageContent> = {
           'Define breach notification and incident escalation paths before launch.',
           'Review retention, deletion, and backup practices regularly.',
           'Avoid making privacy or compliance claims in marketing that operations cannot support in practice.',
+        ],
+      },
+      {
+        title: 'Company Role And Equipment',
+        bullets: [
+          'Type1 and 2 provides software coordination and education — not medical care.',
+          'We do not sell, lease, ship, install, or calibrate CGM, insulin pumps, pens, or other regulated hardware.',
+          'We do not employ clinicians to diagnose, prescribe, or treat users through the product.',
+          'Marketing, support, and legal materials must remain consistent with this software-only posture.',
         ],
       },
       {

@@ -1,9 +1,10 @@
 import React from 'react';
+import { Copy, Check } from 'lucide-react';
 import type { HouseholdProfile } from '../../lib/api';
 import { DIABETES_TYPE_COPY, diabetesTypeKey } from '../../content/diabetes-type-copy';
 import { HOUSEHOLD_COPY } from '../../content/workspace-panel-copy';
 import { typeCardClass } from '../../lib/diabetes-type-theme';
-import { t1dBtnSecondary, t1dSoftLabel } from '../../lib/t1d-ui';
+import { t1dSoftLabel } from '../../lib/t1d-ui';
 import type { Language } from '../../types';
 import { WorkspaceSectionHeader } from './WorkspaceSectionHeader';
 
@@ -55,57 +56,65 @@ export const WorkspaceFamilySection: React.FC<WorkspaceFamilySectionProps> = ({
 }) => {
   const householdCopy = HOUSEHOLD_COPY[lang];
   const diabetesTypeLabel = DIABETES_TYPE_COPY[lang][diabetesTypeKey(household.diabetesType)];
+  const dark = theme === 'dark';
 
   return (
-    <section className={`${primaryPanelClass} ${workspaceSectionShell} ${isRTL ? 'text-right' : 'text-left'}`}>
+    <section className={`${primaryPanelClass} ${workspaceSectionShell} t1d-family-section ${dark ? 't1d-family-section--dark' : ''} ${isRTL ? 'text-right' : 'text-left'}`}>
       <WorkspaceSectionHeader title={sectionTitle} subtitle={sectionSubtitle} theme={theme} isRTL={isRTL} />
-      <div className="mt-5 max-w-2xl space-y-4">
-        <div className={`${typeCardClass(household.diabetesType, theme)} p-5 md:p-6`}>
+
+      <div className="t1d-family-stack">
+        <div className={`${typeCardClass(household.diabetesType, theme)} t1d-family-card t1d-family-card--type`}>
           <p className={softLabelClass}>{DIABETES_TYPE_COPY[lang].field}</p>
-          <p className="mt-2 text-lg font-extrabold tracking-tight">{diabetesTypeLabel.label}</p>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{diabetesTypeLabel.description}</p>
+          <p className="t1d-family-card__title">{diabetesTypeLabel.label}</p>
+          <p className="t1d-family-card__body">{diabetesTypeLabel.description}</p>
         </div>
-        <div className={`${subtlePanelClass} p-5 md:p-6`}>
+
+        <div className={`${subtlePanelClass} t1d-family-card`}>
           <p className={softLabelClass}>{copy.childCard}</p>
-          <p className="mt-2 text-lg font-extrabold tracking-tight">{household.childName} · {household.childAgeBand}</p>
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{copy.primaryParent}: {household.primaryParent}</p>
+          <p className="t1d-family-card__title">{household.childName} · {household.childAgeBand}</p>
+          <p className="t1d-family-card__meta">{copy.primaryParent}: {household.primaryParent}</p>
           {household.caregiverName ? (
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{copy.caregiver}: {household.caregiverName}</p>
+            <p className="t1d-family-card__meta">{copy.caregiver}: {household.caregiverName}</p>
           ) : null}
         </div>
       </div>
-      <div className="mt-5 grid gap-5 lg:grid-cols-[0.72fr_1.28fr] lg:gap-6">
-        <div className={`${subtlePanelClass} p-5 md:p-6`}>
-          <p className="text-base font-extrabold tracking-tight">{inviteCopy.title}</p>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{inviteCopy.body}</p>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <code className="t1d-invite-code">{household.inviteCode || '------'}</code>
-            <button type="button" onClick={onCopyInviteCode} className={`${t1dBtnSecondary(theme)} text-sm`}>
-              {inviteCopied ? inviteCopy.copied : inviteCopy.copyLabel}
+
+      <div className="t1d-family-grid">
+        <div className={`${subtlePanelClass} t1d-family-card t1d-family-card--invite`}>
+          <p className="t1d-family-card__heading">{inviteCopy.title}</p>
+          <p className="t1d-family-card__body">{inviteCopy.body}</p>
+          <div className="t1d-family-invite">
+            <code className="t1d-invite-code" title={household.inviteCode || undefined}>
+              {household.inviteCode || '------'}
+            </code>
+            <button
+              type="button"
+              onClick={onCopyInviteCode}
+              className={`t1d-family-copy-btn ${inviteCopied ? 't1d-family-copy-btn--copied' : ''} ${dark ? 't1d-family-copy-btn--dark' : 't1d-family-copy-btn--light'}`}
+            >
+              {inviteCopied ? <Check size={16} aria-hidden /> : <Copy size={16} aria-hidden />}
+              <span>{inviteCopied ? inviteCopy.copied : inviteCopy.copyLabel}</span>
             </button>
           </div>
         </div>
-        <div className={`${subtlePanelClass} p-4`}>
+
+        <div className={`${subtlePanelClass} t1d-family-card t1d-family-card--members`}>
           <p className={softLabelClass}>{householdCopy.members}</p>
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <div className="t1d-family-members">
             {household.members.map((member) => (
-              <div
+              <article
                 key={member.id}
-                className={`rounded-2xl border p-4 ${theme === 'dark' ? 'border-slate-800 bg-slate-950/70' : 'border-slate-200 bg-white'}`}
+                className={`t1d-family-member-card ${dark ? 't1d-family-member-card--dark' : 't1d-family-member-card--light'}`}
               >
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-sm font-black tracking-tight">{member.fullName}</p>
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    member.status === 'active'
-                      ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/12 dark:text-emerald-300'
-                      : 'bg-amber-100 text-amber-800 dark:bg-amber-500/12 dark:text-amber-300'
-                  }`}>
+                <div className="t1d-family-member-card__head">
+                  <p className="t1d-family-member-card__name" title={member.fullName}>{member.fullName}</p>
+                  <span className={`t1d-family-member-card__status ${member.status === 'active' ? 'is-active' : 'is-pending'}`}>
                     {member.status === 'active' ? householdCopy.active : householdCopy.invited}
                   </span>
                 </div>
-                <p className="mt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">{roleLabels[member.role]}</p>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{member.email || '—'}</p>
-              </div>
+                <p className="t1d-family-member-card__role">{roleLabels[member.role]}</p>
+                <p className="t1d-family-member-card__email" title={member.email || undefined}>{member.email || '—'}</p>
+              </article>
             ))}
           </div>
         </div>

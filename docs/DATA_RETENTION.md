@@ -1,10 +1,10 @@
-# Data Retention Policy (Steady / T1D)
+# Data Retention Policy (Type1 and 2 / T1D)
 
 Last updated: 2026-07-05
 
 ## Overview
 
-Steady stores account, household, safety-state, Dexcom connection metadata, and optional feedback data to operate the family support workspace.
+Type1 and 2 stores account, household, safety-state, Dexcom connection metadata, and optional feedback data to operate the family support workspace.
 
 ## Storage locations
 

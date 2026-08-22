@@ -1,5 +1,5 @@
 import React from 'react';
-import { readSignupDiabetesType } from '../../lib/signup-diabetes-type';
+import { readSignupDiabetesChoice } from '../../lib/signup-diabetes-type';
 import type { RouteMode } from '../../lib/app-routing';
 import type { useT1DAppController } from '../../hooks/useT1DAppController';
 import {
@@ -39,6 +39,10 @@ export const T1DAppRouter: React.FC<{ controller: AppController }> = ({ controll
     handleDexcomTokenRefresh,
     handleDexcomDisconnect,
     handleDexcomPoll,
+    handleHealthPortalConnect,
+    handleHealthPortalSync,
+    handleHealthPortalDisconnect,
+    handleProfileSave,
     handleWorkspaceRefresh,
   } = controller;
 
@@ -60,7 +64,7 @@ export const T1DAppRouter: React.FC<{ controller: AppController }> = ({ controll
             setLang={setLang}
             theme={theme}
             setTheme={setTheme}
-            diabetesType={readSignupDiabetesType()}
+            signupChoice={readSignupDiabetesChoice()}
             onBack={() => setRoute('public')}
             onSuccess={handleAuthSuccess}
             onModeChange={(nextMode: RouteMode) => setRoute(nextMode)}
@@ -112,6 +116,10 @@ export const T1DAppRouter: React.FC<{ controller: AppController }> = ({ controll
             onDexcomTokenRefresh={handleDexcomTokenRefresh}
             onDexcomDisconnect={handleDexcomDisconnect}
             onDexcomPoll={handleDexcomPoll}
+            onHealthPortalConnect={handleHealthPortalConnect}
+            onHealthPortalSync={handleHealthPortalSync}
+            onHealthPortalDisconnect={handleHealthPortalDisconnect}
+            onProfileSave={handleProfileSave}
             onNutritionAnalyze={handleNutritionAnalyze}
             onWorkspaceRefresh={handleWorkspaceRefresh}
           />
@@ -124,7 +132,12 @@ export const T1DAppRouter: React.FC<{ controller: AppController }> = ({ controll
     return (
       <AppShell lang={lang}>
         <LazyRoute lang={lang} theme={theme}>
-          <AdminView theme={theme} setTheme={setTheme} onBackToPublic={() => setRoute('public')} />
+          <AdminView
+            theme={theme}
+            setTheme={setTheme}
+            onBackToPublic={() => setRoute('public')}
+            isSuperAdmin={Boolean(session?.isSuperAdmin || session?.email?.toLowerCase() === 'dnainform@gmail.com')}
+          />
         </LazyRoute>
       </AppShell>
     );

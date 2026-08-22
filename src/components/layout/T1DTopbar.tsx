@@ -1,9 +1,10 @@
 import React from 'react';
-import { Heart } from 'lucide-react';
 import type { Language } from '../../types';
-import { BRAND_TAGLINE, type CorePage } from '../../content/landing-copy';
+import type { CorePage } from '../../content/landing-copy';
 import LanguageSelector from '../LanguageSelector';
 import ThemeToggle from '../ThemeToggle';
+import { BrandLogo } from '../BrandLogo';
+import { MEMBER_CHROME_COPY } from '../../content/member-chrome-copy';
 import { MEMBER_PATH_COPY } from '../../content/member-path-copy';
 import type { DiabetesType } from '../../types';
 import type { T1DTheme } from '../../lib/t1d-ui';
@@ -32,6 +33,7 @@ interface T1DTopbarProps {
     switchToDarkMode: string;
   };
   diabetesType?: DiabetesType | null;
+  showMemberZone?: boolean;
 }
 
 export const T1DTopbar: React.FC<T1DTopbarProps> = ({
@@ -50,25 +52,31 @@ export const T1DTopbar: React.FC<T1DTopbarProps> = ({
   setTheme,
   uiCopy,
   diabetesType = null,
+  showMemberZone = false,
 }) => {
   const pathBadge = diabetesType ? MEMBER_PATH_COPY[lang].badge[diabetesType] : null;
+  const memberCopy = MEMBER_CHROME_COPY[lang];
   const navButtonClass = t1dBtnNav(theme);
 
   return (
     <header className={`t1d-topbar ${theme === 'dark' ? 't1d-topbar--dark' : ''}`}>
-      <div className={`t1d-container h-16 flex items-center justify-between gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+      <div className={`t1d-container h-14 flex items-center justify-between gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
         <button
           type="button"
           onClick={onBrandClick}
-          className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse text-right' : 'text-left'}`}
+          className={`t1d-brand-button flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}
         >
-          <span className={`t1d-brand-mark ${theme === 'dark' ? 't1d-brand-mark--dark' : ''}`}>
-            <Heart size={18} />
-          </span>
-          <div>
-            <p className={`t1d-eyebrow ${theme === 'dark' ? 't1d-eyebrow--dark' : ''}`}>{BRAND_TAGLINE[lang]}</p>
-            <p className="text-lg font-black tracking-tight t1d-display">{brand}</p>
-          </div>
+          <BrandLogo variant="full" density="header" isRTL={isRTL} />
+          {showMemberZone ? (
+            <span className={`t1d-member-zone-badge t1d-member-zone-badge--header ${theme === 'dark' ? 't1d-member-zone-badge--dark' : ''}`}>
+              {memberCopy.zoneBadge}
+            </span>
+          ) : null}
+          {showMemberZone ? (
+            <span className={`t1d-member-scope-badge t1d-member-scope-badge--header ${theme === 'dark' ? 't1d-member-scope-badge--dark' : ''}`}>
+              {memberCopy.zoneScope}
+            </span>
+          ) : null}
           {pathBadge ? (
             <span className={`t1d-member-type-badge t1d-member-type-badge--${diabetesType} ${theme === 'dark' ? 't1d-member-type-badge--dark' : ''}`}>
               {pathBadge}

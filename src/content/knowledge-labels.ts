@@ -4,17 +4,17 @@ const localized = <T,>(value: Record<Language, T>) => value;
 
 export const KNOWLEDGE_LABELS = {
   footer: localized({
-    en: { how: 'How It Works', faq: 'FAQ', learn: 'Learning Center', news: 'Diabetes News' },
-    ru: { how: 'Как Это Работает', faq: 'FAQ', learn: 'Обучающий Центр', news: 'Новости Диабета' },
-    uk: { how: 'Як Це Працює', faq: 'FAQ', learn: 'Навчальний Центр', news: 'Новини Діабету' },
-    es: { how: 'Cómo Funciona', faq: 'FAQ', learn: 'Centro De Aprendizaje', news: 'Noticias Sobre Diabetes' },
-    fr: { how: 'Comment Cela Marche', faq: 'FAQ', learn: 'Centre D’apprentissage', news: 'Actualités Du Diabète' },
-    de: { how: 'So Funktioniert Es', faq: 'FAQ', learn: 'Lernzentrum', news: 'Diabetes-Nachrichten' },
-    zh: { how: '工作方式', faq: '常见问题', learn: '学习中心', news: '糖尿病新闻' },
-    ja: { how: 'しくみ', faq: 'よくある質問', learn: '学習センター', news: '糖尿病ニュース' },
-    pt: { how: 'Como Funciona', faq: 'FAQ', learn: 'Centro De Aprendizado', news: 'Notícias Sobre Diabetes' },
-    he: { how: 'איך זה עובד', faq: 'שאלות נפוצות', learn: 'מרכז למידה', news: 'חדשות סוכרת' },
-    ar: { how: 'كيف يعمل', faq: 'الأسئلة الشائعة', learn: 'مركز التعلّم', news: 'أخبار السكري' },
+    en: { how: 'How It Works', faq: 'FAQ', learn: 'Learning Center', news: 'Diabetes News', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    ru: { how: 'Как Это Работает', faq: 'FAQ', learn: 'Обучающий Центр', news: 'Новости Диабета', voiceGuide: 'Голосовой помощник', pricing: 'Тарифы' },
+    uk: { how: 'Як Це Працює', faq: 'FAQ', learn: 'Навчальний Центр', news: 'Новини Діабету', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    es: { how: 'Cómo Funciona', faq: 'FAQ', learn: 'Centro De Aprendizaje', news: 'Noticias Sobre Diabetes', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    fr: { how: 'Comment Cela Marche', faq: 'FAQ', learn: 'Centre D’apprentissage', news: 'Actualités Du Diabète', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    de: { how: 'So Funktioniert Es', faq: 'FAQ', learn: 'Lernzentrum', news: 'Diabetes-Nachrichten', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    zh: { how: '工作方式', faq: '常见问题', learn: '学习中心', news: '糖尿病新闻', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    ja: { how: 'しくみ', faq: 'よくある質問', learn: '学習センター', news: '糖尿病ニュース', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    pt: { how: 'Como Funciona', faq: 'FAQ', learn: 'Centro De Aprendizado', news: 'Notícias Sobre Diabetes', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    he: { how: 'איך זה עובד', faq: 'שאלות נפוצות', learn: 'מרכז למידה', news: 'חדשות סוכרת', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
+    ar: { how: 'كيف يعمل', faq: 'الأسئلة الشائعة', learn: 'مركز التعلّم', news: 'أخبار السكري', voiceGuide: 'Voice Guide', pricing: 'Pricing' },
   }),
   pages: localized({
     en: {

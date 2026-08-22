@@ -1,0 +1,17 @@
+---
+description: Type1and2 brand logo and wordmark usage
+alwaysApply: true
+---
+
+# Brand assets (type1and2.com)
+
+Use the official PNG assets from `src/content/brand.ts`:
+
+- **Mark (icon):** `BRAND_LOGO_MARK` → `/public/brand/logo-mark.png` — two figures / heart mark
+- **Wordmark (text):** `BRAND_LOGO_WORDMARK` → `/public/brand/logo-wordmark.png` — stylized "type1and2"
+
+Render logos via `BrandLogo` (`src/components/BrandLogo.tsx`), not inline SVG or Lucide icons.
+
+**Tagline:** `PRODUCT_TAGLINE_EN` / `BRAND_TAGLINE` — "When it shifts, the right person knows."
+
+**Favicon / PWA:** `/favicon.png` and `/icons/icon-*.png` derived from the mark.

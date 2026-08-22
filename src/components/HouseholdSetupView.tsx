@@ -4,6 +4,7 @@ import { DIABETES_TYPE_COPY, diabetesTypeKey } from '../content/diabetes-type-co
 import { MEMBER_PATH_COPY, TYPE2_SETUP_FIELDS } from '../content/member-path-copy';
 import { WORKSPACE_T2_LABELS } from '../content/workspace-t2-labels';
 import { readSignupDiabetesType } from '../lib/signup-diabetes-type';
+import type { SignupDiabetesChoice } from '../lib/signup-diabetes-type';
 import { getRoleLabels } from '../lib/role-labels';
 import { MEMBER_CHROME_COPY } from '../content/member-chrome-copy';
 import { buildPublicSiteChrome } from '../lib/public-site-chrome';
@@ -11,6 +12,7 @@ import { RTL_LANGUAGES, type DiabetesType, type Language, type UserRole } from '
 import { t1dBtnPrimary, t1dCard, t1dInput, t1dMemberLayout, t1dSoftLabel } from '../lib/t1d-ui';
 import { MemberPageHero } from './layout/MemberPageHero';
 import { MemberZoneShell } from './layout/MemberZoneShell';
+import { memberHeroEyebrow } from './layout/MemberZoneStrip';
 import { createInitialHouseholdForm, HouseholdSetupFields } from './HouseholdSetupFields';
 import { memberLayoutTypeClass } from '../lib/hero-path';
 
@@ -23,7 +25,7 @@ interface HouseholdSetupViewProps {
   fullName: string;
   onComplete: (household: HouseholdProfile) => void;
   onBack?: () => void;
-  onSignUp: (type: DiabetesType) => void;
+  onSignUp: (choice: SignupDiabetesChoice) => void;
 }
 
 const COPY: Record<Language, {
@@ -392,7 +394,7 @@ export const HouseholdSetupView: React.FC<HouseholdSetupViewProps> = ({
           theme={theme}
           isRTL={isRTL}
           diabetesType={presetType}
-          eyebrow={presetType ? MEMBER_PATH_COPY[lang].badge[presetType] : copy.eyebrow}
+          eyebrow={memberHeroEyebrow(lang, presetType)}
           title={pathCopy?.title ?? copy.title}
           subtitle={flow === 'join' ? flowCopy.joinSubtitle : (pathCopy?.subtitle ?? `${copy.subtitle} ${roleName}.`)}
         />

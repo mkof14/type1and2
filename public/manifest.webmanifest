@@ -1,13 +1,13 @@
 {
-  "name": "Steady",
-  "short_name": "Steady",
-  "description": "Calm support for children, parents, and adults with type 1 or type 2 diabetes.",
+  "name": "Type1 and 2",
+  "short_name": "Type1&2",
+  "description": "When it shifts, the right person knows — for type 1 and type 2 diabetes.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#f8fcff",
-  "theme_color": "#0ea5e9",
+  "background_color": "#faf4eb",
+  "theme_color": "#14b8a6",
   "lang": "en",
   "categories": [
     "health",
@@ -28,9 +28,9 @@
       "purpose": "any maskable"
     },
     {
-      "src": "/favicon.svg",
+      "src": "/favicon.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     }
   ]

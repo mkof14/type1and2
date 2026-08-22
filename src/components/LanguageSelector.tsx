@@ -151,17 +151,13 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         ref={buttonRef}
         type="button"
         onClick={() => setIsOpen((open) => !open)}
-        className={`group inline-flex items-center gap-3 px-4 py-2.5 rounded-full bg-gradient-to-br from-white/90 to-orange-50/80 dark:from-stone-900/75 dark:to-stone-900/45 backdrop-blur-xl border border-orange-200/70 dark:border-stone-700/80 shadow-[0_4px_20px_rgba(120,53,15,0.08)] transition-all hover:border-orange-300 hover:-translate-y-0.5 active:scale-95 outline-none ${rtl ? 'flex-row-reverse' : ''}`}
+        className={`t1d-lang-trigger inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-semibold outline-none ${rtl ? 'flex-row-reverse' : ''}`}
         aria-label={buttonLabel}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
-        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-200/80 via-rose-200/50 to-violet-200/50 dark:from-orange-400/20 dark:via-rose-400/15 dark:to-violet-400/15 flex items-center justify-center text-base shadow-inner">
-          <span aria-hidden="true">{currentLang.flag}</span>
-        </div>
-        <span className="text-xs font-semibold text-stone-700 dark:text-stone-200 group-hover:text-stone-900 dark:group-hover:text-white transition-colors">
-          {currentLang.label}
-        </span>
+        <span className="text-base leading-none" aria-hidden="true">{currentLang.flag}</span>
+        <span>{currentLang.label}</span>
       </button>
       {menu}
     </div>

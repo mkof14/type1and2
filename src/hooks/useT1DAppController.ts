@@ -3,7 +3,9 @@ import type { AccessUser } from '../components/AccessView';
 import {
   analyzeNutrition,
   connectDexcom,
+  connectHealthPortal,
   disconnectDexcom,
+  disconnectHealthPortal,
   finishDexcomOAuth,
   getSession,
   getWorkspace,
@@ -13,6 +15,10 @@ import {
   saveSafetyPreferences,
   signOut,
   startDexcomOAuth,
+  startHealthPortalOAuth,
+  syncHealthPortal,
+  updateAccountProfile,
+  type AccountProfileInput,
   type ActionId,
   type HouseholdProfile,
   type SafetyPreferencesInput,
@@ -31,8 +37,10 @@ import {
   clearSignupDiabetesType,
   memberPathForRoute,
   readSignupDiabetesType,
+  setSignupDiabetesChoice,
   setSignupDiabetesType,
   syncSignupTypeFromLocation,
+  type SignupDiabetesChoice,
 } from '../lib/signup-diabetes-type';
 import { DiabetesType, Language, RTL_LANGUAGES, SUPPORTED_LANGUAGES } from '../types';
 import {
@@ -102,12 +110,15 @@ export const useT1DAppController = () => {
     if (!authReady || route !== 'workspace' || !session) return;
     const params = new URLSearchParams(window.location.search);
     const dexcomAuth = params.get('dexcom_auth');
-    if (!dexcomAuth) return;
+    const healthPortalAuth = params.get('health_portal_auth');
+    if (!dexcomAuth && !healthPortalAuth) return;
 
     getWorkspace()
       .then((nextWorkspace) => setWorkspace(nextWorkspace))
       .finally(() => {
         params.delete('dexcom_auth');
+        params.delete('health_portal_auth');
+        params.delete('portal');
         const nextSearch = params.toString();
         const nextUrl = `${window.location.pathname}${nextSearch ? `?${nextSearch}` : ''}`;
         window.history.replaceState({}, '', nextUrl);
@@ -148,9 +159,6 @@ export const useT1DAppController = () => {
 
   useEffect(() => {
     if (route === 'admin') {
-      if (window.location.pathname !== '/admin') {
-        window.history.pushState({}, '', '/admin');
-      }
       return;
     }
     if (route === 'public') {
@@ -272,8 +280,8 @@ export const useT1DAppController = () => {
     setRoute('workspace');
   };
 
-  const beginSignup = (type: DiabetesType) => {
-    setSignupDiabetesType(type);
+  const beginSignup = (choice: SignupDiabetesChoice) => {
+    setSignupDiabetesChoice(choice);
     setRoute('signup');
   };
 
@@ -333,6 +341,38 @@ export const useT1DAppController = () => {
     setWorkspace(nextWorkspace);
   };
 
+  const handleHealthPortalConnect = async (portalId: string) => {
+    const catalog = workspace?.healthRecords?.portals.find((entry) => entry.id === portalId);
+    if (catalog?.authMode === 'oauth_smart') {
+      const response = await startHealthPortalOAuth(portalId);
+      setWorkspace(response.workspace);
+      if (response.redirectUrl && typeof window !== 'undefined') {
+        window.location.href = response.redirectUrl;
+      }
+      return;
+    }
+    const response = await connectHealthPortal(portalId);
+    setWorkspace(response.workspace);
+  };
+
+  const handleHealthPortalSync = async (portalId: string) => {
+    const response = await syncHealthPortal(portalId);
+    setWorkspace(response.workspace);
+  };
+
+  const handleHealthPortalDisconnect = async (portalId: string) => {
+    const response = await disconnectHealthPortal(portalId);
+    setWorkspace(response.workspace);
+  };
+
+  const handleProfileSave = async (profile: AccountProfileInput) => {
+    const response = await updateAccountProfile(profile);
+    setSession((current) => (current ? { ...current, ...response.user } : current));
+    const nextWorkspace = await getWorkspace();
+    setWorkspace(nextWorkspace);
+    return response.user;
+  };
+
   const handleWorkspaceRefresh = async () => {
     const nextWorkspace = await getWorkspace();
     setWorkspace(nextWorkspace);
@@ -361,6 +401,10 @@ export const useT1DAppController = () => {
     handleDexcomTokenRefresh,
     handleDexcomDisconnect,
     handleDexcomPoll,
+    handleHealthPortalConnect,
+    handleHealthPortalSync,
+    handleHealthPortalDisconnect,
+    handleProfileSave,
     handleWorkspaceRefresh,
   };
 };

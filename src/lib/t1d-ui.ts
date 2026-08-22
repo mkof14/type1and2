@@ -86,6 +86,26 @@ export const t1dMuted = (theme: T1DTheme) =>
 export const t1dSoft = (theme: T1DTheme) =>
   theme === 'dark' ? 'text-slate-400' : 'text-stone-600';
 
+export const t1dSurfaceInset = (theme: T1DTheme) =>
+  theme === 'dark' ? 't1d-surface-inset t1d-surface-inset--dark' : 't1d-surface-inset t1d-surface-inset--light';
+
+export const t1dSurfaceStack = (theme: T1DTheme) =>
+  theme === 'dark' ? 't1d-surface-stack t1d-surface-stack--dark' : 't1d-surface-stack t1d-surface-stack--light';
+
+export type InnerTone = 'neutral' | 'accent' | 'mint' | 'rose' | 'amber';
+
+export const t1dInnerSubcard = (theme: T1DTheme, tone: InnerTone = 'neutral') => {
+  if (tone === 'neutral') {
+    return theme === 'dark' ? 't1d-subcard t1d-subcard--dark' : 't1d-subcard';
+  }
+  return theme === 'dark'
+    ? `t1d-inner-tone t1d-inner-tone--${tone}-dark`
+    : `t1d-inner-tone t1d-inner-tone--${tone}-light`;
+};
+
+export const t1dNightPanel = (theme: T1DTheme) =>
+  theme === 'dark' ? 't1d-night-panel t1d-night-panel--dark' : 't1d-night-panel t1d-night-panel--light';
+
 export const t1dWarmNote = (theme: T1DTheme) =>
   theme === 'dark'
     ? 'rounded-[1.6rem] border border-amber-400/20 bg-amber-400/10 px-5 py-5 md:px-6 md:py-6'

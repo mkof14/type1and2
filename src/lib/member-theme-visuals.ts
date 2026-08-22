@@ -11,11 +11,16 @@ export const WORKSPACE_SECTION_HERO: Record<WorkspaceSectionId, HeroIllustration
   nutrition: 'how',
   timeline: 'how',
   system: 'system',
+  'health-records': 'system',
   alerts: 'night',
   settings: 'setup',
   family: 'family',
   history: 'learn',
+  guide: 'voice-guide',
 };
 
 export const resolveWorkspaceSectionHero = (section: WorkspaceSectionId): HeroIllustrationVariant =>
   WORKSPACE_SECTION_HERO[section];
+
+export const resolveWorkspaceSectionCopyAlign = (section: WorkspaceSectionId): 'start' | 'end' =>
+  section === 'family' ? 'end' : 'start';

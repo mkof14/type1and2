@@ -21,6 +21,8 @@ export const buildPublicSiteChrome = (lang: Language, basePath?: string) => {
     { id: 'faq', label: knowledgeLabels.faq },
     { id: 'learn', label: knowledgeLabels.learn },
     { id: 'news', label: knowledgeLabels.news },
+    { id: 'voiceGuide', label: knowledgeLabels.voiceGuide },
+    { id: 'pricing', label: knowledgeLabels.pricing },
   ];
   const footerLegalLinks = LEGAL_PAGE_ORDER.map((page) => ({ id: page, label: legalLabels[page] }));
   const downloadCopy = DOWNLOAD_COPY[lang];
@@ -29,7 +31,7 @@ export const buildPublicSiteChrome = (lang: Language, basePath?: string) => {
       id: 'downloadDesktop',
       label: downloadCopy.footerDesktop,
       href: DOWNLOAD_ARTIFACTS.desktopWindows,
-      downloadFilename: 'Steady Desktop.url',
+      downloadFilename: 'Type1 and 2 Desktop.url',
       isFileDownload: true,
       pageHref: pagePaths.downloadDesktop,
     },
@@ -37,7 +39,7 @@ export const buildPublicSiteChrome = (lang: Language, basePath?: string) => {
       id: 'downloadMobile',
       label: downloadCopy.footerMobile,
       href: DOWNLOAD_ARTIFACTS.mobileHtml,
-      downloadFilename: 'Steady Mobile.html',
+      downloadFilename: 'Type1 and 2 Mobile.html',
       isFileDownload: true,
       pageHref: pagePaths.downloadMobile,
     },
@@ -55,6 +57,8 @@ export const buildPublicSiteChrome = (lang: Language, basePath?: string) => {
     if (page === 'trust') return legalLabels.trust;
     if (page === 'downloadDesktop') return downloadCopy.footerDesktop;
     if (page === 'downloadMobile') return downloadCopy.footerMobile;
+    if (page === 'pricing') return knowledgeLabels.pricing;
+    if (page === 'voiceGuide') return knowledgeLabels.voiceGuide;
     return copy.titleByPage[page as CorePage];
   };
 

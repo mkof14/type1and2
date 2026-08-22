@@ -1,11 +1,13 @@
 import React from 'react';
-import type { SafetyPreferencesInput } from '../../lib/api';
+import type { SafetyPreferencesInput, SessionUser } from '../../lib/api';
 import { glucoseUnitOptionLabel, GLUCOSE_DISPLAY_COPY } from '../../content/glucose-display-copy';
 import { ACCOUNT_DELETE_COPY, PREFERENCE_COPY } from '../../content/workspace-panel-copy';
+import type { MemberSettingsCopy } from '../../content/member-settings-copy';
 import { normalizeGlucoseUnit } from '../../lib/glucose-units';
 import { normalizeContactPhones } from '../../lib/workspace-view-utils';
 import { t1dBtnPrimary, t1dBtnSecondary, t1dSoftLabel } from '../../lib/t1d-ui';
 import type { Language } from '../../types';
+import { MemberProfilePanel, type MemberProfileInput } from './MemberProfilePanel';
 import { PushNotificationsPanel } from './PushNotificationsPanel';
 import { WorkspaceSectionHeader } from './WorkspaceSectionHeader';
 
@@ -28,6 +30,13 @@ interface WorkspaceSettingsSectionProps {
   deleteAccountError: string;
   deletingAccount: boolean;
   onDeleteAccount: () => void;
+  user: SessionUser;
+  memberProfile: MemberProfileInput;
+  setMemberProfile: React.Dispatch<React.SetStateAction<MemberProfileInput>>;
+  savingProfile: boolean;
+  profileSavedNotice: string;
+  onProfileSave: () => void;
+  memberSettingsCopy: MemberSettingsCopy;
 }
 
 export const WorkspaceSettingsSection: React.FC<WorkspaceSettingsSectionProps> = ({
@@ -49,6 +58,13 @@ export const WorkspaceSettingsSection: React.FC<WorkspaceSettingsSectionProps> =
   deleteAccountError,
   deletingAccount,
   onDeleteAccount,
+  user,
+  memberProfile,
+  setMemberProfile,
+  savingProfile,
+  profileSavedNotice,
+  onProfileSave,
+  memberSettingsCopy,
 }) => {
   const preferenceCopy = PREFERENCE_COPY[lang];
   const accountDeleteCopy = ACCOUNT_DELETE_COPY[lang];
@@ -58,7 +74,28 @@ export const WorkspaceSettingsSection: React.FC<WorkspaceSettingsSectionProps> =
   return (
     <section className={`${primaryPanelClass} ${workspaceSectionShell} ${isRTL ? 'text-right' : 'text-left'}`}>
       <WorkspaceSectionHeader title={sectionTitle} subtitle={sectionSubtitle} theme={theme} isRTL={isRTL} />
-      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">{preferenceExplainer}</p>
+
+      <div className={`mt-5 rounded-[1.75rem] border px-5 py-5 ${theme === 'dark' ? 'border-sky-500/20 bg-sky-500/5' : 'border-sky-200 bg-sky-50/60'}`}>
+        <p className={`text-xs font-bold uppercase tracking-[0.14em] ${theme === 'dark' ? 'text-sky-300' : 'text-sky-800'}`}>{memberSettingsCopy.personalTitle}</p>
+        <p className="mt-1 text-sm opacity-80">{memberSettingsCopy.personalSubtitle}</p>
+        <div className="mt-4">
+          <MemberProfilePanel
+            lang={lang}
+            theme={theme}
+            user={user}
+            profile={memberProfile}
+            setProfile={setMemberProfile}
+            saving={savingProfile}
+            savedNotice={profileSavedNotice}
+            onSave={onProfileSave}
+          />
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <p className={`text-xs font-bold uppercase tracking-[0.14em] ${theme === 'dark' ? 'text-violet-300' : 'text-violet-800'}`}>{memberSettingsCopy.safetyTitle}</p>
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">{preferenceExplainer}</p>
+      </div>
       <div className="mt-5 grid max-w-lg gap-4">
         <label className="space-y-2">
           <span className={softLabelClass}>{glucoseCopy.unitField}</span>
@@ -125,7 +162,8 @@ export const WorkspaceSettingsSection: React.FC<WorkspaceSettingsSectionProps> =
         </button>
       </div>
       <div className={`mt-8 max-w-lg rounded-[1.75rem] border px-4 py-4 ${theme === 'dark' ? 'border-rose-500/20 bg-rose-500/5' : 'border-rose-200 bg-rose-50/70'}`}>
-        <p className="text-sm font-bold text-rose-900 dark:text-rose-200">{accountDeleteCopy.title}</p>
+        <p className={`text-xs font-bold uppercase tracking-[0.14em] ${theme === 'dark' ? 'text-rose-300' : 'text-rose-800'}`}>{memberSettingsCopy.accountTitle}</p>
+        <p className="mt-2 text-sm font-bold text-rose-900 dark:text-rose-200">{accountDeleteCopy.title}</p>
         <p className="mt-2 text-sm leading-relaxed text-rose-950/80 dark:text-rose-100/80">{accountDeleteCopy.body}</p>
         <input
           type="password"

@@ -108,10 +108,10 @@ export const applyOrganizationJsonLd = () => {
   script.textContent = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Steady',
+    name: 'Type1 and 2',
     url: buildAbsoluteUrl('/'),
     description: PRODUCT_DESCRIPTION_EN,
-    logo: buildAbsoluteUrl('/favicon.svg'),
+    logo: buildAbsoluteUrl('/brand/logo-mark.png'),
   });
   document.head.appendChild(script);
 };

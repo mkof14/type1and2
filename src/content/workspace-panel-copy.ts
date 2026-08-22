@@ -132,7 +132,7 @@ export const REVIEW_COPY: Record<Language, {
   repeatRisk: string;
   escalationHeavy: string;
 }> = {
-  en: { title: 'Review', score: 'Stability', delivery: 'Delivery', response: 'Response', pattern: 'Pattern', notes: 'Notes', nextFocus: 'Next Step', strong: 'Strong', watch: 'Watch', fragile: 'Fragile', steady: 'Steady', repeatRisk: 'Risk Of Repeat', escalationHeavy: 'Heavy Escalation' },
+  en: { title: 'Review', score: 'Stability', delivery: 'Delivery', response: 'Response', pattern: 'Pattern', notes: 'Notes', nextFocus: 'Next Step', strong: 'Strong', watch: 'Watch', fragile: 'Fragile', steady: 'Stable', repeatRisk: 'Risk Of Repeat', escalationHeavy: 'Heavy Escalation' },
   ru: { title: 'Разбор', score: 'Стабильность', delivery: 'Доставка', response: 'Реакция', pattern: 'Паттерн', notes: 'Заметки', nextFocus: 'Следующий Шаг', strong: 'Сильно', watch: 'Наблюдать', fragile: 'Хрупко', steady: 'Ровно', repeatRisk: 'Риск Повтора', escalationHeavy: 'Тяжёлая Эскалация' },
   uk: { title: 'Огляд', score: 'Стабільність', delivery: 'Доставка', response: 'Реакція', pattern: 'Патерн', notes: 'Нотатки', nextFocus: 'Наступний Крок', strong: 'Сильно', watch: 'Нагляд', fragile: 'Крихко', steady: 'Рівно', repeatRisk: 'Ризик Повтору', escalationHeavy: 'Важка Ескалація' },
   es: { title: 'Revisión', score: 'Estabilidad', delivery: 'Entrega', response: 'Respuesta', pattern: 'Patrón', notes: 'Notas', nextFocus: 'Siguiente Paso', strong: 'Fuerte', watch: 'Vigilar', fragile: 'Frágil', steady: 'Estable', repeatRisk: 'Riesgo De Repetición', escalationHeavy: 'Escalada Alta' },

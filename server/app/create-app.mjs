@@ -23,10 +23,21 @@ import { handleAlertTimelineRoutes } from './routes/alert-timeline.routes.mjs';
 import { handleAuthRoutes } from './routes/auth.routes.mjs';
 import { handleHouseholdRoutes } from './routes/household.routes.mjs';
 import { handleDexcomRoutes } from './routes/dexcom.routes.mjs';
+import { handleHealthPortalRoutes } from './routes/health-portal.routes.mjs';
 import { handleWorkspaceRoutes } from './routes/workspace.routes.mjs';
 import { handleFeedbackRoutes } from './routes/feedback.routes.mjs';
+import { handleBillingRoutes } from './routes/billing.routes.mjs';
 import { handleSystemRoutes } from './routes/system.routes.mjs';
 import { handleAdminRoutes } from './routes/admin.routes.mjs';
+import { createHealthPortalSyncService } from '../services/health-portal-sync-service.mjs';
+import {
+  ensureHealthPortals,
+  getPortalCatalogEntry,
+  healthPortalEnvConfig,
+  refreshHealthPortalToken,
+  shouldRunBackgroundHealthPortalSync,
+  syncHealthPortal,
+} from '../services/health-portal-service.mjs';
 import { handlePushRoutes } from './routes/push.routes.mjs';
 import { configurePushProvider } from '../services/push-provider.mjs';
 import { configurePushSubscriptionStorage } from '../services/push-subscription-service.mjs';
@@ -37,6 +48,7 @@ import { createDexcomPollService } from '../services/dexcom-poll-service.mjs';
 import { runEscalationPass } from '../services/escalation-service.mjs';
 import { dualWritePollReadings, dualWriteDexcomConnection, dualWriteAlertCreated } from '../infrastructure/repositories/dual-write-service.mjs';
 import { orchestrateAlertCreated } from '../services/notification-orchestrator.mjs';
+import { upsertSuperAdminUser } from '../lib/super-admin.mjs';
 import { hashPassword, isValidPassword, verifyPassword } from '../lib/password.mjs';
 import {
   createCookieHelpers,
@@ -79,6 +91,7 @@ export const createApp = ({ serverDir }) => {
   const authRateLimit = createRateLimiter({ windowMs: 60_000, max: 12, keyPrefix: 'auth' });
   const joinRateLimit = createRateLimiter({ windowMs: 60_000, max: 8, keyPrefix: 'join' });
   const feedbackRateLimit = createRateLimiter({ windowMs: 60_000, max: 6, keyPrefix: 'feedback' });
+  const billingRateLimit = createRateLimiter({ windowMs: 60_000, max: 10, keyPrefix: 'billing' });
   const resetConfirmRateLimit = createRateLimiter({ windowMs: 60_000, max: 8, keyPrefix: 'reset-confirm' });
   const SUPPORT_ACTIONS = new Set([
     'parent_handling',
@@ -172,6 +185,15 @@ export const createApp = ({ serverDir }) => {
     mirrorUsersToSql,
   } = authStorage;
 
+  void upsertSuperAdminUser({
+    readUsers,
+    writeUsers,
+    hashPassword,
+    mirrorUsersToSql,
+  }).catch((error) => {
+    console.warn('[t1d-api] super admin bootstrap failed', error);
+  });
+
   const findSessionUser = async (req) => authStorage.findSessionUser(req, parseCookies);
 
   const householdStorage = createHouseholdStorage({
@@ -224,6 +246,29 @@ export const createApp = ({ serverDir }) => {
     applyDexcomPollToHousehold,
     runBackgroundDexcomSync,
   } = dexcomPollService;
+
+  const healthPortalSyncService = createHealthPortalSyncService({
+    ensureHealthPortals,
+    shouldRunBackgroundHealthPortalSync,
+    syncHealthPortal,
+    refreshHealthPortalToken,
+    getPortalCatalogEntry,
+    healthPortalEnvConfig,
+    readHouseholds,
+    writeHouseholds,
+  });
+
+  const {
+    shouldRunBackgroundHealthPortalSync: shouldRunHealthPortalSync,
+    applyHealthPortalSyncToHousehold,
+    runBackgroundHealthPortalSync,
+  } = healthPortalSyncService;
+
+  const runBackgroundIntegrationsSync = async () => {
+    const dexcomResult = await runBackgroundDexcomSync();
+    const healthResult = await runBackgroundHealthPortalSync();
+    return { dexcom: dexcomResult, healthPortal: healthResult };
+  };
 
   const runEscalationPassForAll = () => runEscalationPass(readHouseholds, writeHouseholds);
 
@@ -284,6 +329,7 @@ export const createApp = ({ serverDir }) => {
     appendDexcomAudit,
     applyDexcomPollToHousehold,
     feedbackRateLimit,
+    billingRateLimit,
     DATA_DIR,
     FEEDBACK_FILE,
     SUPPORT_ACTIONS,
@@ -292,6 +338,10 @@ export const createApp = ({ serverDir }) => {
     safeEqualString,
     CRON_SECRET,
     runBackgroundDexcomSync,
+    runBackgroundHealthPortalSync,
+    runBackgroundIntegrationsSync,
+    shouldRunBackgroundHealthPortalSync: shouldRunHealthPortalSync,
+    applyHealthPortalSyncToHousehold,
     runEscalationPass: runEscalationPassForAll,
   });
 
@@ -318,10 +368,12 @@ export const createApp = ({ serverDir }) => {
       const routeCtx = buildRouteContext(req, res, url, lang);
       if (await handlePushRoutes(routeCtx)) return;
       if (await handleDexcomRoutes(routeCtx)) return;
+      if (await handleHealthPortalRoutes(routeCtx)) return;
       if (await handleAuthRoutes(routeCtx)) return;
       if (await handleHouseholdRoutes(routeCtx)) return;
       if (await handleWorkspaceRoutes(routeCtx)) return;
       if (await handleFeedbackRoutes(routeCtx)) return;
+      if (await handleBillingRoutes(routeCtx)) return;
       if (await handleAlertTimelineRoutes(routeCtx)) return;
 
       sendJson(res, 404, { error: 'Not found' });
@@ -339,6 +391,10 @@ export const createApp = ({ serverDir }) => {
     applyDexcomPollToHousehold,
     appendDexcomAudit,
     runBackgroundDexcomSync,
+    runBackgroundHealthPortalSync,
+    runBackgroundIntegrationsSync,
+    shouldRunBackgroundHealthPortalSync: shouldRunHealthPortalSync,
+    applyHealthPortalSyncToHousehold,
     runEscalationPass: runEscalationPassForAll,
   };
 };

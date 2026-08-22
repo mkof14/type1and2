@@ -79,6 +79,8 @@ const publicPaths = [
   '/compliance',
   '/download/desktop',
   '/download/mobile',
+  '/pricing',
+  '/voice-guide',
 ];
 
 writeFileSync(

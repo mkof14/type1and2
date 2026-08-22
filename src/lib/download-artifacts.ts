@@ -1,8 +1,8 @@
 export const DOWNLOAD_ARTIFACTS = {
-  desktopWindows: '/downloads/steady-desktop.url',
-  desktopMac: '/downloads/steady-desktop.webloc',
-  mobileHtml: '/downloads/steady-mobile.html',
-  pwaManifest: '/downloads/steady-app.webmanifest',
+  desktopWindows: '/downloads/type1and2-desktop.url',
+  desktopMac: '/downloads/type1and2-desktop.webloc',
+  mobileHtml: '/downloads/type1and2-mobile.html',
+  pwaManifest: '/downloads/type1and2-app.webmanifest',
 } as const;
 
 export const resolveDesktopDownloadHref = () => {
@@ -13,7 +13,7 @@ export const resolveDesktopDownloadHref = () => {
 };
 
 export const resolveDesktopDownloadName = (href: string) =>
-  href.endsWith('.webloc') ? 'Steady Desktop.webloc' : 'Steady Desktop.url';
+  href.endsWith('.webloc') ? 'Type1and2 Desktop.webloc' : 'Type1and2 Desktop.url';
 
 export const triggerFileDownload = (href: string, filename: string) => {
   if (typeof document === 'undefined') return;

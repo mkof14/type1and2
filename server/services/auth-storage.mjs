@@ -6,6 +6,7 @@ import {
   isSqlReadEnabled,
   isSqlReadShadowEnabled,
 } from '../infrastructure/repositories/sql-read-service.mjs';
+import { decorateSuperAdminUser } from '../lib/super-admin.mjs';
 
 export const createAuthStorage = ({
   readJson,
@@ -111,13 +112,16 @@ export const createAuthStorage = ({
 
   const writeOAuthStates = async (states) => writeJson(OAUTH_STATES_FILE, { states });
 
-  const createOAuthState = async (householdId, userId = '') => {
+  const createOAuthState = async (householdId, userId = '', meta = {}) => {
     const token = randomBytes(12).toString('hex');
     const states = await readOAuthStates();
     states.push({
       token,
       householdId,
       userId: safeText(userId, 120),
+      kind: safeText(meta.kind, 40),
+      portalId: safeText(meta.portalId, 80),
+      codeVerifier: safeText(meta.codeVerifier, 200),
       expiresAt: Date.now() + 1000 * 60 * 15,
     });
     await writeOAuthStates(states.slice(-100));
@@ -175,7 +179,7 @@ export const createAuthStorage = ({
   const resolveGoogleUser = async ({ profile, mode, role }) => {
     const email = normalizeEmail(profile.email);
     const googleId = safeText(profile.sub, 120);
-    const fullName = safeText(profile.name, 120) || email.split('@')[0] || 'Steady Member';
+    const fullName = safeText(profile.name, 120) || email.split('@')[0] || 'Type1 and 2 Member';
 
     if (!email || !googleId || profile.email_verified === false) {
       return { error: 'invalid_profile' };
@@ -185,7 +189,7 @@ export const createAuthStorage = ({
     let user = users.find((entry) => entry.googleId === googleId) || users.find((entry) => entry.email === email);
 
     if (!user) {
-      user = {
+      user = decorateSuperAdminUser({
         id: randomBytes(12).toString('hex'),
         email,
         fullName,
@@ -194,19 +198,19 @@ export const createAuthStorage = ({
         role: safeRole(role),
         organization: '',
         createdAt: new Date().toISOString(),
-      };
+      });
       users.push(user);
       await writeUsers(users);
       mirrorUsersToSql([user]);
       return { user };
     }
 
-    const nextUser = {
+    const nextUser = decorateSuperAdminUser({
       ...user,
       googleId: user.googleId || googleId,
       authProvider: user.authProvider || 'google',
       fullName: user.fullName || fullName,
-    };
+    });
     await writeUsers(users.map((entry) => (entry.id === user.id ? nextUser : entry)));
     mirrorUsersToSql([nextUser]);
     return { user: nextUser };

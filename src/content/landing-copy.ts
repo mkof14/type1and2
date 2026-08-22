@@ -7,7 +7,8 @@ import type { KnowledgePage } from './knowledge-copy';
 
 export type CorePage = 'home' | 'system' | 'night' | 'family' | 'trust';
 export type DownloadPage = 'downloadDesktop' | 'downloadMobile';
-export type Page = CorePage | Exclude<LegalPage, 'trust'> | KnowledgePage | DownloadPage;
+export type InfoPage = 'pricing' | 'voiceGuide';
+export type Page = CorePage | Exclude<LegalPage, 'trust'> | KnowledgePage | DownloadPage | InfoPage;
 
 type Copy = {
   brand: string;
@@ -108,17 +109,17 @@ export const HOME_TERMS: Record<Language, {
 };
 
 export const BRAND_TAGLINE: Record<Language, string> = {
-  en: 'Calm support for diabetes families',
-  ru: 'Спокойная поддержка для семей с диабетом',
-  uk: 'Спокійна підтримка для сімей із діабетом',
-  es: 'Apoyo tranquilo para familias con diabetes',
-  fr: 'Soutien apaisant pour les familles touchées par le diabète',
-  de: 'Ruhige Unterstützung für Diabetes-Familien',
-  zh: '为糖尿病家庭提供安心支持',
-  ja: '糖尿病の家族に、落ち着いた支えを',
-  pt: 'Apoio calmo para famílias com diabetes',
-  he: 'תמיכה רגועה למשפחות עם סוכרת',
-  ar: 'دعم هادئ لعائلات السكري',
+  en: 'When it shifts, the right person knows.',
+  ru: 'Когда меняется цифра — нужный человек знает.',
+  uk: 'Коли змінюється цифра — потрібна людина знає.',
+  es: 'Cuando cambia la cifra, la persona indicada lo sabe.',
+  fr: 'Quand le chiffre bouge, la bonne personne le sait.',
+  de: 'Wenn sich die Zahl ändert, weiß es die richtige Person.',
+  zh: '数字一变，该知道的人就会知道。',
+  ja: '数字が動いたら、必要な人に届く。',
+  pt: 'Quando o número muda, a pessoa certa fica sabendo.',
+  he: 'כשהמספר משתנה, האדם הנכון יודע.',
+  ar: 'عندما يتغيّر الرقم، يعرف الشخص المناسب.',
 };
 
 export const PUBLIC_UI_COPY: Record<Language, {
@@ -242,90 +243,90 @@ export const PUBLIC_MICROCOPY: Record<Language, {
   en: {
     homeSubtitle: 'Understand what changed, who can help, and what to do next — without stress.',
     homeNote: 'Made for children, parents, and adults who support each other.',
-    systemIntro: 'Steady reads your device data and turns it into a simple, human picture of what matters now.',
-    nightIntro: 'At night, Steady stays closer — with calm alerts, not alarm overload.',
+    systemIntro: 'Type1 and 2 reads your device data and turns it into a simple, human picture of what matters now.',
+    nightIntro: 'At night, Type1 and 2 stays closer — with calm alerts, not alarm overload.',
     familyIntro: 'Everyone in the family sees the same gentle picture and knows who is responding.',
-    limitsIntro: 'Steady supports your daily life. It does not replace your doctor or your devices.',
+    limitsIntro: 'Type1 and 2 supports daily life. It is software only — not a medical device and not a doctor.',
   },
   ru: {
     homeSubtitle: 'Понять, что изменилось, кто рядом и что делать дальше — без лишнего напряжения.',
     homeNote: 'Для детей, родителей и взрослых, которые поддерживают друг друга.',
-    systemIntro: 'Steady читает данные с устройства и показывает простую, человеческую картину того, что важно сейчас.',
-    nightIntro: 'Ночью Steady остаётся ближе — с мягкими напоминаниями, а не лавиной тревог.',
+    systemIntro: 'Type1 and 2 читает данные с устройства и показывает простую, человеческую картину того, что важно сейчас.',
+    nightIntro: 'Ночью Type1 and 2 остаётся ближе — с мягкими напоминаниями, а не лавиной тревог.',
     familyIntro: 'Вся семья видит одну спокойную картину и понимает, кто сейчас отвечает.',
-    limitsIntro: 'Steady поддерживает повседневную жизнь. Он не заменяет врача и ваши устройства.',
+    limitsIntro: 'Type1 and 2 поддерживает повседневную жизнь. Это только программа — не медицинское устройство и не врач.',
   },
   uk: {
     homeSubtitle: 'Зрозуміти, що змінилося, хто поруч і що робити далі — без зайвого стресу.',
     homeNote: 'Для дітей, батьків і дорослих, які підтримують одне одного.',
-    systemIntro: 'Steady читає дані з пристрою і показує просту, людську картину того, що важливо зараз.',
-    nightIntro: 'Вночі Steady лишається ближче — із спокійними нагадуваннями, а не потоком тривог.',
+    systemIntro: 'Type1 and 2 читає дані з пристрою і показує просту, людську картину того, що важливо зараз.',
+    nightIntro: 'Вночі Type1 and 2 лишається ближче — із спокійними нагадуваннями, а не потоком тривог.',
     familyIntro: 'Уся родина бачить одну м’яку картину і розуміє, хто відповідає зараз.',
-    limitsIntro: 'Steady підтримує повсякденне життя. Він не замінює лікаря та ваші пристрої.',
+    limitsIntro: 'Type1 and 2 підтримує повсякденне життя. Це лише програмне забезпечення — не медичний пристрій і не лікар.',
   },
   es: {
     homeSubtitle: 'Entender qué cambió, quién puede ayudar y qué hacer después — sin estrés.',
     homeNote: 'Hecho para niños, padres y adultos que se apoyan mutuamente.',
-    systemIntro: 'Steady lee los datos del dispositivo y los convierte en una imagen simple y humana de lo que importa ahora.',
-    nightIntro: 'De noche, Steady se mantiene cerca — con avisos calmados, no con alarmas agotadoras.',
+    systemIntro: 'Type1 and 2 lee los datos del dispositivo y los convierte en una imagen simple y humana de lo que importa ahora.',
+    nightIntro: 'De noche, Type1 and 2 se mantiene cerca — con avisos calmados, no con alarmas agotadoras.',
     familyIntro: 'Toda la familia ve la misma imagen amable y sabe quién responde ahora.',
-    limitsIntro: 'Steady apoya la vida diaria. No sustituye a tu médico ni a tus dispositivos.',
+    limitsIntro: 'Type1 and 2 apoya la vida diaria. Es solo software — no es un dispositivo médico ni un médico.',
   },
   fr: {
     homeSubtitle: 'Comprendre ce qui a changé, qui peut aider et quoi faire ensuite — sans stress.',
     homeNote: 'Pensé pour les enfants, les parents et les adultes qui se soutiennent.',
-    systemIntro: 'Steady lit les données de l appareil et en fait une image simple et humaine de l essentiel maintenant.',
-    nightIntro: 'La nuit, Steady reste proche — avec des rappels calmes, pas une avalanche d alertes.',
+    systemIntro: 'Type1 and 2 lit les données de l appareil et en fait une image simple et humaine de l essentiel maintenant.',
+    nightIntro: 'La nuit, Type1 and 2 reste proche — avec des rappels calmes, pas une avalanche d alertes.',
     familyIntro: 'Toute la famille voit la même image douce et sait qui répond maintenant.',
-    limitsIntro: 'Steady soutient le quotidien. Il ne remplace ni votre médecin ni vos appareils.',
+    limitsIntro: 'Type1 and 2 soutient le quotidien. C’est un logiciel uniquement — pas un dispositif médical ni un médecin.',
   },
   de: {
     homeSubtitle: 'Verstehen, was sich geändert hat, wer helfen kann und was als Nächstes zu tun ist — ohne Stress.',
     homeNote: 'Für Kinder, Eltern und Erwachsene, die einander stützen.',
-    systemIntro: 'Steady liest Gerätedaten und macht daraus ein einfaches, menschliches Bild dessen, was jetzt zählt.',
-    nightIntro: 'Nachts bleibt Steady näher dran — mit ruhigen Hinweisen statt Alarmflut.',
+    systemIntro: 'Type1 and 2 liest Gerätedaten und macht daraus ein einfaches, menschliches Bild dessen, was jetzt zählt.',
+    nightIntro: 'Nachts bleibt Type1 and 2 näher dran — mit ruhigen Hinweisen statt Alarmflut.',
     familyIntro: 'Die ganze Familie sieht dasselbe sanfte Bild und weiß, wer gerade reagiert.',
-    limitsIntro: 'Steady unterstützt den Alltag. Es ersetzt weder Arzt noch Geräte.',
+    limitsIntro: 'Type1 and 2 unterstützt den Alltag. Es ist reine Software — kein Medizinprodukt und kein Arzt.',
   },
   zh: {
     homeSubtitle: '了解发生了什么变化、谁能帮忙、下一步做什么——不必紧张。',
     homeNote: '为彼此支持的孩子、家长和成年人而设计。',
-    systemIntro: 'Steady 读取设备数据，把它变成现在最重要事情的简单、易懂画面。',
-    nightIntro: '夜间 Steady 离你更近——提醒温和，不会让人喘不过气。',
+    systemIntro: 'Type1 and 2 读取设备数据，把它变成现在最重要事情的简单、易懂画面。',
+    nightIntro: '夜间 Type1 and 2 离你更近——提醒温和，不会让人喘不过气。',
     familyIntro: '全家人看到同一幅温和画面，也清楚现在谁在回应。',
-    limitsIntro: 'Steady 支持日常生活，但不能替代医生或设备。',
+    limitsIntro: 'Type1 and 2 支持日常生活。仅为软件——不是医疗设备，也不是医生。',
   },
   ja: {
     homeSubtitle: '何が変わったか、誰が助けられるか、次に何をするか——落ち着いて分かります。',
     homeNote: '子ども、保護者、支え合う大人のためにつくりました。',
-    systemIntro: 'Steady は機器データを読み取り、今大切なことをシンプルでやさしい画面にします。',
-    nightIntro: '夜も Steady はそばに——穏やかなお知らせで、警報の洪水にはしません。',
+    systemIntro: 'Type1 and 2 は機器データを読み取り、今大切なことをシンプルでやさしい画面にします。',
+    nightIntro: '夜も Type1 and 2 はそばに——穏やかなお知らせで、警報の洪水にはしません。',
     familyIntro: '家族全員が同じやさしい画面を見て、今だれが動いているか分かります。',
-    limitsIntro: 'Steady は日常を支えます。医師や機器の代わりにはなりません。',
+    limitsIntro: 'Type1 and 2 は日常を支えます。ソフトウェアのみ — 医療機器でも医師でもありません。',
   },
   pt: {
     homeSubtitle: 'Entender o que mudou, quem pode ajudar e o que fazer a seguir — sem estresse.',
     homeNote: 'Feito para crianças, pais e adultos que se apoiam.',
-    systemIntro: 'Steady lê os dados do dispositivo e transforma isso numa imagem simples e humana do que importa agora.',
-    nightIntro: 'À noite, Steady fica mais perto — com avisos calmos, não uma enxurrada de alarmes.',
+    systemIntro: 'Type1 and 2 lê os dados do dispositivo e transforma isso numa imagem simples e humana do que importa agora.',
+    nightIntro: 'À noite, Type1 and 2 fica mais perto — com avisos calmos, não uma enxurrada de alarmes.',
     familyIntro: 'Toda a família vê a mesma imagem gentil e sabe quem está respondendo agora.',
-    limitsIntro: 'Steady apoia a vida diária. Não substitui o médico nem os dispositivos.',
+    limitsIntro: 'Type1 and 2 apoia a vida diária. É apenas software — não é dispositivo médico nem médico.',
   },
   he: {
     homeSubtitle: 'להבין מה השתנה, מי יכול לעזור ומה לעשות הלאה — בלי לחץ.',
     homeNote: 'נבנה לילדים, להורים ולמבוגרים שתומכים זה בזה.',
-    systemIntro: 'Steady קורא נתונים מהמכשיר והופך אותם לתמונה פשוטה ואנושית של מה שחשוב עכשיו.',
-    nightIntro: 'בלילה Steady נשאר קרוב — עם תזכורות רגועות, לא הצפה של אזעקות.',
+    systemIntro: 'Type1 and 2 קורא נתונים מהמכשיר והופך אותם לתמונה פשוטה ואנושית של מה שחשוב עכשיו.',
+    nightIntro: 'בלילה Type1 and 2 נשאר קרוב — עם תזכורות רגועות, לא הצפה של אזעקות.',
     familyIntro: 'כל המשפחה רואה את אותה תמונה עדינה ויודעת מי מגיב עכשיו.',
-    limitsIntro: 'Steady תומך בחיים היומיומיים. הוא לא מחליף רופא או מכשירים.',
+    limitsIntro: 'Type1 and 2 תומך בחיים היומיומיים. זו תוכנה בלבד — לא מכשיר רפואי ולא רופא.',
   },
   ar: {
     homeSubtitle: 'افهم ما تغيّر، من يمكنه المساعدة، وماذا تفعل بعد ذلك — بدون توتر.',
     homeNote: 'صُمم للأطفال والآباء والبالغين الذين يدعمون بعضهم.',
-    systemIntro: 'Steady يقرأ بيانات الجهاز ويحوّلها إلى صورة بسيطة وإنسانية لما يهم الآن.',
-    nightIntro: 'ليلًا يبقى Steady أقرب — بتنبيهات هادئة، لا بسيل من الإنذارات.',
+    systemIntro: 'Type1 and 2 يقرأ بيانات الجهاز ويحوّلها إلى صورة بسيطة وإنسانية لما يهم الآن.',
+    nightIntro: 'ليلًا يبقى Type1 and 2 أقرب — بتنبيهات هادئة، لا بسيل من الإنذارات.',
     familyIntro: 'ترى العائلة كلها الصورة نفسها اللطيفة وتعرف من يستجيب الآن.',
-    limitsIntro: 'Steady يدعم الحياة اليومية. لا يحل محل الطبيب أو الأجهزة.',
+    limitsIntro: 'Type1 and 2 يدعم الحياة اليومية. برنامج فقط — ليس جهازًا طبيًا وليس طبيبًا.',
   },
 };
 
@@ -342,7 +343,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'Sign in',
     titleByPage: {
-      home: 'Steady',
+      home: 'Type1 and 2',
       system: 'How it helps',
       night: 'At night',
       family: 'Family',
@@ -355,8 +356,8 @@ export const COPY: Record<Language, Copy> = {
     },
     hero: {
       eyebrow: 'Separate paths for type 1 and type 2 diabetes',
-      title: 'Calm support, together — day and night.',
-      subtitle: 'Steady helps children, parents, and adults understand what is happening and feel less alone when glucose changes.',
+      title: 'Two paths. One household — day and night.',
+      subtitle: 'Type1 and 2 helps children, parents, and adults understand what is happening and feel less alone when glucose changes.',
       primary: 'Get started',
       secondary: 'See how it helps',
       note: 'Gentle alerts. A clear next step. No clutter.',
@@ -376,24 +377,24 @@ export const COPY: Record<Language, Copy> = {
       ],
     },
     architecture: {
-      title: 'How Steady works behind the scenes',
+      title: 'How Type1 and 2 works behind the scenes',
       items: [
         { title: 'From your devices', body: 'CGM sources such as Dexcom, with room for more devices over time.' },
         { title: 'Making sense of the numbers', body: 'Timing, freshness, and confidence — without flooding you with raw data.' },
         { title: 'What is happening now', body: 'A simple current picture instead of a wall of numbers.' },
         { title: 'Looking a little ahead', body: 'Trend and short forecast so you can respond before things feel urgent.' },
-        { title: 'When to reach out', body: 'Steady decides when a nudge is enough and when more help should join in.' },
+        { title: 'When to reach out', body: 'Type1 and 2 decides when a nudge is enough and when more help should join in.' },
         { title: 'How your family gets notified', body: 'Push, repeat, backup support, and a clear sign when someone has responded.' },
       ],
     },
     states: {
       title: 'What you might see',
       items: [
-        { name: 'Steady', body: 'Things look stable. The screen stays quiet.' },
+        { name: 'Type1 and 2', body: 'Things look stable. The screen stays quiet.' },
         { name: 'Glucose falling', body: 'A drop is showing up. Attention, not panic.' },
-        { name: 'Needs attention soon', body: 'A risky level may be close. Steady suggests a next step.' },
+        { name: 'Needs attention soon', body: 'A risky level may be close. Type1 and 2 suggests a next step.' },
         { name: 'Urgent help needed', body: 'The situation needs action now.' },
-        { name: 'Getting better', body: 'Steady stays with recovery until things feel stable again.' },
+        { name: 'Getting better', body: 'Type1 and 2 stays with recovery until things feel stable again.' },
       ],
     },
     night: {
@@ -420,7 +421,7 @@ export const COPY: Record<Language, Copy> = {
     },
     trust: {
       title: 'Good to know',
-      intro: 'Steady supports daily life. It is not a medical device and not a doctor.',
+      intro: 'Type1 and 2 supports daily life. It is not a medical device and not a doctor.',
       legalTitle: 'Important boundaries',
       legal: [
         'Not a medical instrument.',
@@ -438,7 +439,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'This system is not a medical device, not a diagnostic tool, and not a substitute for physician care. It depends on device data and timely user response.',
+        'This system is not a medical device, not a diagnostic tool, and not medical care. It depends on device data and timely user response.',
       legal: 'Trust And Legal Limits',
       accountLabel: 'Theme',
     },
@@ -464,7 +465,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'Войти',
     titleByPage: {
-      home: 'Steady',
+      home: 'Type1 and 2',
       system: 'Как помогает',
       night: 'Ночью',
       family: 'Семья',
@@ -477,8 +478,8 @@ export const COPY: Record<Language, Copy> = {
     },
     hero: {
       eyebrow: 'Отдельные пути для диабета 1 и 2 типа',
-      title: 'Спокойная поддержка вместе — днём и ночью.',
-      subtitle: 'Steady помогает детям, родителям и взрослым понимать, что происходит, и чувствовать себя спокойнее, когда меняется сахар.',
+      title: 'Два пути. Один дом — днём и ночью.',
+      subtitle: 'Type1 and 2 помогает детям, родителям и взрослым понимать, что происходит, и чувствовать себя спокойнее, когда меняется сахар.',
       primary: 'Начать',
       secondary: 'Как это помогает',
       note: 'Мягкие напоминания. Понятный следующий шаг. Без лишнего.',
@@ -498,13 +499,13 @@ export const COPY: Record<Language, Copy> = {
       ],
     },
     architecture: {
-      title: 'Как Steady работает внутри',
+      title: 'Как Type1 and 2 работает внутри',
       items: [
         { title: 'Из ваших устройств', body: 'Источники CGM, такие как Dexcom, с возможностью добавить другие устройства позже.' },
         { title: 'Смысл в цифрах', body: 'Время, свежесть и доверие к данным — без потока сырых чисел.' },
         { title: 'Что происходит сейчас', body: 'Простая текущая картина вместо стены показателей.' },
         { title: 'Немного вперёд', body: 'Тренд и короткий прогноз, чтобы успеть отреагировать раньше.' },
-        { title: 'Когда стоит обратиться', body: 'Steady решает, когда хватит мягкого напоминания, а когда нужна помощь близких.' },
+        { title: 'Когда стоит обратиться', body: 'Type1 and 2 решает, когда хватит мягкого напоминания, а когда нужна помощь близких.' },
         { title: 'Как семья получает уведомления', body: 'Push, повтор, резервная поддержка и понятный знак, что кто-то ответил.' },
       ],
     },
@@ -513,9 +514,9 @@ export const COPY: Record<Language, Copy> = {
       items: [
         { name: 'Спокойно', body: 'Всё выглядит стабильно. Экран остаётся тихим.' },
         { name: 'Сахар снижается', body: 'Появляется снижение. Внимание, без паники.' },
-        { name: 'Скоро нужно внимание', body: 'Опасный уровень может быть близко. Steady подскажет следующий шаг.' },
+        { name: 'Скоро нужно внимание', body: 'Опасный уровень может быть близко. Type1 and 2 подскажет следующий шаг.' },
         { name: 'Нужна срочная помощь', body: 'Ситуация требует действия сейчас.' },
-        { name: 'Становится лучше', body: 'Steady остаётся рядом, пока всё снова не станет спокойнее.' },
+        { name: 'Становится лучше', body: 'Type1 and 2 остаётся рядом, пока всё снова не станет спокойнее.' },
       ],
     },
     night: {
@@ -542,7 +543,7 @@ export const COPY: Record<Language, Copy> = {
     },
     trust: {
       title: 'Важно знать',
-      intro: 'Steady поддерживает повседневную жизнь. Это не медицинское устройство и не врач.',
+      intro: 'Type1 and 2 поддерживает повседневную жизнь. Это не медицинское устройство и не врач.',
       legalTitle: 'Важные границы',
       legal: [
         'Не является медицинским инструментом.',
@@ -560,7 +561,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'Система не является медицинским устройством, диагностическим инструментом и не заменяет врача. Она зависит от качества данных устройств и своевременной реакции пользователя.',
+        'Система не является медицинским устройством, диагностическим инструментом или медицинской помощью. Она зависит от качества данных устройств и реакции пользователя.',
       legal: 'Доверие И Юридические Границы',
       accountLabel: 'Тема',
     },
@@ -586,7 +587,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'Увійти',
     titleByPage: {
-      home: 'Steady',
+      home: 'Type1 and 2',
       system: 'Як допомагає',
       night: 'Вночі',
       family: 'Сімʼя',
@@ -599,9 +600,9 @@ export const COPY: Record<Language, Copy> = {
     },
     hero: {
       eyebrow: 'Окремі шляхи для діабету 1 і 2 типу',
-      title: 'Спокійна підтримка разом — вдень і вночі.',
+      title: 'Два шляхи. Один дім — днем і вночі.',
       subtitle:
-        'Steady допомагає дітям, батькам і дорослим розуміти, що відбувається, і почуватися спокійніше, коли змінюється цукор.',
+        'Type1 and 2 допомагає дітям, батькам і дорослим розуміти, що відбувається, і почуватися спокійніше, коли змінюється цукор.',
       primary: 'Почати',
       secondary: 'Як це допомагає',
       note: 'Мʼякі нагадування. Зрозумілий наступний крок. Без зайвого.',
@@ -621,13 +622,13 @@ export const COPY: Record<Language, Copy> = {
       ],
     },
     architecture: {
-      title: 'Як Steady працює всередині',
+      title: 'Як Type1 and 2 працює всередині',
       items: [
         { title: 'З ваших пристроїв', body: 'Джерела CGM, такі як Dexcom, з можливістю додати інші пристрої пізніше.' },
         { title: 'Сенс у цифрах', body: 'Час, свіжість і довіра до даних — без потоку сирих чисел.' },
         { title: 'Що відбувається зараз', body: 'Проста поточна картина замість стіни показників.' },
         { title: 'Трохи наперед', body: 'Тренд і короткий прогноз, щоб встигнути відреагувати раніше.' },
-        { title: 'Коли варто звернутися', body: 'Steady вирішує, коли достатньо мʼякого нагадування, а коли потрібна допомога близьких.' },
+        { title: 'Коли варто звернутися', body: 'Type1 and 2 вирішує, коли достатньо мʼякого нагадування, а коли потрібна допомога близьких.' },
         { title: 'Як сімʼя отримує сповіщення', body: 'Push, повтор, резервна підтримка і зрозумілий знак, що хтось відповів.' },
       ],
     },
@@ -636,9 +637,9 @@ export const COPY: Record<Language, Copy> = {
       items: [
         { name: 'Спокійно', body: 'Усе виглядає стабільно. Екран залишається тихим.' },
         { name: 'Цукор знижується', body: 'Зʼявляється зниження. Увага, без паніки.' },
-        { name: 'Скоро потрібна увага', body: 'Небезпечний рівень може бути близько. Steady підкаже наступний крок.' },
+        { name: 'Скоро потрібна увага', body: 'Небезпечний рівень може бути близько. Type1 and 2 підкаже наступний крок.' },
         { name: 'Потрібна термінова допомога', body: 'Ситуація потребує дії зараз.' },
-        { name: 'Стає краще', body: 'Steady залишається поруч, поки все знову не стане спокійніше.' },
+        { name: 'Стає краще', body: 'Type1 and 2 залишається поруч, поки все знову не стане спокійніше.' },
       ],
     },
     night: {
@@ -683,7 +684,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'Система не є медичним пристроєм, діагностичним інструментом і не замінює лікаря. Вона залежить від якості даних пристроїв і своєчасної реакції користувача.',
+        'Система не є медичним пристроєм, діагностичним інструментом або медичною допомогою. Вона залежить від якості даних пристроїв і реакції користувача.',
       legal: 'Довіра Та Юридичні Межі',
       accountLabel: 'Тема',
     },
@@ -709,7 +710,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'Abrir Acceso',
     titleByPage: {
-      home: 'Steady — sistema de soporte',
+      home: 'Type1 and 2 — sistema de soporte',
       system: 'Arquitectura Del Sistema',
       night: 'Modo Nocturno',
       family: 'Modelo Familiar',
@@ -724,7 +725,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: 'Caminos separados para diabetes tipo 1 y tipo 2',
       title: 'Ver el riesgo antes. Saber quién responde. Pasar la noche con menos caos.',
       subtitle:
-        'Steady ayuda al niño, al padre o madre y al cuidador a actuar como un solo equipo cuando la glucosa baja por la noche. Muestra qué está pasando, qué hacer ahora y quién tomó la responsabilidad.',
+        'Type1 and 2 ayuda al niño, al padre o madre y al cuidador a actuar como un solo equipo cuando la glucosa baja por la noche. Muestra qué está pasando, qué hacer ahora y quién tomó la responsabilidad.',
       primary: 'Crear Cuenta',
       secondary: 'Abrir Sistema',
       note: 'Simple a propósito: alertas claras, relevo claro y un resumen corto por la mañana.',
@@ -807,7 +808,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'Este sistema no es un dispositivo médico, no es una herramienta de diagnóstico y no sustituye la atención médica. Depende de los datos del dispositivo y de una respuesta oportuna del usuario.',
+        'Este sistema no es un dispositivo médico, no es una herramienta de diagnóstico y no es atención médica. Depende de los datos del dispositivo y de la respuesta del usuario.',
       legal: 'Confianza Y Límites Legales',
       accountLabel: 'Tema',
     },
@@ -833,7 +834,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'Ouvrir L Acces',
     titleByPage: {
-      home: 'Steady — système de support',
+      home: 'Type1 and 2 — système de support',
       system: 'Architecture Du Systeme',
       night: 'Mode Nuit',
       family: 'Modele Familial',
@@ -848,7 +849,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: 'Parcours distincts pour diabète type 1 et type 2',
       title: 'Voir le risque plus tot. Savoir qui repond. Traverser la nuit avec moins de chaos.',
       subtitle:
-        'Steady aide l enfant, le parent et l aidant a agir comme une seule equipe quand le glucose baisse la nuit. Il montre ce qui se passe, quoi faire ensuite et qui a pris la responsabilite.',
+        'Type1 and 2 aide l enfant, le parent et l aidant a agir comme une seule equipe quand le glucose baisse la nuit. Il montre ce qui se passe, quoi faire ensuite et qui a pris la responsabilite.',
       primary: 'Creer Un Compte',
       secondary: 'Ouvrir Le Systeme',
       note: 'Simple par choix: alertes claires, relais clair, resume court le matin.',
@@ -931,7 +932,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'Ce systeme n est pas un dispositif medical, ni un outil de diagnostic, et ne remplace pas un medecin. Il depend des donnees des appareils et de la reponse rapide de l utilisateur.',
+        'Ce systeme n est pas un dispositif medical, ni un outil de diagnostic, et n est pas un soin medical. Il depend des donnees des appareils et de la reponse de l utilisateur.',
       legal: 'Confiance Et Limites Juridiques',
       accountLabel: 'Theme',
     },
@@ -957,7 +958,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'Zugang Offnen',
     titleByPage: {
-      home: 'Steady',
+      home: 'Type1 and 2',
       system: 'Systemarchitektur',
       night: 'Nachtmodus',
       family: 'Familienmodell',
@@ -970,9 +971,9 @@ export const COPY: Record<Language, Copy> = {
     },
     hero: {
       eyebrow: 'Getrennte Wege für Diabetes Typ 1 und Typ 2',
-      title: 'Ruhige Unterstützung gemeinsam — Tag und Nacht.',
+      title: 'Zwei Wege. Ein Zuhause — Tag und Nacht.',
       subtitle:
-        'Steady hilft Kindern, Eltern und Erwachsenen zu verstehen, was passiert, und sich ruhiger zu fühlen, wenn sich der Zucker ändert.',
+        'Type1 and 2 hilft Kindern, Eltern und Erwachsenen zu verstehen, was passiert, und sich ruhiger zu fühlen, wenn sich der Zucker ändert.',
       primary: 'Loslegen',
       secondary: 'So hilft es',
       note: 'Sanfte Hinweise. Ein klarer nächster Schritt. Kein Durcheinander.',
@@ -1055,7 +1056,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'Dieses System ist kein Medizinprodukt, kein Diagnosewerkzeug und kein Ersatz fur arztliche Versorgung. Es hangt von Geratedaten und der rechtzeitigen Reaktion des Nutzers ab.',
+        'Dieses System ist kein Medizinprodukt, kein Diagnosewerkzeug und keine medizinische Versorgung. Es hangt von Geraetedaten und der Reaktion des Nutzers ab.',
       legal: 'Vertrauen Und Rechtliche Grenzen',
       accountLabel: 'Thema',
     },
@@ -1081,7 +1082,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: '打开访问',
     titleByPage: {
-      home: 'Steady 支持系统',
+      home: 'Type1 and 2 支持系统',
       system: '系统架构',
       night: '夜间模式',
       family: '家庭模式',
@@ -1096,7 +1097,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: '1 型与 2 型糖尿病的独立路径',
       title: '更早看到风险。知道谁在回应。让夜晚少一点混乱。',
       subtitle:
-        '当夜间血糖变化时，Steady 帮助孩子、家长和照护者像一个团队一样协作。它会清楚显示正在发生什么、下一步该做什么，以及谁已经接手。',
+        '当夜间血糖变化时，Type1 and 2 帮助孩子、家长和照护者像一个团队一样协作。它会清楚显示正在发生什么、下一步该做什么，以及谁已经接手。',
       primary: '创建账户',
       secondary: '打开系统',
       note: '刻意保持简单：清楚的提醒、清楚的交接、简短的晨间总结。',
@@ -1179,7 +1180,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        '本系统不是医疗器械，不是诊断工具，也不能替代医生。它依赖设备数据和用户及时反应。',
+        '本系统不是医疗器械，不是诊断工具，也不是医疗护理。它依赖设备数据和用户反应。',
       legal: '信任与法律边界',
       accountLabel: '主题',
     },
@@ -1205,7 +1206,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'アクセスを開く',
     titleByPage: {
-      home: 'Steady サポート',
+      home: 'Type1 and 2 サポート',
       system: 'システム構成',
       night: 'ナイトモード',
       family: '家族モデル',
@@ -1220,7 +1221,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: '1 型と 2 型糖尿病それぞれの専用パス',
       title: 'リスクを早く知る。誰が対応しているか分かる。夜をもっと落ち着いて乗り切る。',
       subtitle:
-        '夜に血糖が動いたとき、Steady は子ども、保護者、ケア提供者が一つのチームとして動けるようにします。何が起きているか、次に何をするか、誰が引き受けたかがすぐ分かります。',
+        '夜に血糖が動いたとき、Type1 and 2 は子ども、保護者、ケア提供者が一つのチームとして動けるようにします。何が起きているか、次に何をするか、誰が引き受けたかがすぐ分かります。',
       primary: 'アカウント作成',
       secondary: 'システムを開く',
       note: '意図的にシンプルです。分かりやすい通知、分かりやすい引き継ぎ、短い朝のまとめ。',
@@ -1303,7 +1304,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'このシステムは医療機器でも診断ツールでもなく、医師の代わりにもなりません。デバイスデータとユーザーの迅速な対応に依存します。',
+        'このシステムは医療機器でも診断ツールでもなく、医療行為でもありません。デバイスデータとユーザーの対応に依存します。',
       legal: '信頼と法的境界',
       accountLabel: 'テーマ',
     },
@@ -1329,7 +1330,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'Abrir Acesso',
     titleByPage: {
-      home: 'Steady — suporte familiar',
+      home: 'Type1 and 2 — suporte familiar',
       system: 'Arquitetura Do Sistema',
       night: 'Modo Noturno',
       family: 'Modelo Familiar',
@@ -1344,7 +1345,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: 'Caminhos separados para diabetes tipo 1 e tipo 2',
       title: 'Ver o risco mais cedo. Saber quem esta respondendo. Passar a noite com menos caos.',
       subtitle:
-        'O Steady ajuda a crianca, o responsavel e o cuidador a agir como uma so equipe quando a glicose muda durante a noite. Mostra o que esta acontecendo, o que fazer em seguida e quem assumiu a responsabilidade.',
+        'O Type1 and 2 ajuda a crianca, o responsavel e o cuidador a agir como uma so equipe quando a glicose muda durante a noite. Mostra o que esta acontecendo, o que fazer em seguida e quem assumiu a responsabilidade.',
       primary: 'Criar Conta',
       secondary: 'Abrir Sistema',
       note: 'Simples de proposito: aviso claro, passagem clara e um resumo curto pela manha.',
@@ -1427,7 +1428,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'Este sistema nao e um dispositivo medico, nao e uma ferramenta diagnostica e nao substitui o cuidado medico. Ele depende dos dados do dispositivo e da resposta oportuna do usuario.',
+        'Este sistema nao e um dispositivo medico, nao e uma ferramenta diagnostica e nao e cuidado medico. Ele depende dos dados do dispositivo e da resposta do usuario.',
       legal: 'Confianca E Limites Legais',
       accountLabel: 'Tema',
     },
@@ -1453,7 +1454,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'פתח גישה',
     titleByPage: {
-      home: 'Steady — מערכת תמיכה',
+      home: 'Type1 and 2 — מערכת תמיכה',
       system: 'ארכיטקטורת המערכת',
       night: 'מצב לילה',
       family: 'המודל המשפחתי',
@@ -1468,7 +1469,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: 'מסלולים נפרדים לסוכרת סוג 1 וסוג 2',
       title: 'לראות סיכון מוקדם יותר. לדעת מי מגיב. לעבור את הלילה עם פחות כאוס.',
       subtitle:
-        'Steady עוזר לילד, להורה ולמטפל לפעול כמו צוות אחד כשהגלוקוז יורד בלילה. רואים מה קורה, מה הצעד הבא ומי לקח אחריות.',
+        'Type1 and 2 עוזר לילד, להורה ולמטפל לפעול כמו צוות אחד כשהגלוקוז יורד בלילה. רואים מה קורה, מה הצעד הבא ומי לקח אחריות.',
       primary: 'יצירת חשבון',
       secondary: 'פתח מערכת',
       note: 'פשוט בכוונה: התרעה ברורה, העברה ברורה וסיכום קצר בבוקר.',
@@ -1551,7 +1552,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'המערכת הזו אינה מכשיר רפואי, אינה כלי אבחוני ואינה תחליף לטיפול רפואי. היא תלויה בנתוני המכשיר ובתגובה בזמן של המשתמש.',
+        'המערכת הזו אינה מכשיר רפואי, אינה כלי אבחוני ואינה טיפול רפואי. היא תלויה בנתוני המכשיר ובתגובת המשתמש.',
       legal: 'אמון וגבולות משפטיים',
       accountLabel: 'ערכת נושא',
     },
@@ -1577,7 +1578,7 @@ export const COPY: Record<Language, Copy> = {
     },
     signIn: 'افتح الوصول',
     titleByPage: {
-      home: 'Steady — نظام الدعم',
+      home: 'Type1 and 2 — نظام الدعم',
       system: 'بنية النظام',
       night: 'الوضع الليلي',
       family: 'النموذج العائلي',
@@ -1592,7 +1593,7 @@ export const COPY: Record<Language, Copy> = {
       eyebrow: 'مسارات منفصلة لسكري النوع 1 والنوع 2',
       title: 'رؤية الخطر مبكرًا. معرفة من يستجيب. عبور الليل بهدوء أكبر.',
       subtitle:
-        'يساعد Steady الطفل وولي الأمر ومقدم الرعاية على العمل كفريق واحد عندما يتغير السكر ليلًا. يوضح ما يحدث الآن، وما الخطوة التالية، ومن تولى المسؤولية.',
+        'يساعد Type1 and 2 الطفل وولي الأمر ومقدم الرعاية على العمل كفريق واحد عندما يتغير السكر ليلًا. يوضح ما يحدث الآن، وما الخطوة التالية، ومن تولى المسؤولية.',
       primary: 'إنشاء حساب',
       secondary: 'افتح النظام',
       note: 'البساطة مقصودة: تنبيه واضح، تسليم واضح، وملخص قصير في الصباح.',
@@ -1675,7 +1676,7 @@ export const COPY: Record<Language, Copy> = {
     },
     footer: {
       disclaimer:
-        'هذا النظام ليس جهازًا طبيًا ولا أداة تشخيصية ولا بديلًا عن رعاية الطبيب. وهو يعتمد على بيانات الجهاز واستجابة المستخدم في الوقت المناسب.',
+        'هذا النظام ليس جهازًا طبيًا ولا أداة تشخيصية ولا رعاية طبية. وهو يعتمد على بيانات الجهاز واستجابة المستخدم.',
       legal: 'الثقة والحدود القانونية',
       accountLabel: 'السمة',
     },
@@ -1717,6 +1718,8 @@ export const buildPagePaths = (basePath?: string): Record<Page, string> => {
     compliance: `${normalizedBase}/compliance` || '/compliance',
     downloadDesktop: `${normalizedBase}/download/desktop` || '/download/desktop',
     downloadMobile: `${normalizedBase}/download/mobile` || '/download/mobile',
+    pricing: `${normalizedBase}/pricing` || '/pricing',
+    voiceGuide: `${normalizedBase}/voice-guide` || '/voice-guide',
   };
 };
 
@@ -1735,6 +1738,8 @@ export const resolvePage = (pathname: string, pagePaths: Record<Page, string>): 
   if (pathname === pagePaths.compliance) return 'compliance';
   if (pathname === pagePaths.downloadDesktop) return 'downloadDesktop';
   if (pathname === pagePaths.downloadMobile) return 'downloadMobile';
+  if (pathname === pagePaths.pricing) return 'pricing';
+  if (pathname === pagePaths.voiceGuide) return 'voiceGuide';
   return 'home';
 };
 

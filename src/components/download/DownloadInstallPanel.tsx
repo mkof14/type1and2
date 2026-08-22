@@ -34,7 +34,7 @@ export const DownloadInstallPanel: React.FC<DownloadInstallPanelProps> = ({
   const cardClass = theme === 'dark' ? 't1d-download-card t1d-download-card--dark' : 't1d-download-card';
   const PlatformIcon = platform === 'desktop' ? Monitor : Smartphone;
   const fileHref = platform === 'desktop' ? resolveDesktopDownloadHref() : DOWNLOAD_ARTIFACTS.mobileHtml;
-  const fileName = platform === 'desktop' ? resolveDesktopDownloadName(fileHref) : 'Steady Mobile.html';
+  const fileName = platform === 'desktop' ? resolveDesktopDownloadName(fileHref) : 'Type1 and 2 Mobile.html';
 
   useEffect(() => {
     setInstallable(canInstallPwa());

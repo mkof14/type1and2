@@ -10,11 +10,13 @@ export type PageHeroBannerProps = {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  highlights?: string[];
   isRTL?: boolean;
   compact?: boolean;
   bleed?: boolean;
   priority?: boolean;
   diabetesType?: DiabetesType | null;
+  copyAlign?: 'start' | 'end';
   children?: React.ReactNode;
   className?: string;
 };
@@ -30,6 +32,8 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
   bleed = true,
   priority = false,
   diabetesType = null,
+  copyAlign = 'start',
+  highlights = [],
   children,
   className = '',
 }) => {
@@ -37,6 +41,8 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
     't1d-page-hero',
     bleed ? 't1d-page-hero--bleed' : '',
     `t1d-page-hero--${variant}`,
+    copyAlign === 'end' ? 't1d-page-hero--copy-end' : '',
+    highlights.length ? 't1d-page-hero--has-highlights' : '',
     diabetesType ? `t1d-page-hero--${diabetesType}` : '',
     theme === 'dark' ? 't1d-page-hero--dark' : 't1d-page-hero--light',
     compact ? 't1d-page-hero--compact' : '',
@@ -64,6 +70,13 @@ export const PageHeroBanner: React.FC<PageHeroBannerProps> = ({
               {title}
             </h1>
             {subtitle ? <p className={`t1d-page-hero__subtitle ${subtitleTone}`}>{subtitle}</p> : null}
+            {highlights.length ? (
+              <ul className="t1d-page-hero__highlights">
+                {highlights.map((item) => (
+                  <li key={item} className="t1d-page-hero__highlight">{item}</li>
+                ))}
+              </ul>
+            ) : null}
             {children ? <div className="t1d-page-hero__actions">{children}</div> : null}
           </div>
         </div>

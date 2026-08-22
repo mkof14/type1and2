@@ -28,8 +28,8 @@ const buildPushPayload = (delivery) => {
   const kind = delivery?.payload?.kind || 'alert';
   const title =
     kind === 'escalation'
-      ? 'Steady — backup needed'
-      : 'Steady — safety alert';
+      ? 'Type1 and 2 — backup needed'
+      : 'Type1 and 2 — safety alert';
   const body =
     delivery?.payload?.detail
     || `${delivery?.recipientName || 'Contact'}: ${kind.replace(/_/g, ' ')}`;
@@ -170,8 +170,8 @@ export const sendSmsNotification = async (delivery) => {
   const kind = delivery?.payload?.kind || 'alert';
   const body =
     kind === 'escalation'
-      ? `Steady backup alert for ${delivery?.recipientName || 'caregiver'}. Open the app to respond.`
-      : `Steady safety alert for ${delivery?.recipientName || 'contact'}. Open the app to respond.`;
+      ? `Type1 and 2 backup alert for ${delivery?.recipientName || 'caregiver'}. Open the app to respond.`
+      : `Type1 and 2 safety alert for ${delivery?.recipientName || 'contact'}. Open the app to respond.`;
 
   return sendTwilioSms({ to: phone, body });
 };

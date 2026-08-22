@@ -9,17 +9,17 @@ export const STORAGE_KEYS = {
 } as const;
 
 export const LOADING_COPY: Record<Language, string> = {
-  en: 'Opening Steady',
-  ru: 'Открываем Steady',
-  uk: 'Відкриваємо Steady',
-  es: 'Abriendo Steady',
-  fr: 'Ouverture de Steady',
-  de: 'Steady wird geöffnet',
-  zh: '正在打开 Steady',
-  ja: 'Steady を開いています',
-  pt: 'Abrindo Steady',
-  he: 'פותח את Steady',
-  ar: 'جار فتح Steady',
+  en: 'Opening Type1 and 2',
+  ru: 'Открываем Type1 and 2',
+  uk: 'Відкриваємо Type1 and 2',
+  es: 'Abriendo Type1 and 2',
+  fr: 'Ouverture de Type1 and 2',
+  de: 'Type1 and 2 wird geöffnet',
+  zh: '正在打开 Type1 and 2',
+  ja: 'Type1 and 2 を開いています',
+  pt: 'Abrindo Type1 and 2',
+  he: 'פותח את Type1 and 2',
+  ar: 'جار فتح Type1 and 2',
 };
 
 export const SKIP_LINK_COPY: Record<Language, string> = {
@@ -38,30 +38,30 @@ export const SKIP_LINK_COPY: Record<Language, string> = {
 
 export const APP_ROUTE_META: Record<Exclude<RouteMode, 'public'>, Record<Language, { title: string; description: string }>> = {
   signin: {
-    en: { title: 'Sign in to Steady', description: 'Sign in to see today’s view, current signals, and family support status.' },
-    ru: { title: 'Вход в Steady', description: 'Войдите, чтобы увидеть сегодняшнюю картину, сигналы и состояние семейной поддержки.' },
-    uk: { title: 'Вхід до Steady', description: 'Увійдіть, щоб побачити сьогоднішню картину, сигнали та підтримку сім’ї.' },
-    es: { title: 'Entrar en Steady', description: 'Inicia sesión para ver el estado actual, las señales y el apoyo de la familia.' },
-    fr: { title: 'Se connecter à Steady', description: 'Connectez-vous pour voir l’état actuel, les signaux et le soutien de la famille.' },
-    de: { title: 'Bei Steady anmelden', description: 'Melden Sie sich an, um den aktuellen Zustand, Signale und die Unterstützung der Familie zu sehen.' },
-    zh: { title: '登录 Steady', description: '登录后可查看当前状态、提醒信号和家庭支持状态。' },
-    ja: { title: 'Steady にサインイン', description: 'サインインすると、現在の状態、合図、家族の支えを確認できます。' },
-    pt: { title: 'Entrar no Steady', description: 'Entre para ver o estado atual, os sinais e o apoio da família.' },
-    he: { title: 'כניסה ל-Steady', description: 'התחברו כדי לראות את המצב הנוכחי, את האותות ואת מצב התמיכה של המשפחה.' },
-    ar: { title: 'تسجيل الدخول إلى Steady', description: 'سجّل الدخول لرؤية الحالة الحالية والإشارات ووضع دعم العائلة.' },
+    en: { title: 'Sign in to Type1 and 2', description: 'Sign in to see today’s view, current signals, and family support status.' },
+    ru: { title: 'Вход в Type1 and 2', description: 'Войдите, чтобы увидеть сегодняшнюю картину, сигналы и состояние семейной поддержки.' },
+    uk: { title: 'Вхід до Type1 and 2', description: 'Увійдіть, щоб побачити сьогоднішню картину, сигнали та підтримку сім’ї.' },
+    es: { title: 'Entrar en Type1 and 2', description: 'Inicia sesión para ver el estado actual, las señales y el apoyo de la familia.' },
+    fr: { title: 'Se connecter à Type1 and 2', description: 'Connectez-vous pour voir l’état actuel, les signaux et le soutien de la famille.' },
+    de: { title: 'Bei Type1 and 2 anmelden', description: 'Melden Sie sich an, um den aktuellen Zustand, Signale und die Unterstützung der Familie zu sehen.' },
+    zh: { title: '登录 Type1 and 2', description: '登录后可查看当前状态、提醒信号和家庭支持状态。' },
+    ja: { title: 'Type1 and 2 にサインイン', description: 'サインインすると、現在の状態、合図、家族の支えを確認できます。' },
+    pt: { title: 'Entrar no Type1 and 2', description: 'Entre para ver o estado atual, os sinais e o apoio da família.' },
+    he: { title: 'כניסה ל-Type1 and 2', description: 'התחברו כדי לראות את המצב הנוכחי, את האותות ואת מצב התמיכה של המשפחה.' },
+    ar: { title: 'تسجيل الدخول إلى Type1 and 2', description: 'سجّل الدخول لرؤية الحالة الحالية والإشارات ووضع دعم العائلة.' },
   },
   signup: {
-    en: { title: 'Create your Steady account', description: 'Create your account and start a simple daily safety setup for your family.' },
-    ru: { title: 'Создать аккаунт Steady', description: 'Создайте аккаунт и начните простую настройку ежедневной поддержки для семьи.' },
-    uk: { title: 'Створити акаунт Steady', description: 'Створіть акаунт і почніть просте налаштування щоденної підтримки для сім’ї.' },
-    es: { title: 'Crear cuenta en Steady', description: 'Crea tu cuenta y comienza una configuración simple de apoyo diario para la familia.' },
-    fr: { title: 'Créer un compte Steady', description: 'Créez votre compte et commencez une configuration simple de soutien quotidien pour la famille.' },
-    de: { title: 'Steady-Konto erstellen', description: 'Erstellen Sie Ihr Konto und starten Sie eine einfache tägliche Sicherheitskonfiguration für die Familie.' },
-    zh: { title: '创建 Steady 账号', description: '创建账号，开始为家庭设置简洁的日常支持流程。' },
-    ja: { title: 'Steady アカウントを作成', description: 'アカウントを作成して、家族のためのシンプルな日常サポート設定を始めます。' },
-    pt: { title: 'Criar conta no Steady', description: 'Crie sua conta e inicie uma configuração simples de apoio diário para a família.' },
-    he: { title: 'יצירת חשבון Steady', description: 'צרו חשבון והתחילו הגדרה פשוטה של תמיכה יומיומית למשפחה.' },
-    ar: { title: 'إنشاء حساب Steady', description: 'أنشئ حسابًا وابدأ إعدادًا بسيطًا لدعم العائلة خلال اليوم.' },
+    en: { title: 'Create your Type1 and 2 account', description: 'Create your account and start a simple daily safety setup for your family.' },
+    ru: { title: 'Создать аккаунт Type1 and 2', description: 'Создайте аккаунт и начните простую настройку ежедневной поддержки для семьи.' },
+    uk: { title: 'Створити акаунт Type1 and 2', description: 'Створіть акаунт і почніть просте налаштування щоденної підтримки для сім’ї.' },
+    es: { title: 'Crear cuenta en Type1 and 2', description: 'Crea tu cuenta y comienza una configuración simple de apoyo diario para la familia.' },
+    fr: { title: 'Créer un compte Type1 and 2', description: 'Créez votre compte et commencez une configuration simple de soutien quotidien pour la famille.' },
+    de: { title: 'Type1 and 2-Konto erstellen', description: 'Erstellen Sie Ihr Konto und starten Sie eine einfache tägliche Sicherheitskonfiguration für die Familie.' },
+    zh: { title: '创建 Type1 and 2 账号', description: '创建账号，开始为家庭设置简洁的日常支持流程。' },
+    ja: { title: 'Type1 and 2 アカウントを作成', description: 'アカウントを作成して、家族のためのシンプルな日常サポート設定を始めます。' },
+    pt: { title: 'Criar conta no Type1 and 2', description: 'Crie sua conta e inicie uma configuração simples de apoio diário para a família.' },
+    he: { title: 'יצירת חשבון Type1 and 2', description: 'צרו חשבון והתחילו הגדרה פשוטה של תמיכה יומיומית למשפחה.' },
+    ar: { title: 'إنشاء حساب Type1 and 2', description: 'أنشئ حسابًا وابدأ إعدادًا بسيطًا لدعم العائلة خلال اليوم.' },
   },
   setup: {
     en: { title: 'Set Up Your Family', description: 'Add family members, backup support, and safety preferences for day and night.' },
@@ -77,17 +77,17 @@ export const APP_ROUTE_META: Record<Exclude<RouteMode, 'public'>, Record<Languag
     ar: { title: 'إعداد العائلة', description: 'أضف أفراد العائلة والدعم الاحتياطي وتفضيلات الأمان للنهار والليل.' },
   },
   workspace: {
-    en: { title: 'Steady Daily View', description: 'See the current state, recent signals, device health, family readiness, and support flow in one place.' },
-    ru: { title: 'Steady: картина дня', description: 'Смотрите текущее состояние, недавние сигналы, состояние устройства и готовность семьи в одном месте.' },
-    uk: { title: 'Steady: картина дня', description: 'Дивіться поточний стан, недавні сигнали, стан пристрою та готовність сім’ї в одному місці.' },
-    es: { title: 'Vista diaria de Steady', description: 'Mira el estado actual, las señales recientes, la salud del dispositivo y la preparación familiar en un solo lugar.' },
-    fr: { title: 'Vue quotidienne Steady', description: 'Voyez l’état actuel, les signaux récents, la santé de l’appareil et la préparation de la famille au même endroit.' },
-    de: { title: 'Steady Tagesansicht', description: 'Sehen Sie aktuellen Zustand, letzte Signale, Gerätestatus und Familienbereitschaft an einem Ort.' },
-    zh: { title: 'Steady 日常视图', description: '在一个页面里查看当前状态、最新信号、设备状态和家庭准备情况。' },
-    ja: { title: 'Steady デイリー表示', description: '現在の状態、最近の合図、デバイスの状態、家族の準備状況をひとつで確認できます。' },
-    pt: { title: 'Visão diária Steady', description: 'Veja o estado atual, os sinais recentes, a saúde do dispositivo e a prontidão da família em um só lugar.' },
-    he: { title: 'תצוגה יומית של Steady', description: 'ראו במקום אחד את המצב הנוכחי, האותות האחרונים, מצב המכשיר ומוכנות המשפחה.' },
-    ar: { title: 'عرض Steady اليومي', description: 'شاهد الحالة الحالية والإشارات الأخيرة وصحة الجهاز وجاهزية العائلة في مكان واحد.' },
+    en: { title: 'Type1 and 2 Daily View', description: 'See the current state, recent signals, device health, family readiness, and support flow in one place.' },
+    ru: { title: 'Type1 and 2: картина дня', description: 'Смотрите текущее состояние, недавние сигналы, состояние устройства и готовность семьи в одном месте.' },
+    uk: { title: 'Type1 and 2: картина дня', description: 'Дивіться поточний стан, недавні сигнали, стан пристрою та готовність сім’ї в одному місці.' },
+    es: { title: 'Vista diaria de Type1 and 2', description: 'Mira el estado actual, las señales recientes, la salud del dispositivo y la preparación familiar en un solo lugar.' },
+    fr: { title: 'Vue quotidienne Type1 and 2', description: 'Voyez l’état actuel, les signaux récents, la santé de l’appareil et la préparation de la famille au même endroit.' },
+    de: { title: 'Type1 and 2 Tagesansicht', description: 'Sehen Sie aktuellen Zustand, letzte Signale, Gerätestatus und Familienbereitschaft an einem Ort.' },
+    zh: { title: 'Type1 and 2 日常视图', description: '在一个页面里查看当前状态、最新信号、设备状态和家庭准备情况。' },
+    ja: { title: 'Type1 and 2 デイリー表示', description: '現在の状態、最近の合図、デバイスの状態、家族の準備状況をひとつで確認できます。' },
+    pt: { title: 'Visão diária Type1 and 2', description: 'Veja o estado atual, os sinais recentes, a saúde do dispositivo e a prontidão da família em um só lugar.' },
+    he: { title: 'תצוגה יומית של Type1 and 2', description: 'ראו במקום אחד את המצב הנוכחי, האותות האחרונים, מצב המכשיר ומוכנות המשפחה.' },
+    ar: { title: 'عرض Type1 and 2 اليومي', description: 'شاهد الحالة الحالية والإشارات الأخيرة وصحة الجهاز وجاهزية العائلة في مكان واحد.' },
   },
   admin: {
     en: { title: 'T1D Admin', description: 'Read-only operations dashboard for households, alerts, and SQL parity.' },
@@ -105,7 +105,7 @@ export const APP_ROUTE_META: Record<Exclude<RouteMode, 'public'>, Record<Languag
 };
 
 export const resolveRoute = (pathname: string, hasSession: boolean): RouteMode => {
-  if (pathname === '/admin') return 'admin';
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) return 'admin';
   if (pathname === '/access') return 'signin';
   if (pathname === '/create-account') return 'signup';
   if (pathname === '/household-setup') return hasSession ? 'setup' : 'signin';

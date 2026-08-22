@@ -68,20 +68,20 @@ const writeSolidPng = (filePath, size, rgb) => {
   writeFileSync(filePath, png);
 };
 
-writeSolidPng(join(iconsDir, 'icon-192.png'), 192, [14, 165, 233]);
-writeSolidPng(join(iconsDir, 'icon-512.png'), 512, [14, 165, 233]);
+writeSolidPng(join(iconsDir, 'icon-192.png'), 192, [20, 184, 166]);
+writeSolidPng(join(iconsDir, 'icon-512.png'), 512, [249, 115, 22]);
 
 const desktopUrl = `${siteUrl}/download/desktop?install=desktop`;
 const mobileUrl = `${siteUrl}/download/mobile?install=mobile`;
 
 writeFileSync(
-  join(downloadsDir, 'steady-desktop.url'),
+  join(downloadsDir, 'type1and2-desktop.url'),
   ['[InternetShortcut]', `URL=${desktopUrl}`, `IconFile=${siteUrl}/icons/icon-192.png`, 'IconIndex=0', ''].join('\r\n'),
   'utf8',
 );
 
 writeFileSync(
-  join(downloadsDir, 'steady-desktop.webloc'),
+  join(downloadsDir, 'type1and2-desktop.webloc'),
   [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">',
@@ -97,17 +97,17 @@ writeFileSync(
 );
 
 writeFileSync(
-  join(downloadsDir, 'steady-mobile.html'),
+  join(downloadsDir, 'type1and2-mobile.html'),
   `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="Steady" />
+  <meta name="apple-mobile-web-app-title" content="Type1 and 2" />
   <link rel="manifest" href="${siteUrl}/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="${siteUrl}/icons/icon-192.png" />
-  <title>Steady Mobile</title>
+  <title>Type1 and 2 Mobile</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; background: #f8fcff; color: #0f172a; }
     main { max-width: 28rem; margin: 0 auto; padding: 2rem 1.25rem; }
@@ -119,14 +119,14 @@ writeFileSync(
 </head>
 <body>
   <main>
-    <h1>Steady on mobile</h1>
-    <p>Save Steady to your home screen for quick access.</p>
+    <h1>Type1 and 2 on mobile</h1>
+    <p>Save Type1 and 2 to your home screen for quick access.</p>
     <ol>
-      <li>Open Steady in Safari (iPhone/iPad) or Chrome (Android).</li>
+      <li>Open Type1 and 2 in Safari (iPhone/iPad) or Chrome (Android).</li>
       <li>iPhone/iPad: Share → Add to Home Screen.</li>
       <li>Android: menu → Install app or Add to Home screen.</li>
     </ol>
-    <a class="button" href="${mobileUrl}">Open Steady</a>
+    <a class="button" href="${mobileUrl}">Open Type1 and 2</a>
   </main>
   <script>setTimeout(function(){ window.location.replace(${JSON.stringify(mobileUrl)}); }, 1200);</script>
 </body>
@@ -136,21 +136,21 @@ writeFileSync(
 );
 
 const manifest = {
-  name: 'Steady',
-  short_name: 'Steady',
-  description: 'Calm support for children, parents, and adults with type 1 or type 2 diabetes.',
+  name: 'Type1 and 2',
+  short_name: 'Type1&2',
+  description: 'When it shifts, the right person knows — for type 1 and type 2 diabetes.',
   start_url: '/',
   scope: '/',
   display: 'standalone',
   orientation: 'portrait-primary',
-  background_color: '#f8fcff',
-  theme_color: '#0ea5e9',
+  background_color: '#faf4eb',
+  theme_color: '#14b8a6',
   lang: 'en',
   categories: ['health', 'medical', 'lifestyle'],
   icons: [
     { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
     { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
-    { src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+    { src: '/favicon.png', sizes: 'any', type: 'image/png', purpose: 'any' },
   ],
 };
 
@@ -161,11 +161,11 @@ const portableManifest = {
   icons: [
     { src: `${siteUrl}/icons/icon-192.png`, sizes: '192x192', type: 'image/png', purpose: 'any' },
     { src: `${siteUrl}/icons/icon-512.png`, sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
-    { src: `${siteUrl}/favicon.svg`, sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+    { src: `${siteUrl}/favicon.png`, sizes: 'any', type: 'image/png', purpose: 'any' },
   ],
 };
 
-writeFileSync(join(downloadsDir, 'steady-app.webmanifest'), `${JSON.stringify(portableManifest, null, 2)}\n`, 'utf8');
+writeFileSync(join(downloadsDir, 'type1and2-app.webmanifest'), `${JSON.stringify(portableManifest, null, 2)}\n`, 'utf8');
 writeFileSync(join(publicDir, 'manifest.webmanifest'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 
 console.log(`[download] Generated icons, shortcuts, and manifest for ${siteUrl}`);

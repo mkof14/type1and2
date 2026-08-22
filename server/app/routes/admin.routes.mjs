@@ -1,3 +1,16 @@
+import {
+  computeFinanceMetrics,
+  computeMarketingAnalytics,
+  computeUserMetrics,
+  getAdminPermissions,
+  getAdminSettings,
+  getEmailTemplates,
+  getInvitationCampaigns,
+  getMarketingAssets,
+  getMonitoringSnapshot,
+  getSupportTickets,
+} from '../../services/admin-console-data.mjs';
+import { isSuperAdminUser, decorateSuperAdminUser } from '../../lib/super-admin.mjs';
 import { getStorageBackend, probeStorage } from '../../storage.mjs';
 import { dexcomEnvConfig } from '../../dexcom-service.mjs';
 import { isUpstashRateLimitEnabled } from '../../rate-limit.mjs';
@@ -6,20 +19,29 @@ import { getSqlReadMode } from '../../infrastructure/repositories/sql-read-servi
 import { getPool } from '../../infrastructure/db.mjs';
 import { listDeliveriesForHousehold } from '../../services/notification-service.mjs';
 
-const authorizeAdmin = (req, res, sendJson, safeEqualString, CRON_SECRET) => {
+const authorizeAdmin = async (req, res, sendJson, safeEqualString, CRON_SECRET, findSessionUser) => {
   const adminSecret = String(process.env.T1D_ADMIN_SECRET || CRON_SECRET || '').trim();
-  if (!adminSecret) {
-    sendJson(res, 503, { error: 'Admin access is not configured' });
-    return false;
-  }
-
   const authHeader = String(req.headers.authorization || '');
-  if (!safeEqualString(authHeader, `Bearer ${adminSecret}`)) {
-    sendJson(res, 401, { error: 'Unauthorized admin request' });
+
+  if (adminSecret && safeEqualString(authHeader, `Bearer ${adminSecret}`)) {
+    return true;
+  }
+
+  if (typeof findSessionUser === 'function') {
+    const current = await findSessionUser(req);
+    const user = decorateSuperAdminUser(current?.user);
+    if (user && isSuperAdminUser(user)) {
+      return true;
+    }
+  }
+
+  if (!adminSecret) {
+    sendJson(res, 503, { error: 'Admin access is not configured. Sign in as super admin or set T1D_ADMIN_SECRET.' });
     return false;
   }
 
-  return true;
+  sendJson(res, 401, { error: 'Unauthorized admin request' });
+  return false;
 };
 
 const countKvHouseholds = async (readJson, DATA_DIR) => {
@@ -39,6 +61,7 @@ const countKvHouseholds = async (readJson, DATA_DIR) => {
       (total, household) => total + listDeliveriesForHousehold(household.id).length,
       0,
     ),
+    usersList: users,
   };
 };
 
@@ -63,6 +86,33 @@ const countSqlSummary = async () => {
   }
 };
 
+const buildSummaryPayload = async (readJson, DATA_DIR) => {
+  const storageProbe = await probeStorage();
+  const kvCounts = await countKvHouseholds(readJson, DATA_DIR);
+  const sqlCounts = await countSqlSummary();
+  const { usersList, ...kv } = kvCounts;
+
+  return {
+    ok: true,
+    service: 't1d-api',
+    timestamp: new Date().toISOString(),
+    storage: storageProbe.backend || getStorageBackend(),
+    sqlRead: getSqlReadMode(),
+    rateLimit: isUpstashRateLimitEnabled() ? 'upstash' : 'memory',
+    dexcomLive: dexcomEnvConfig().useLiveMode,
+    alertRuleVersion: ALERT_RULE_VERSION,
+    kv,
+    sql: sqlCounts,
+    recommendations: [
+      sqlCounts ? null : 'Set DATABASE_URL and run npm run db:backfill',
+      getSqlReadMode() === 'off' ? 'Enable T1D_SQL_READ_SHADOW=true on production after parity' : null,
+      getSqlReadMode() === 'shadow' ? 'Watch logs; then set T1D_SQL_READ=true' : null,
+      dexcomEnvConfig().useLiveMode ? null : 'Add Dexcom credentials for live CGM',
+    ].filter(Boolean),
+    usersList,
+  };
+};
+
 export const handleAdminRoutes = async (ctx) => {
   const {
     req,
@@ -73,39 +123,26 @@ export const handleAdminRoutes = async (ctx) => {
     CRON_SECRET,
     readJson,
     DATA_DIR,
+    findSessionUser,
   } = ctx;
 
   if (!url.pathname.startsWith('/api/admin/')) {
     return false;
   }
 
-  if (!authorizeAdmin(req, res, sendJson, safeEqualString, CRON_SECRET)) {
+  if (!(await authorizeAdmin(req, res, sendJson, safeEqualString, CRON_SECRET, findSessionUser))) {
     return true;
   }
 
-  if (req.method === 'GET' && url.pathname === '/api/admin/summary') {
-    const storageProbe = await probeStorage();
-    const kvCounts = await countKvHouseholds(readJson, DATA_DIR);
-    const sqlCounts = await countSqlSummary();
+  const readUsersList = async () => {
+    const payload = await readJson(`${DATA_DIR}/users.json`, { users: [] });
+    return Array.isArray(payload.users) ? payload.users : [];
+  };
 
-    sendJson(res, 200, {
-      ok: true,
-      service: 't1d-api',
-      timestamp: new Date().toISOString(),
-      storage: storageProbe.backend || getStorageBackend(),
-      sqlRead: getSqlReadMode(),
-      rateLimit: isUpstashRateLimitEnabled() ? 'upstash' : 'memory',
-      dexcomLive: dexcomEnvConfig().useLiveMode,
-      alertRuleVersion: ALERT_RULE_VERSION,
-      kv: kvCounts,
-      sql: sqlCounts,
-      recommendations: [
-        sqlCounts ? null : 'Set DATABASE_URL and run npm run db:backfill',
-        getSqlReadMode() === 'off' ? 'Enable T1D_SQL_READ_SHADOW=true on production after parity' : null,
-        getSqlReadMode() === 'shadow' ? 'Watch logs; then set T1D_SQL_READ=true' : null,
-        dexcomEnvConfig().useLiveMode ? null : 'Add Dexcom credentials for live CGM',
-      ].filter(Boolean),
-    });
+  if (req.method === 'GET' && url.pathname === '/api/admin/summary') {
+    const summary = await buildSummaryPayload(readJson, DATA_DIR);
+    const { usersList, ...publicSummary } = summary;
+    sendJson(res, 200, publicSummary);
     return true;
   }
 
@@ -128,6 +165,66 @@ export const handleAdminRoutes = async (ctx) => {
         updatedAt: household.updatedAt,
       })),
     });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/analytics') {
+    const users = await readUsersList();
+    sendJson(res, 200, { ok: true, ...computeMarketingAnalytics(users), users: computeUserMetrics(users) });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/finance') {
+    const users = await readUsersList();
+    sendJson(res, 200, { ok: true, ...computeFinanceMetrics(users), users: computeUserMetrics(users) });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/marketing/assets') {
+    sendJson(res, 200, { ok: true, items: getMarketingAssets() });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/email-templates') {
+    sendJson(res, 200, { ok: true, items: getEmailTemplates() });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname.startsWith('/api/admin/email-templates/')) {
+    const id = url.pathname.split('/').pop();
+    const template = getEmailTemplates().find((entry) => entry.id === id);
+    if (!template) {
+      sendJson(res, 404, { error: 'Template not found' });
+      return true;
+    }
+    sendJson(res, 200, { ok: true, template });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/permissions') {
+    const users = await readUsersList();
+    sendJson(res, 200, { ok: true, ...getAdminPermissions(users) });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/settings') {
+    sendJson(res, 200, { ok: true, settings: getAdminSettings() });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/support') {
+    sendJson(res, 200, { ok: true, tickets: getSupportTickets() });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/invitations') {
+    sendJson(res, 200, { ok: true, campaigns: getInvitationCampaigns(), templates: getEmailTemplates().filter((t) => t.category === 'Invitation' || t.category === 'Marketing' || t.category === 'Onboarding') });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/admin/monitoring') {
+    const summary = await buildSummaryPayload(readJson, DATA_DIR);
+    sendJson(res, 200, { ok: true, summary, monitoring: getMonitoringSnapshot(summary) });
     return true;
   }
 

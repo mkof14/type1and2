@@ -1,5 +1,5 @@
 self.addEventListener('push', (event) => {
-  let payload = { title: 'Steady alert', body: 'Open the app to respond.' };
+  let payload = { title: 'Type1 and 2 alert', body: 'Open the app to respond.' };
   try {
     if (event.data) {
       payload = { ...payload, ...event.data.json() };
@@ -9,10 +9,10 @@ self.addEventListener('push', (event) => {
   }
 
   event.waitUntil(
-    self.registration.showNotification(payload.title || 'Steady alert', {
+    self.registration.showNotification(payload.title || 'Type1 and 2 alert', {
       body: payload.body || '',
-      icon: '/favicon.ico',
-      badge: '/favicon.ico',
+      icon: '/favicon.png',
+      badge: '/favicon.png',
       data: payload,
     }),
   );

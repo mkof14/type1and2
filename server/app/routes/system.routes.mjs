@@ -1,6 +1,7 @@
 import { applySecurityHeaders } from '../../security-headers.mjs';
 import { ALERT_RULE_VERSION } from '../../domain/alerts/alert-rules.mjs';
 import { dexcomEnvConfig } from '../../dexcom-service.mjs';
+import { healthPortalEnvConfig } from '../../services/health-portal-service.mjs';
 import { getStorageBackend, probeStorage } from '../../storage.mjs';
 import { isUpstashRateLimitEnabled } from '../../rate-limit.mjs';
 import { readOpenApiSpec } from '../../services/workspace-payload-service.mjs';
@@ -15,6 +16,8 @@ export const handleSystemRoutes = async (ctx) => {
     safeEqualString,
     CRON_SECRET,
     runBackgroundDexcomSync,
+    runBackgroundHealthPortalSync,
+    runBackgroundIntegrationsSync,
     runEscalationPass,
   } = ctx;
 
@@ -27,6 +30,7 @@ export const handleSystemRoutes = async (ctx) => {
       storage: storageProbe.backend || getStorageBackend(),
       rateLimit: isUpstashRateLimitEnabled() ? 'upstash' : 'memory',
       dexcomLive: dexcomEnvConfig().useLiveMode,
+      healthPortalLive: healthPortalEnvConfig().useLiveMode,
       alertRuleVersion: ALERT_RULE_VERSION,
       sqlRead: getSqlReadMode(),
     };
@@ -62,9 +66,25 @@ export const handleSystemRoutes = async (ctx) => {
       sendJson(res, 401, { error: 'Unauthorized cron request' });
       return true;
     }
-    const dexcomResult = await runBackgroundDexcomSync();
+    const syncFn = runBackgroundIntegrationsSync || runBackgroundDexcomSync;
+    const syncResult = await syncFn();
     const escalationResult = runEscalationPass ? await runEscalationPass() : { processed: 0, escalated: 0 };
-    sendJson(res, 200, { ok: true, ...dexcomResult, escalation: escalationResult });
+    sendJson(res, 200, { ok: true, ...syncResult, escalation: escalationResult });
+    return true;
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/cron/health-portal-sync') {
+    const authHeader = String(req.headers.authorization || '');
+    if (!CRON_SECRET) {
+      sendJson(res, 503, { error: 'Service unavailable' });
+      return true;
+    }
+    if (!safeEqualString(authHeader, `Bearer ${CRON_SECRET}`)) {
+      sendJson(res, 401, { error: 'Unauthorized cron request' });
+      return true;
+    }
+    const healthResult = runBackgroundHealthPortalSync ? await runBackgroundHealthPortalSync() : { processed: 0, changed: false };
+    sendJson(res, 200, { ok: true, healthPortal: healthResult });
     return true;
   }
 
